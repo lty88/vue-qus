@@ -1,4 +1,4 @@
-<!-- <template>
+ <template>
   <div class="data-container">
     <template v-if="!isError">
       <span class="back" @click="goBack()">&lt; 返回</span>
@@ -196,4 +196,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/QS-data";
-</style> -->
+</style> 

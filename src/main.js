@@ -2,10 +2,18 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import {  DatePicker,} from 'element-ui';
+import { Button, DatePicker,Message,MessageBox} from 'element-ui';
 Vue.use(DatePicker);
-
+Vue.component(Button.name, Button);
+Vue.prototype.$message = Message;
+Vue.prototype.$MessageBox = MessageBox;
 Vue.config.productionTip = false;
+
+router.beforeEach((to,from,next)=>{
+  document.title=to.meta.title
+  
+  next() 
+})
 
 new Vue({
   router,

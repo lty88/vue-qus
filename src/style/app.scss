@@ -1,3 +1,5 @@
+
+
 * {
   padding: 0;
   margin: 0;
@@ -15,4 +17,24 @@ body {
   overflow: auto;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   background-color: #efefef;
+}
+/* 设置浏览器默认的选中字体的颜色 */
+::-moz-selection {
+	text-shadow: none;
+	background-color: #b3d4fc;
+}
+
+::selection {
+	text-shadow: none;
+	background-color: #b3d4fc;
+}
+
+a {
+	text-decoration: none;
+	color: #333;
+	-webkit-transition: 0.4s ease-in-out;
+	-moz-transition: 0.4s ease-in-out;
+	-ms-transition: 0.4s ease-in-out;
+	-o-transition: 0.4s ease-in-out;
+	transition: 0.4s ease-in-out;
 }

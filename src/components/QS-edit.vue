@@ -28,24 +28,28 @@
             <input type="checkbox" :value="qs.isNeed" v-model="qs.isNeed" />
             此题是否必填
           </label>
-          <p>
-            <span v-if="index !== 0" @click="goUp(index)">上移</span>
-            <span v-if="index !== qsItem.question.length - 1" @click="goDown(index)">下移</span>
-            <span @click="copy(index, qs)">复用</span>
-            <span @click="del(index)">删除</span>
+          <p id="edit-btn-box-top">
+            <el-button v-if="index !== 0" @click="goUp(index)" type="success" plain icon="el-icon-upload2" ></el-button>
+            <el-button  v-if="index !== qsItem.question.length - 1" @click="goDown(index)" plain type="success" icon="el-icon-download "  ></el-button>
+          </p>
+           <p id="edit-btn-box">
+            <el-button @click="copy(index, qs)" type="success"  plain>复用</el-button>
+            <el-button @click="del(index)" type="warning"  plain>删除</el-button>
+         
           </p>
         </div>
       </div>
       <div class="add">
         <transition name="slide">
           <div class="add-option" v-if="showBtn">
-            <button @click="addRadio">单选</button>
-            <button @click="addCheckbox">多选</button>
-            <button @click="addTextarea">文本框</button>
+            <el-button @click="addRadio" type="info" plain>单选</el-button>
+            <el-button @click="addCheckbox" type="info" plain>多选</el-button>
+            <el-button @click="addTextarea" type="info" plain>文本框</el-button>
           </div>
         </transition>
         <div class="add-item" @click="addItemClick">
-          <span class="add-icon">+</span>
+          <span class="add-icon"><i class="el-icon-circle-plus-outline" style="font-size:20px " ></i></span>
+         
           <span>添加问题</span>
         </div>
       </div>
@@ -92,16 +96,16 @@
           value-format="yyyy-MM-dd"
           align="center"
           type="date"
-		  size="small"
+          size="small"
           placeholder="选择日期"
           :picker-options="pickerOptions"
         ></el-date-picker>
       </div>
       <div class="btn-box">
-        <button class="save" @click="iterator = save();iterator.next();">保存问卷</button>
+        <el-button type="text" class="save" @click="iterator = save();iterator.next();" >保存问卷</el-button>
         <button class="issue" @click="iterator = issueQs();iterator.next();">发布问卷</button>
       </div>
-      <p>{{selectTime}}</p>
+      <!-- <p>{{selectTime}}</p> -->
     </footer>
   </div>
 </template>
@@ -171,6 +175,7 @@ export default {
     };
   },
   beforeRouteEnter(to, from, next) {
+    console.log(to)
     let num = to.params.num;
     let theItem = {};
     if (num != 0) {
@@ -197,18 +202,21 @@ export default {
     }
   },
   created() {
+  
     this.fetchData();
     console.log(storage.get());
   },
   mounted() {
-    //   console.log(typeof this.$route.params)
-    let numID = this.$route.params.num - 1;
+    if(this.$route.params.num !=0){
+    //console.log(typeof this.$route.params)
+    let numID = this.$route.params.num-1;
     console.log(numID);
     let fir = this.qsList[numID];
     console.log(this.qsList[numID]);
-
-    console.log(fir)
+    console.log(fir);
     this.selectTime = fir.time;
+    }
+    
   },
   methods: {
     fetchData() {
@@ -255,8 +263,7 @@ export default {
     },
     onsubmit() {
       this.titleValue = this.titleValue.trim();
-      this.qsItem.title =
-        this.titleValue === "" ? this.qsItem.title : this.titleValue;
+      this.qsItem.title =this.titleValue === "" ? this.qsItem.title : this.titleValue;
       this.titleChange = false;
     },
     titleClick() {
@@ -268,15 +275,12 @@ export default {
       }, 150);
     },
     swapItems(oldIndex, newIndex) {
-      let [newVal] = this.qsItem.question.splice(
-        newIndex,
-        1,
-        this.qsItem.question[oldIndex]
-      );
+      let [newVal] = this.qsItem.question.splice(newIndex,1,this.qsItem.question[oldIndex]);
       this.qsItem.question.splice(oldIndex, 1, newVal);
     },
     goUp(index) {
       this.swapItems(index, index - 1);
+      console.log('index :>> ', index);
     },
     goDown(index) {
       this.swapItems(index, index + 1);
@@ -365,7 +369,7 @@ export default {
       yield;
       if (this.qsItem.question.length === 0) {
         this.showDialog = false;
-        alert("问卷为空无法保存");
+        this.$message.error('问卷为空，不能保存');
       } else {
         storage.save(this.qsList);
         this.info = "是否发布?";
@@ -386,6 +390,7 @@ export default {
       this.info = "确认发布?";
       yield;
       if (this.qsItem.question.length === 0) {
+         console.log(this.qsItem.question.length)
         this.showDialog = false;
         alert("问卷为空无法保存");
       } else {

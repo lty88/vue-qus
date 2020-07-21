@@ -74,6 +74,9 @@
 				info: ""
 			};
 		},
+		created(){
+			document.title='我的问卷'
+		},
 		mounted() {
 			if (storage.get() !== null) {
 				this.qsList = storage.get();
@@ -208,6 +211,7 @@
 					}
 					this.qsList.splice(index, 1);
 					this.showDialog = false;
+					 this.$message.success('刪除成功！');
 				})();
 			},
 			//删除选中的问卷
