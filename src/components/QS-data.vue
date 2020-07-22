@@ -1,7 +1,7 @@
  <template>
   <div class="data-container">
     <template v-if="!isError">
-      <span class="back" @click="goBack()">&lt; 返回</span>
+      <span class="back" @click="goBack()"><i class="el-icon-arrow-left" style="font-size:25px;font-weight: bold"></i></span>
       <h2>{{ qsItem.title }}</h2>
       <p>此统计分析只包含完整回收的数据(数据皆为自制数据模拟来mock数据)</p>
     </template>

@@ -37,11 +37,21 @@ const routes = [{
 		},
 		component: () =>
 			import( /* webpackChunkName: "about" */ "../components/QS-data.vue")
+	},
+	{
+		path: '/test',
+		name: '	',
+		meta:{
+			title:'我是测试'
+		},
+		component: () =>
+			import( /* webpackChunkName: "about" */ "../components/Test.vue")
 	}
 ];
 
 
 const router = new VueRouter({
+	mode: 'history',
 	routes
 });
 

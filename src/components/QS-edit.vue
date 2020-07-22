@@ -178,6 +178,12 @@ export default {
     console.log(to)
     let num = to.params.num;
     let theItem = {};
+     let length = storage.get().length;
+    console.log(num)
+    console.log(length);
+    next(vm=>{
+      console.log(vm);
+    })
     if (num != 0) {
       let length = storage.get().length;
       if (num < 0 || num > length) {
@@ -202,7 +208,6 @@ export default {
     }
   },
   created() {
-  
     this.fetchData();
     console.log(storage.get());
   },

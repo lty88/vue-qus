@@ -1,7 +1,7 @@
 <template>
 	<div class="fill-container">
 		<div class="fill" v-if="!isError">
-			<router-link to="/" tag="span" class="back">&lt; 返回</router-link>
+			<router-link to="/" tag="span" class="back"><i class="el-icon-arrow-left" style="font-size:25px;font-weight: bold"></i></router-link>
 			<h2>{{ qsItem.title }}</h2>
 			<div class="content">
 				<div class="content-item" v-for="(item, index) in qsItem.question" :key="index">
