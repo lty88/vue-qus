@@ -2,6 +2,7 @@
   <div class="Test">
     <button @click="tap">点击我，跳出Dailog</button>
     <h1>{{msg}}</h1>
+    <radio></radio>
     <Dialog
       title="提示"
       btnType="3"
@@ -21,9 +22,10 @@
 
 <script>
 import Dialog from "@/components/Dialog";
+import Radio from '@/components/Radio';
 export default {
   name: "Test",
-  components: { Dialog },
+  components: { Dialog,Radio},
   data() {
     return {
       msg: "测试",

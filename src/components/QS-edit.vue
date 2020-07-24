@@ -22,6 +22,9 @@
             </label>
           </p>
           <textarea v-if="qs.type === 'textarea'"></textarea>
+          <div class="jz">
+          <h1>矩阵</h1>
+          </div>
         </div>
         <div class="qs-right">
           <label>
@@ -45,11 +48,11 @@
             <el-button @click="addRadio" type="info" plain>单选</el-button>
             <el-button @click="addCheckbox" type="info" plain>多选</el-button>
             <el-button @click="addTextarea" type="info" plain>文本框</el-button>
+            <el-button @click="addTextarea" type="info" plain>矩阵</el-button>
           </div>
         </transition>
         <div class="add-item" @click="addItemClick">
           <span class="add-icon"><i class="el-icon-circle-plus-outline" style="font-size:20px " ></i></span>
-         
           <span>添加问题</span>
         </div>
       </div>
@@ -68,6 +71,8 @@
         <label v-if="showAddOptionInput">
           输入选项
           <input type="text" v-model="qsInputOptions" />
+          
+           <button @click="addIpt">添加选项</button>
         </label>
         <div class="btn-box">
           <button class="yes" @click="validateAddQs">确定</button>
