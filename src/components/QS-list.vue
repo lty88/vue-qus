@@ -104,7 +104,7 @@ export default {
           num: 1,
           title: "第一份问卷",
           time: "2030-1-1",
-          state: "inissue",
+          state: "noissue",
           stateTitle: "发布中",
           checked: false,
           question: [
@@ -113,14 +113,14 @@ export default {
               title: "单选题",
               type: "radio",
               isNeed: true,
-              options: ["选项一", "选项二"]
+              options: [{name:'选项一'},{name:'选项二'},{name:'选项三'}]
             },
             {
               num: "Q2",
               title: "多选题",
               type: "checkbox",
               isNeed: true,
-              options: ["选项一", "选项二", "选项三", "选项四"]
+              options: [{name:'选项一'},{name:'选项二'},{name:'选项三'}]
             },
             {
               num: "Q3",
@@ -144,21 +144,28 @@ export default {
               title: "单选题",
               type: "radio",
               isNeed: true,
-              options: ["选项一", "选项二"]
+              options:[{name:'选项一'},{name:'选项二'},{name:'选项三'}]
             },
             {
               num: "Q2",
               title: "多选题",
               type: "checkbox",
               isNeed: true,
-              options: ["选项一", "选项二", "选项三", "选项四"]
+              options: [{name:'选项一'},{name:'选项二'},{name:'选项三'},{name:'选项四'}]
             },
             {
               num: "Q3",
               title: "文本题",
               type: "textarea",
               isNeed: true
-            }
+            },
+            //  {
+            //   num: "Q4",
+            //   title: "矩阵题",
+            //   type: "jz",
+            //   isNeed: true,
+            //   options: [{name:'选项一'},{name:'选项二'},{name:'选项三'},{name:'选项四'}]
+            // }
           ]
         },
 

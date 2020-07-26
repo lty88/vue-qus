@@ -1,27 +1,31 @@
 <template>
-<transition name='slide'>
- <div class="modal" v-show="showModal">
-    <div class="mask"></div>
-    <div class="modal-dialog">
-      <div class="modal-header">
-        <span>{{title}}</span>
-        <a href="JavaScript:;" class="icon-close"  v-if="btnType==1" @click="$emit('cancel')">x</a>
-      </div>
-      <div class="modal-body">
-        <slot name="body" class="content"></slot>
-      </div>
-      <div class="modal-footer">
-      <a href="JavaScript:;" class="btn"    v-if="btnType==1" @click="$emit('submit')">{{sureText}}</a>
-        <a href="JavaScript:;" class="btn cancel-btn"  v-if="btnType==2" @click="$emit('cancel')">{{cancelText}}</a>
-        <div class="btn-group" v-if="btnType==3">
-          <a href="JavaScript:;" class="btn"  @click="$emit('submit')">{{sureText}}</a>
-          <a href="JavaScript:;" class="btn cancel-btn"  @click="$emit('cancel')">{{cancelText}}</a>
+  <transition name="slide">
+    <div class="modal" v-show="showModal">
+      <div class="mask"></div>
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <span>{{title}}</span>
+          <a href="JavaScript:;" class="icon-close" v-if="btnType==1" @click="$emit('cancel')">x</a>
+        </div>
+        <div class="modal-body">
+          <slot name="body" class="content"></slot>
+        </div>
+        <div class="modal-footer">
+          <a href="JavaScript:;" class="btn" v-if="btnType==1" @click="$emit('submit')">{{sureText}}</a>
+          <a
+            href="JavaScript:;"
+            class="btn cancel-btn"
+            v-if="btnType==2"
+            @click="$emit('cancel')"
+          >{{cancelText}}</a>
+          <div class="btn-group" v-if="btnType==3">
+            <a href="JavaScript:;" class="btn" @click="$emit('submit')">{{sureText}}</a>
+            <a href="JavaScript:;" class="btn cancel-btn" @click="$emit('cancel')">{{cancelText}}</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</transition>
- 
+  </transition>
 </template>
 
 <script>
@@ -49,7 +53,7 @@ export default {
   },
   data() {
     return {
-    //   closeURL:require('../../public/imgs/icon-close.png')
+      //   closeURL:require('../../public/imgs/icon-close.png')
     };
   },
 
@@ -66,9 +70,10 @@ export default {
   watch: {}
 };
 </script>
-<style lang='scss'>
+
+<style lang='scss' scoped>
 @import "../assets/config.scss";
 @import "../assets/mixin.scss";
 @import "../assets/modal.scss";
-@import '../assets/button.scss';
+@import "../assets/button.scss";
 </style>

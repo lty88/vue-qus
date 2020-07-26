@@ -22,7 +22,7 @@
 
 <script>
 import Dialog from "@/components/Dialog";
-import Radio from '@/components/Radio';
+// import Radio from '@/components/Radio';
 export default {
   name: "Test",
   components: { Dialog,Radio},

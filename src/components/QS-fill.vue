@@ -14,7 +14,7 @@
 							 :value="option" />
 							<input type="checkbox" :name="`${item.num}-${item.title}`" v-model="requiredItem[item.num]" v-if="item.type === 'checkbox'"
 							 :value="option" />
-							{{ option }}
+							{{ option.name }}
 						</label>
 					</p>
 					<textarea v-if="item.type === 'textarea'" v-model="requiredItem[item.num]"></textarea>
