@@ -16,7 +16,7 @@
             href="JavaScript:;"
             class="btn cancel-btn"
             v-if="btnType==2"
-            @click="$emit('cancel')"
+            @click="$emit('cancel')"  
           >{{cancelText}}</a>
           <div class="btn-group" v-if="btnType==3">
             <a href="JavaScript:;" class="btn" @click="$emit('submit')">{{sureText}}</a>

@@ -159,13 +159,22 @@ export default {
               type: "textarea",
               isNeed: true
             },
-            //  {
-            //   num: "Q4",
-            //   title: "矩阵题",
-            //   type: "jz",
-            //   isNeed: true,
-            //   options: [{name:'选项一'},{name:'选项二'},{name:'选项三'},{name:'选项四'}]
-            // }
+             {
+              num: "Q4",
+              title: "矩阵题目",
+              type: "jz",
+              isNeed: true,
+              jzTitle: [{title:'CCTV1'},{title:'CCTV2'},{title:'CCTV3'}],
+              jzOptions: [{name:'非常喜欢'},{name:'喜欢'},{name:'一般'},{name:'不喜欢'},{name:'非常不喜欢'}]
+            },
+            {
+              num: "Q5",
+              title: "矩阵题目",
+              type: "jz",
+              isNeed: true,
+              jzTitle: [{title:'CCTV1'},{title:'CCTV2'},{title:'CCTV3'}],
+              jzOptions: [{name:'非常喜欢'},{name:'喜欢'},{name:'一般'},{name:'不喜欢'},{name:'非常不喜欢'}]
+            }
           ]
         },
 

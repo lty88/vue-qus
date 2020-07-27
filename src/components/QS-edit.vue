@@ -12,7 +12,6 @@
     />
     
     <div class="content">
-    
       <div class="questions" v-for="(qs, index) in qsItem.question" :key="index">
         <div class="qs-left">
           <p class="qs-title">{{ qs.num }}&nbsp;{{ qs.title }}&nbsp;{{ getMsg(qs) }}</p>
@@ -24,37 +23,15 @@
             </label>
           </p>
           <textarea v-if="qs.type === 'textarea'"></textarea>
-          <div class="jz"></div>
-        </div>
-        <!-- <div class="wjdc_list">
-        <p class="title_wjht"><i class="nmb">4</i>. 对目前的工作哪方面不满意？</p>
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tswjdc_table">
-          <tr>
+        <div class="wjdc_list" >
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tswjdc_table" v-if="qs.type==='jz'">
+          <tr >
             <td class="lefttd_qk">&nbsp;</td>
-            <td>非常喜欢</td>
-            <td>喜欢</td>
-            <td>一般</td>
-            <td>不喜欢</td>
-            <td>非常不喜欢</td>
+            <td class="lefttd_tit" v-for="(jzOption,jzIndex) in qs.jzOptions" :key="jzIndex">{{jzOption.name}}</td>
+           
           </tr>
-          <tr class="os_bjqk">
-            <td class="lefttd_qk">CCTV1</td>
-            <td><input name="c1" type="radio" value=""></td>
-            <td><input name="c2" type="radio" value=""></td>
-            <td><input name="c3" type="radio" value=""></td>
-            <td><input name="c4" type="radio" value=""></td>
-            <td><input name="c5" type="radio" value=""></td>
-          </tr>
-          <tr>
-            <td class="lefttd_qk">CCTV2</td>
-            <td><input name="c1" type="radio" value=""></td>
-            <td><input name="c2" type="radio" value=""></td>
-            <td><input name="c3" type="radio" value=""></td>
-            <td><input name="c4" type="radio" value=""></td>
-            <td><input name="c5" type="radio" value=""></td>
-          </tr>
-          <tr class="os_bjqk">
-            <td class="lefttd_qk">CCTV3</td>
+          <tr class="os_bjqk"  v-for="(jzTitle,jztIndex) in qs.jzTitle" :key="jztIndex">
+            <td class="lefttd_qk">{{jzTitle.title}}</td>
             <td><input name="c1" type="radio" value=""></td>
             <td><input name="c2" type="radio" value=""></td>
             <td><input name="c3" type="radio" value=""></td>
@@ -62,7 +39,9 @@
             <td><input name="c5" type="radio" value=""></td>
           </tr>
         </table>
-      </div> -->
+      </div> 
+        </div>
+  
         <div class="qs-right">
           <label>
             <input type="checkbox" :value="qs.isNeed" v-model="qs.isNeed" />
@@ -97,7 +76,7 @@
             <el-button @click="addRadio" type="info" plain>单选</el-button>
             <el-button @click="addCheckbox" type="info" plain>多选</el-button>
             <el-button @click="addTextarea" type="info" plain>文本框</el-button>
-            <el-button type="info" plain>矩阵</el-button>
+            <el-button @click="addJz" type="info" plain>矩阵</el-button>
           </div>
         </transition>
         <div class="add-item" @click="addItemClick">
@@ -122,7 +101,6 @@
             <el-input v-model="qsInputTitle" placeholder="请输入标题"></el-input>
           </label>
           <label v-if="showAddOptionInput" id="edit-box">
-            输入选项
             <div v-for="(qsOptions,optionsIndex) in qsInputOptions " :key="optionsIndex">
               <span>选项{{optionsIndex+1}}</span>
               <el-input v-model="qsOptions.name" placeholder="请输入内容"></el-input>
@@ -158,7 +136,7 @@
       </div>
     </div>
 
-    <!-- 新增radio与checkbox模板 -->
+    <!--对应添加问题 新增radio、checkbox、textarea模板 -->
     <Rctemp @formData='qsData'  :showModal="showModal" :types='addOptionType'  @cancel="showModal=false"></Rctemp>
 
     <footer>
@@ -242,22 +220,24 @@ export default {
         ]
       },
       qsItem: {
-          num: 1,
-          title: "第一份问卷",
-          time: "2030-1-1",
-          state: "noissue",
-          stateTitle: "发布中",
-          checked: false,
-          question: [
-            {
-              num: "Q1",
-              title: "单选题",
-              type: "radio",
-              isNeed: true,
-              options: [{name:'选项一'},{name:'选项二'},{name:'选项三'}]
-            }
-          ]
+          // num: 1,
+          // title: "第一份问卷",
+          // time: "2030-1-1",
+          // state: "noissue",
+          // stateTitle: "发布中",
+          // checked: false,
+          // question: [
+          //   {
+          //     num: "Q1",
+          //     title: "单选题",
+          //     type: "radio",
+          //     isNeed: true,
+          //     options: [{name:'选项一'},{name:'选项二'},{name:'选项三'}]
+          //   }
+          // ]
       },
+      //矩阵的数据
+      
       qsList: storage.get(),
       isError: false,
       showBtn: false,
@@ -317,6 +297,7 @@ export default {
     // console.log(storage.get());
   },
   mounted() {
+    console.log(this.qsItem.question)
     if (this.$route.params.num != 0) {
       //console.log(typeof this.$route.params)
       let numID = this.$route.params.num - 1;
@@ -365,10 +346,13 @@ export default {
         msg = "(单选题)";
       } else if (item.type === "checkbox") {
         msg = "(多选题)";
-      } else {
+      }
+      if (item.type === "jz") {
+        msg = "(矩阵题)";
+      }
+      else {
         msg = "(文本题)";
       }
-
       return item.isNeed ? `${msg} *` : msg;
     },
     onblur() {
@@ -455,6 +439,11 @@ export default {
       this.showModal=true
       this.addOptionType = "textarea";
     },
+      addJz() {
+      if (this.questionLength === 10) return alert("问卷已满！");
+      this.showModal=true
+      this.addOptionType = "textarea";
+    },
     delItemOption(qsOptions, optionsIndex) {
       this.qsInputOptions.splice(optionsIndex, 1);
     },
@@ -475,7 +464,7 @@ export default {
          this.qsInputOptions
         );
          let qsOptionss = this.qsInputOptions;
-      qsOptionss.forEach((item, index) => {
+        qsOptionss.forEach((item, index) => {
         if (item.name === "") {
           this.$message.error("选项为空");
         }
