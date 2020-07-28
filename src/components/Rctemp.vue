@@ -31,7 +31,7 @@
               </div>
               <el-form-item>
                 <el-button type="primary" @click="submitForm('formData')">提交</el-button>
-                <el-button @click="addDomain">新增选项</el-button>
+                <el-button @click="addDomain" v-if="types==='radio'||types==='checkbox'">新增选项</el-button>
                 <!--<el-button @click="resetForm('formData')">重置</el-button> /-->
               </el-form-item>
             </el-form>
@@ -69,10 +69,8 @@ export default {
     return {
       showModals: false,
       formData: {
-        num: "",
         title: "",
         type: this.types,
-        isNeed: true,
         options: [{ name: "" }, { name: "" }, { name: "" }]
       }
     };
@@ -94,10 +92,11 @@ export default {
     },
     removeDomain(item) {
       var types = this.types;
+      let numOption=this.formData.options.length
       console.log(item);
-      console.log(types);
+      console.log(numOption);
       if (types === "radio" || types === "checkbox") {  
-        if (item >= 2) {
+        if (numOption>= 3) {
           this.formData.options.splice(item, 1);
         } else {
           this.$message.error('选项至少有两项')

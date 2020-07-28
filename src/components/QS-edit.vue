@@ -10,7 +10,7 @@
       @keyup.enter="onsubmit"
       ref="titleInput"
     />
-    
+
     <div class="content">
       <div class="questions" v-for="(qs, index) in qsItem.question" :key="index">
         <div class="qs-left">
@@ -23,25 +23,35 @@
             </label>
           </p>
           <textarea v-if="qs.type === 'textarea'"></textarea>
-        <div class="wjdc_list" >
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tswjdc_table" v-if="qs.type==='jz'">
-          <tr >
-            <td class="lefttd_qk">&nbsp;</td>
-            <td class="lefttd_tit" v-for="(jzOption,jzIndex) in qs.jzOptions" :key="jzIndex">{{jzOption.name}}</td>
-           
-          </tr>
-          <tr class="os_bjqk"  v-for="(jzTitle,jztIndex) in qs.jzTitle" :key="jztIndex">
-            <td class="lefttd_qk">{{jzTitle.title}}</td>
-            <td><input name="c1" type="radio" value=""></td>
-            <td><input name="c2" type="radio" value=""></td>
-            <td><input name="c3" type="radio" value=""></td>
-            <td><input name="c4" type="radio" value=""></td>
-            <td><input name="c5" type="radio" value=""></td>
-          </tr>
-        </table>
-      </div> 
+          <!-- 矩阵题-->
+          <div class="wjdc_list">
+            <table
+              width="100%"
+              border="0"
+              cellspacing="0"
+              cellpadding="0"
+              class="tswjdc_table"
+              v-if="qs.type==='jz'"
+            >
+              <tr>
+                <td class="lefttd_qk">&nbsp;</td>
+                <td
+                  class="lefttd_tit"
+                  v-for="(jzOption,jzIndex) in qs.jzOptions"
+                  :key="jzIndex"
+                >{{jzOption.name}}</td>
+              </tr>
+              <!-- 渲染的矩阵的radio-->
+              <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.jzTitle" :key="jztIndex">
+                <td class="lefttd_qk">{{jzTitle.title}}</td>
+                <td v-for="(jzOption,jzIndex) in qs.jzOptions" :key="jzIndex">
+                  <input type="radio" :name="`${jzIndex}`" v-if="qs.type === 'jz'" />
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
-  
+
         <div class="qs-right">
           <label>
             <input type="checkbox" :value="qs.isNeed" v-model="qs.isNeed" />
@@ -76,7 +86,8 @@
             <el-button @click="addRadio" type="info" plain>单选</el-button>
             <el-button @click="addCheckbox" type="info" plain>多选</el-button>
             <el-button @click="addTextarea" type="info" plain>文本框</el-button>
-            <el-button @click="addJz" type="info" plain>矩阵</el-button>
+            <el-button @click="addJz" type="info" plain class="btn_add_text">多选矩阵</el-button>
+            <el-button @click="addJz" type="info" plain class="btn_add_text">单选矩阵</el-button>
           </div>
         </transition>
         <div class="add-item" @click="addItemClick">
@@ -87,12 +98,12 @@
         </div>
       </div>
     </div>
-    <!-- 编辑渲染模板 -->
+    <!-- 编辑text radio checkbox渲染模板 -->
     <div class="shadow" v-if="showAddQsDialog">
       <div class="add-qs-dialog">
         <header>
           <span>提示</span>
-          <span class="close-btn" @click="showAddQsDialog = false ;qsInputOptions={}" >X</span>
+          <span class="close-btn" @click="showAddQsDialog = false ;qsInputOptions=[]">X</span>
         </header>
         <p>{{ info }}</p>
         <div class="shadow-body">
@@ -110,14 +121,85 @@
                 type="warning"
                 plain
               >删除</el-button>
-              <el-button @click="addItemOption(qs,index)" type="success" plain>增加</el-button>
+              <el-button @click="addItemOption(qsOptions,optionsIndex)" type="success" plain>增加</el-button>
             </div>
           </label>
-        
         </div>
         <div class="btn-box">
           <button class="yes" @click="validateAddQs()">确定</button>
-          <button @click="showAddQsDialog = false;qsInputOptions={};">取消</button>
+          <button @click="showAddQsDialog = false;qsInputOptions=[];">取消</button>
+        </div>
+      </div>
+    </div>
+    <!-- 编辑矩阵渲染模板 -->
+    <div class="shadowTwo" v-if="showAddQsDialogJz">
+      <div class="add-qs-dialog">
+        <header>
+          <span>提示</span>
+          <span class="close-btn" @click="showAddQsDialogJz= false ;qsInputOptions=[]">X</span>
+        </header>
+        <p>{{ info }}</p>
+        <div class="shadow-body">
+          <label>
+            输入题目标题
+            <el-input v-model="qsJzTitle" placeholder="请输入标题"></el-input>
+          </label>
+          <div id="edit-box">
+            <label class="edit-jzItemOptions-box edit-box">
+              <h3>横标题</h3>
+              <div v-for="(rowOptions,roptionsIndex) in jzItemOptions" :key="roptionsIndex">
+                <span>选项{{roptionsIndex+1}}</span>
+                <el-input v-model="rowOptions.name" placeholder="请输入内容"></el-input>
+                <el-button
+                  @click="delJzItemOption(rowOptions,roptionsIndex)"
+                  el-icon-circle-plus
+                  type="warning"
+                  plain
+                >删除</el-button>
+                <el-button
+                  @click="addJzItemOption(rowOptions,roptionsIndex)"
+                  type="success"
+                  plain
+                >增加</el-button>
+              </div>
+            </label>
+            <label class="edit-jzTitleOptions-box edit-box">
+              <h3>竖标题</h3>
+              <div v-for="(colOptions,coptionsIndex) in jzTitleOptions " :key="coptionsIndex">
+                <span>选项{{coptionsIndex+1}}</span>
+                <el-input v-model="colOptions.title" placeholder="请输入内容"></el-input>
+                <el-button
+                  @click="delJzTitleOptions(colOptions,coptionsIndex)"
+                  el-icon-circle-plus
+                  type="warning"
+                  plain
+                >删除</el-button>
+                <el-button
+                  @click="addJzTitleOptions(colOptions,coptionsIndex)"
+                  type="success"
+                  plain
+                >增加</el-button>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div class="btn-box">
+          <button class="yes" @click="validateAddQsJz()">确定</button>
+          <button @click="showAddQsDialogJz = false;qsInputOptions=[];">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shadow" v-if="showDialog">
+      <div class="dialog">
+        <header>
+          <span>提示</span>
+          <span class="close-btn" @click="cancel">X</span>
+        </header>
+        <p>{{ info }}</p>
+        <div class="btn-box">
+          <button class="yes" @click="iterator.next()">确定</button>
+          <button @click="cancel">取消</button>
         </div>
       </div>
     </div>
@@ -137,7 +219,12 @@
     </div>
 
     <!--对应添加问题 新增radio、checkbox、textarea模板 -->
-    <Rctemp @formData='qsData'  :showModal="showModal" :types='addOptionType'  @cancel="showModal=false"></Rctemp>
+    <Rctemp
+      @formData="qsData"
+      :showModal="showModal"
+      :types="addOptionType"
+      @cancel="showModal=false"
+    ></Rctemp>
 
     <footer>
       <div class="block">
@@ -156,7 +243,7 @@
         <el-button type="text" class="save" @click="iterator = save();iterator.next();">保存问卷</el-button>
         <button class="issue" @click="iterator = issueQs();iterator.next();">发布问卷</button>
       </div>
-       <div class="block">
+      <div class="block">
         <span class="demonstration">截止日期</span>
         <el-date-picker
           v-model="selectTime"
@@ -168,7 +255,7 @@
           :picker-options="pickerOptions"
         ></el-date-picker>
       </div>
-     
+
       <!-- <p>{{selectTime}}</p> -->
     </footer>
   </div>
@@ -176,10 +263,10 @@
 
 <script>
 import storage from "../store/index";
-import Rctemp from '@/components/Rctemp'
+import Rctemp from "@/components/Rctemp";
 export default {
   name: "qsEdit",
-  components: {Rctemp},
+  components: { Rctemp },
   data() {
     return {
       pickerOptions: {
@@ -219,34 +306,37 @@ export default {
           }
         ]
       },
-      qsItem: {
-          // num: 1,
-          // title: "第一份问卷",
-          // time: "2030-1-1",
-          // state: "noissue",
-          // stateTitle: "发布中",
-          // checked: false,
-          // question: [
-          //   {
-          //     num: "Q1",
-          //     title: "单选题",
-          //     type: "radio",
-          //     isNeed: true,
-          //     options: [{name:'选项一'},{name:'选项二'},{name:'选项三'}]
-          //   }
-          // ]
-      },
-      //矩阵的数据
-      
+      Jzquestion: [
+        {
+          num: "Q4",
+          title: "矩阵题目",
+          type: "jz",
+          isNeed: true,
+          jzTitle: [{ title: "CCTV1" }, { title: "CCTV2" }, { title: "CCTV3" }],
+          jzOptions: [
+            { name: "非常喜欢" },
+            { name: "喜欢" },
+            { name: "一般" },
+            { name: "不喜欢" },
+            { name: "非常不喜欢" }
+          ]
+        }
+      ],
+
+      qsItem: {},
       qsList: storage.get(),
       isError: false,
       showBtn: false,
       titleChange: false,
       titleValue: "",
       showAddQsDialog: false,
+      showAddQsDialogJz: false,
       showAddOptionInput: true,
       qsInputTitle: "",
+      qsJzTitle: "",
       qsInputOptions: [],
+      jzTitleOptions: [],
+      jzItemOptions: [],
       info: "",
       selectTime: "",
       addOptionType: "",
@@ -256,7 +346,7 @@ export default {
       isGoIndex: false,
       numID: 0,
       currEditIndex: -1,
-     showModal:false
+      showModal: false
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -297,7 +387,7 @@ export default {
     // console.log(storage.get());
   },
   mounted() {
-    console.log(this.qsItem.question)
+    console.log(this.qsItem.question);
     if (this.$route.params.num != 0) {
       //console.log(typeof this.$route.params)
       let numID = this.$route.params.num - 1;
@@ -310,11 +400,13 @@ export default {
   },
   methods: {
     // 子组件传递过来的数据
-    qsData(e){
+    qsData(e) {
       console.log(e);
-      this.showModal=false
-       this.qsItem.question.push(JSON.parse(JSON.stringify(e)));
-       this.qsList.push(this.qsItem);
+      this.showModal = false;
+      let res = JSON.stringify(e);
+      console.log("子组件传过来的值：" + res);
+      this.qsItem.question.push(JSON.parse(JSON.stringify(e)));
+      this.qsList.push(this.qsItem);
     },
     fetchData() {
       if (this.$route.params.num == 0) {
@@ -349,8 +441,7 @@ export default {
       }
       if (item.type === "jz") {
         msg = "(矩阵题)";
-      }
-      else {
+      } else {
         msg = "(文本题)";
       }
       return item.isNeed ? `${msg} *` : msg;
@@ -407,79 +498,141 @@ export default {
         this.showBtn = !this.showBtn;
       }
     },
-    showAddDialog(msg, showOption) {
-      this.showAddQsDialog = true;
-      this.showAddOptionInput = showOption;
-      this.info = msg;
-      this.qsInputTitle = "";
-      this.qsInputOptions = "";
-    },
+    // showAddDialog(msg, showOption) {
+    //   this.showAddOptionInput = showOption;
+    //   this.showAddQsDialog = true;
+    //   this.showAddQsDialogJz=true,
+    //   this.info = msg;
+    //   this.qsInputTitle = "";
+    //   this.qsJzTitle="";
+    //   this.qsInputOptions = [];
+    //   this.qsJzOptions=[]
+    // },
     editTitle(qs, index) {
-      console.log("yyb=" + JSON.stringify(qs))
-      this.qsInputTitle = qs.title;
-      this.currEditIndex = index;
-      if (qs.type === "checkbox" || qs.type === "radio") {
-        this.qsInputOptions = qs.options;
+      this.qsInputTitle = "";
+      this.qsJzTitle = "";
+      this.qsInputOptions = [];
+      this.jzTitleOptions = [];
+      this.jzItemOptions = [];
+      console.log("yyb=" + JSON.stringify(qs));
+      console.log(qs.type);
+      let typeOne =
+        qs.type === "checkbox" || qs.type === "radio" || qs.type === "textarea";
+      let typeTwo = qs.type === "checkbox" || qs.type === "radio";
+      if (typeOne) {
+        if (typeOne) {
+          this.qsInputTitle = qs.title;
+          this.currEditIndex = index;
+          if (typeTwo) {
+            this.qsInputOptions = qs.options;
+            this.showAddQsDialog = true;
+          }
+        }
         this.showAddQsDialog = true;
+      } else {
+        if (qs.type === "jz") {
+          this.showAddQsDialogJz = true;
+          this.qsJzTitle = qs.title;
+          this.currEditIndex = index;
+          this.jzTitleOptions = qs.jzTitle;
+          this.jzItemOptions = qs.jzOptions;
+        }
+        this.showAddQsDialogJz = true;
       }
-       this.showAddQsDialog = true;
     },
     addRadio() {
       if (this.questionLength === 10) return alert("问卷已满！");
-      this.showModal=true
+      this.showModal = true;
       this.addOptionType = "radio";
     },
     addCheckbox() {
       if (this.questionLength === 10) return alert("问卷已满！");
-      this.showModal=true
+      this.showModal = true;
       this.addOptionType = "checkbox";
     },
     addTextarea() {
       if (this.questionLength === 10) return alert("问卷已满！");
-      this.showModal=true
+      this.showModal = true;
       this.addOptionType = "textarea";
     },
-      addJz() {
+    addJz() {
       if (this.questionLength === 10) return alert("问卷已满！");
-      this.showModal=true
-      this.addOptionType = "textarea";
+      this.showModal = true;
+      this.addOptionType = "jz";
     },
+    // 增加删除矩阵类型
+    delJzItemOption(rowOptions, roptionsIndex) {
+      let rownum = this.jzItemOptions.length;
+      console.log(rownum);
+      if (rownum >= 4) {
+        this.jzItemOptions.splice(rowOptions, 1);
+      } else this.$message.error("至少保留三项");
+    },
+    delJzTitleOptions(colOptions, coptionsIndex) {
+      let cowNum = this.jzTitleOptions.length;
+      console.log(cowNum);
+      if (cowNum >= 4) {
+        this.jzTitleOptions.splice(coptionsIndex, 1);
+      } else this.$message.error("至少保留三项");
+    },
+    addJzItemOption(rowOptions, roptionsIndex) {
+      let rowNumT = this.jzItemOptions.length;
+      console.log(rowNumT);
+      if (rowNumT < 8) {
+        let jzItemOptions = { name: "" };
+        this.jzItemOptions.push(rowOptions);
+      } else this.$message.error("最多只能有八项");
+    },
+    addJzTitleOptions(colOptions, coptionsIndex) {
+      let rowNumO = this.jzTitleOptions.length;
+      if (rowNumO < 8) {
+        let jzTitleOptions = { name: "" };
+        this.jzTitleOptions.push(colOptions);
+      } else this.$message.error("最多只能有八项");
+    },
+    // 增加删除checkbox radio text类型
     delItemOption(qsOptions, optionsIndex) {
       this.qsInputOptions.splice(optionsIndex, 1);
     },
     addItemOption() {
-      let qsOptions = {
-        name: ""
-      };
+      let qsOptions = { name: "" };
       this.qsInputOptions.push(qsOptions);
     },
     validateAddQs() {
-      let qsTitle = this.qsInputTitle.trim();
-      if (this.currEditIndex >= 0) {
-        //編輯
-     let Types=this.qsItem.question[this.currEditIndex]
-        this.qsItem.question[this.currEditIndex].title = qsTitle;
-        if(Types==='checkbox'||Types==='radio'){
-        this.qsItem.question[this.currEditIndex].options.name = JSON.stringify(
-         this.qsInputOptions
-        );
-         let qsOptionss = this.qsInputOptions;
-        qsOptionss.forEach((item, index) => {
-        if (item.name === "") {
-          this.$message.error("选项为空");
+        let qsTitle = this.qsInputTitle.trim();
+        if (this.currEditIndex >= 0) {
+          //編輯
+          let Types = this.qsItem.question[this.currEditIndex];
+          this.qsItem.question[this.currEditIndex].title = qsTitle;
+          if (Types === "checkbox" || Types === "radio") {
+            this.qsItem.question[this.currEditIndex].options.name = JSON.parse(
+              JSON.stringify(this.qsInputOptions)
+            );
+            let qsOptionss = this.qsInputOptions;
+            qsOptionss.forEach((item, index) => {
+              if (item.name === "") {
+                this.$message.error("选项为空");
+              }
+            });
+          }
         }
-      });
+        if (qsTitle === "") {
+          this.$message.error("题目为空");
+        } else {
+          this.showAddQsDialog = false;
+          this.currEditIndex = -1;
+          this.qsInputOptions = {};
         }
-      }
-     
-      if (qsTitle === "") {
-        this.$message.error("题目为空");
-      }
-      // this.qsInputOptions.forEach;
-      this.showAddQsDialog = false;
-      this.currEditIndex = -1;
-      this.qsInputOptions={};
+      
     },
+    validateAddQsJz(){
+        if (this.qsJzTitle === "") {
+          this.$message.error("题目不能为空");
+        } else {
+          this.showAddQsDialog = false;
+        }
+    },
+
     *save() {
       this.showDialog = true;
       this.info = "确认保存?";
@@ -555,5 +708,10 @@ export default {
 #edit-box {
   width: 80%;
   margin: 0 auto;
+}
+.btn_add_text {
+  display: inline-block;
+  width: 9.5rem !important;
+  text-align: center !important;
 }
 </style>

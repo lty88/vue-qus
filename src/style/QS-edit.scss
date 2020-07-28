@@ -319,6 +319,7 @@ $lightorange: #fcf0e5;
       }
     }
   }
+
 }
 #edit-btn-box{
   width: 20rem;
@@ -361,6 +362,129 @@ $lightorange: #fcf0e5;
 	width: 40.625rem;
 }
 
+  .shadowTwo {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    background: rgba(85, 85, 85, .7);
 
+    .add-qs-dialog,
+    .dialog {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 100rem;
+      min-height: 550px;
+      overflow-y: auto;
+      transform: translateX(-50%) translateY(-50%);
+      border-radius: .5rem;
+      box-shadow: 0 0 5px #555;
+      background-color: #fff;
+      .shadow-body{
+        max-height: 450px;
+        overflow-y: auto !important;
+        padding: 20px;
+        margin-bottom: 30px;
+        #edit-box{
+          display: flex;
+          justify-content: space-between;
+          .edit-box{ 
+            border-radius: 3px;
+            box-shadow: 20px 0px 10px 0px rgba(0,0,0,0.5);
+          h3{
+            background: rgba(85, 85, 85, .7);
+            border-radius: 2px 3px 2px 2px;
+            box-shadow: 0 0 0 1px #5F5A4B, 1px 1px 6px 1px rgba(10, 10, 0, 0.5);
+            color: #FFFFFF;
+            font-family:"微软雅黑", "宋体", "黑体", Arial;
+            font-size: 18px;
+            font-weight: bold;
+            height: 25px;
+            line-height: 25px;
+            margin: 18px 0 !important;
+            padding: 8px 0 5px 5px;
+            text-shadow: 2px 2px 3px #222222;
+            text-align: center;
+          }
+          
+          }
+          .edit-jzItemOptions-box{
+            
+          }
+          .edit-jzItemOptions-box{}
+        }
+      }
+    }
+
+    header {
+      height: 5rem;
+
+      padding: {
+        left: 3rem;
+        right: 3rem;
+      }
+
+      line-height: 5rem;
+      border-radius: .5rem;
+      background-color: #f7f7f7;
+
+      span:nth-of-type(1) {
+        font-weight: 700;
+      }
+
+      .close-btn {
+        position: absolute;
+        right: 3rem;
+        color: #bbb;
+        cursor: pointer;
+
+        &:hover {
+          color: $orange;
+        }
+      }
+    }
+
+    .add-qs-dialog p,
+    .dialog p {
+      margin: 3rem 0 2rem 3rem;
+    }
+
+    label {
+      display: block;
+      margin-left: 3rem;
+      margin-bottom: 2rem;
+
+      &:nth-of-type(2) {
+        margin-left: 5.7rem;
+      }
+
+      input {
+        margin-left: 1rem;
+      }
+    }
+
+    .btn-box {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 6rem;
+      text-align: center;
+      line-height: 6rem;
+
+      .yes {
+        margin-right: 1rem;
+        color: #fff;
+        background-color: $orange;
+        border: 1px solid $orange;
+
+        &:hover {
+          box-shadow: 0 0 5px $orange;
+        }
+      }
+    }
+  }
 
 

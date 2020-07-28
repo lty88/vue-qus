@@ -18,6 +18,9 @@
         <p>成功！</p>
       </template>
     </Dialog>
+    <p v-for='(item,index) in jzOptions' :key="index">
+        <input type="checkbox" :name="index">
+    </p>
   </div>
 </template>
 
@@ -31,7 +34,8 @@ export default {
     return {
       msg: "测试",
       showModal: false,
-      showModalS:false
+      showModalS:false,
+      jzOptions: [{name: "非常喜欢"}, {name: "喜欢"}, {name: "一般"}, {name: "不喜欢"}]
     };
   },
   methods: {

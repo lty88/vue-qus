@@ -78,25 +78,25 @@ export default {
       this.qsList = storage.get();
       this.qsList.forEach(item => {
         console.log(item);
-        // let [year, month, day] = item.time.split("-");
-        // // 从后台获取时间后判断发布的状态
-        // if (year < new Date().getFullYear()) {
-        // 	item.state = "issueed";
-        // 	item.stateTitle = "已发布";
-        // } else if (
-        // 	year == new Date().getFullYear() &&
-        // 	month < new Date().getMonth() + 1
-        // ) {
-        // 	item.state = "issueed";
-        // 	item.stateTitle = "已发布";
-        // } else if (
-        // 	year == new Date().getFullYear() &&
-        // 	month == new Date().getMonth() + 1 &&
-        // 	day < new Date().getDate()
-        // ) {
-        // 	item.state = "issueed";
-        // 	item.stateTitle = "已发布";
-        // }
+        let [year, month, day] = item.time.split("-");
+        // 从后台获取时间后判断发布的状态
+        if (year < new Date().getFullYear()) {
+        	item.state = "issueed";
+        	item.stateTitle = "已发布";
+        } else if ( 
+        	year == new Date().getFullYear() &&
+        	month < new Date().getMonth() + 1
+        ) {
+        	item.state = "issueed";
+        	item.stateTitle = "已发布";
+        } else if (
+        	year == new Date().getFullYear() &&
+        	month == new Date().getMonth() + 1 &&
+        	day < new Date().getDate()
+        ) {
+        	item.state = "issueed";
+        	item.stateTitle = "已发布";
+        }
       });
     } else {
       storage.save([
@@ -169,11 +169,11 @@ export default {
             },
             {
               num: "Q5",
-              title: "矩阵题目",
+              title: "你最喜欢的中央频道是？",
               type: "jz",
               isNeed: true,
-              jzTitle: [{title:'CCTV1'},{title:'CCTV2'},{title:'CCTV3'}],
-              jzOptions: [{name:'非常喜欢'},{name:'喜欢'},{name:'一般'},{name:'不喜欢'},{name:'非常不喜欢'}]
+              jzTitle: [{title:'CCTV1'},{title:'CCTV2'},{title:'CCTV3'},{title:'CCTV4'},{title:'CCTV5'},{title:'CCTV6'}],
+              jzOptions: [{name:'要的'},{name:'阔以'},{name:'非常阔以'},{name:'不得行'},{name:'非常差'},{name:'一般般'},{name:'阿达萨达'}]
             }
           ]
         },
