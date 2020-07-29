@@ -1,0 +1,55 @@
+@font-face {font-family: "iconfont";
+    src: url('//at.alicdn.com/t/font_1973410_dl75of344ko.eot?t=1595992014013'); /* IE9 */
+    src: url('//at.alicdn.com/t/font_1973410_dl75of344ko.eot?t=1595992014013#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAALwAAsAAAAABqQAAAKjAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCCcAqBMIE2ATYCJAMICwYABCAFhG0HLRvZBRHVk1dkXydwc2iLo3VgCysz6YDssmUazBNKKl1kUfcAd1/u7GuCJ35//79mz5z79pPQ6UR81R8SoNCE0IhmpR8FBNntdSuwTAMMOMogEErqCR7LZjq3QmCDjV7Az1SNkWRqFhDYgLNxH2nVmWdpcc6Bq1ERaiRnD6jQF1IaZznBRK4tQQztJA+AP+6d/hbQxvnu4nIZY9CYAz91AcZbA9oboy1cJJE3jF3gEs5DQIQcVWR2XR+JZ6xpAuSscTLxOS9jLOGJUM3aRC4BX7a7e8De8PvyaQgPTlCxSkb2ziQtL8ZO0XX/x7SP4AOBNgdAQRUwyKqNDlHCiCqC2xQAY4FP/n9sQfZqRNhfZ+VHAciConsSu5JbzXcADHbXg8FRLrBuvS964dGnNZ/RH6M+nHrg/TDmMf6jrR1bfzw1+vDhdYeWOyXB+qM7DyfbuhO/Bm6q5rmv6q4ENHV2tb8a1TiR+nZ0yk6SPqkn9d3opJ0CnLg/L1h67KBLBK8LRLXomA9/KQpaAPxPbzqAAEHUaH9z5lcvBsDz8qH7f0Y/O/jT2QS/TdyzynSppXUXIEI2pz7jxgEKuIP/WM4Er8bqku8xKbzkO7WHyU5BeUUYI1RBIFIThHjNEKFS9+ZIidZSkuFAhc0ARJzz4MS4CCrOfYwRXkIgxRcIiQuFCKPBnpFKggpiQygZDag/BD2N1rGyiApv6N69pKw0pL+Q1hCAuqiKiQOOSHMsWD+uYbZgaRpgDy7Dvp9gpimi5sIzz21Z2robFXoaEpFsCCWjAfWHoKfR+vVZlD5/Q/fuJbWgarwvpDX0DnVR9cAcVGMv1L1cs35cw2zB0jTAHozCvp9grh8VUXPhR4TntrRr2b6qYn3N8HUbSBKRWPostSuUXBqTJAA=') format('woff2'),
+    url('//at.alicdn.com/t/font_1973410_dl75of344ko.woff?t=1595992014013') format('woff'),
+    url('//at.alicdn.com/t/font_1973410_dl75of344ko.ttf?t=1595992014013') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url('//at.alicdn.com/t/font_1973410_dl75of344ko.svg?t=1595992014013#iconfont') format('svg'); /* iOS 4.1- */
+  }
+  
+  
+  .iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+ 
+  
+  .icon-add:before {
+    content: "\e60e";
+  }
+   .icon-jianqu:before {
+    content: "\e600";
+  }
+
+  .modal-dialog {
+    width: 100rem !important;
+  }
+  .form {
+    margin: 0 auto !important;
+  }
+  .hTit {
+    margin: 0 auto 15px;
+  }
+  .title-box {
+    margin: 0 auto !important;
+    width: 100%;
+    border-radius: 3px;
+    box-shadow: 20px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    display: flex;
+    // .Tbox {
+    //   border: 1px springgreen solid;
+    //   border-radius: 3px;
+    //   box-shadow: 20px 0px 10px 0px rgba(0, 0, 0, 0.5);
+     
+    // }
+  }
+  #submitFormBtn {
+    position: absolute;
+    left: 40%;
+    top: 50%;
+    transform: translate(-50%, 50%);
+  }

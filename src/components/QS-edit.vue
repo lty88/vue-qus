@@ -10,7 +10,7 @@
       @keyup.enter="onsubmit"
       ref="titleInput"
     />
-
+    <!--渲染数据-->
     <div class="content">
       <div class="questions" v-for="(qs, index) in qsItem.question" :key="index">
         <div class="qs-left">
@@ -185,7 +185,7 @@
         </div>
         <div class="btn-box">
           <button class="yes" @click="validateAddQsJz()">确定</button>
-          <button @click="showAddQsDialogJz = false;qsInputOptions=[];">取消</button>
+          <button @click="showAddQsDialogJz = false;  qsInputOptions=[];  jzItemOptions=[], jzTitleOptions=[];">取消</button>
         </div>
       </div>
     </div>
@@ -219,13 +219,33 @@
     </div>
 
     <!--对应添加问题 新增radio、checkbox、textarea模板 -->
-    <Rctemp
+    <v-radio
       @formData="qsData"
       :showModal="showModal"
       :types="addOptionType"
       @cancel="showModal=false"
-    ></Rctemp>
-
+    ></v-radio>
+    <!--对应添加问题 新增checkbox模板 -->
+    <v-checkbox
+      @formDataC="qsDataC"
+      :showModal="AddshowModalC"
+      :types="addOptionType"
+      @cancel="AddshowModalC=false"
+    ></v-checkbox>
+    <!--对应添加问题 新增textarea模板 -->
+    <v-textarea
+      @formDataT="qsDataT"
+      :showModal="AddshowModalT"
+      :types="addOptionType"
+      @cancel="AddshowModalT=false"
+    ></v-textarea>
+    <!--对应添加问题 新增矩阵模板 -->
+    <v-jztemp
+      :showModal="AddshowModalJz"
+      @formDataJz="fDataJz"
+      @cancel="AddshowModalJz=false"
+      :types="addOptionType"
+    ></v-jztemp>
     <footer>
       <div class="block">
         <span class="demonstration">开始日期</span>
@@ -263,10 +283,13 @@
 
 <script>
 import storage from "../store/index";
-import Rctemp from "@/components/Rctemp";
+import vRadio from '@/components/v-radio'
+import vJztemp from "@/components/v-jztemp";
+import vTextarea from "@/components/v-textarea";
+import vCheckbox from "@/components/v-checkbox";
 export default {
   name: "qsEdit",
-  components: { Rctemp },
+  components: { vRadio, vJztemp, vTextarea, vCheckbox },
   data() {
     return {
       pickerOptions: {
@@ -308,21 +331,20 @@ export default {
       },
       Jzquestion: [
         {
-          num: "Q4",
-          title: "矩阵题目",
-          type: "jz",
+          num: "",
+          title: "",
+          type: "",
           isNeed: true,
-          jzTitle: [{ title: "CCTV1" }, { title: "CCTV2" }, { title: "CCTV3" }],
+          jzTitle: [{ title: "" }, { title: "" }, { title: "" }],
           jzOptions: [
-            { name: "非常喜欢" },
-            { name: "喜欢" },
-            { name: "一般" },
-            { name: "不喜欢" },
-            { name: "非常不喜欢" }
+            { name: "" },
+            { name: "" },
+            { name: "" },
+            { name: "" },
+            { name: "" }
           ]
         }
       ],
-
       qsItem: {},
       qsList: storage.get(),
       isError: false,
@@ -332,6 +354,9 @@ export default {
       showAddQsDialog: false,
       showAddQsDialogJz: false,
       showAddOptionInput: true,
+      AddshowModalJz: false, //矩阵的增加modal
+      AddshowModalT: false, //textarea的增加modal
+      AddshowModalC:false,//checkbox的增加modal
       qsInputTitle: "",
       qsJzTitle: "",
       qsInputOptions: [],
@@ -384,7 +409,6 @@ export default {
   },
   created() {
     this.fetchData();
-    // console.log(storage.get());
   },
   mounted() {
     console.log(this.qsItem.question);
@@ -393,20 +417,41 @@ export default {
       let numID = this.$route.params.num - 1;
       // console.log(numID);
       let fir = this.qsList[numID];
-      // console.log(this.qsList[numID]);
-      // console.log(fir);
       this.selectTime = fir.time;
     }
   },
   methods: {
-    // 子组件传递过来的数据
+    // radio单选子组件传递过来的数据
     qsData(e) {
       console.log(e);
       this.showModal = false;
       let res = JSON.stringify(e);
       console.log("子组件传过来的值：" + res);
       this.qsItem.question.push(JSON.parse(JSON.stringify(e)));
-      this.qsList.push(this.qsItem);
+      // this.qsList.push(this.qsItem);
+    },
+     // checkbox单选子组件传递过来的数据
+    qsDataC(e) {
+      console.log(e);
+      this.AddshowModalC = false;
+      let res = JSON.stringify(e);
+      console.log("子组件传过来的值：" + res);
+      this.qsItem.question.push(JSON.parse(JSON.stringify(e)));
+      // this.qsList.push(this.qsItem);
+    },
+    // Textarea单选子组件传递过来的数据
+    qsDataT(e) {
+      console.log(e);
+      this.AddshowModalT = false;
+      let res = JSON.stringify(e);
+      console.log("子组件传过来的值：" + res);
+      this.qsItem.question.push(JSON.parse(JSON.stringify(e)));
+    },
+    // 矩阵子组件传递过来的数据
+    fDataJz(e) {
+      this.AddshowModalJz = false;
+      this.qsItem.question.push(JSON.parse(JSON.stringify(e)));
+      console.log(e);
     },
     fetchData() {
       if (this.$route.params.num == 0) {
@@ -481,6 +526,7 @@ export default {
     goDown(index) {
       this.swapItems(index, index + 1);
     },
+    // 复用题目按钮
     // copy(index, qs) {
     //   // if (this.questionLength === 10) return alert('问卷已满！')
     //   qs = Object.assign({}, qs);
@@ -498,16 +544,6 @@ export default {
         this.showBtn = !this.showBtn;
       }
     },
-    // showAddDialog(msg, showOption) {
-    //   this.showAddOptionInput = showOption;
-    //   this.showAddQsDialog = true;
-    //   this.showAddQsDialogJz=true,
-    //   this.info = msg;
-    //   this.qsInputTitle = "";
-    //   this.qsJzTitle="";
-    //   this.qsInputOptions = [];
-    //   this.qsJzOptions=[]
-    // },
     editTitle(qs, index) {
       this.qsInputTitle = "";
       this.qsJzTitle = "";
@@ -547,17 +583,17 @@ export default {
     },
     addCheckbox() {
       if (this.questionLength === 10) return alert("问卷已满！");
-      this.showModal = true;
+      this.AddshowModalC = true;
       this.addOptionType = "checkbox";
     },
     addTextarea() {
       if (this.questionLength === 10) return alert("问卷已满！");
-      this.showModal = true;
+      this.AddshowModalT = true;
       this.addOptionType = "textarea";
     },
     addJz() {
       if (this.questionLength === 10) return alert("问卷已满！");
-      this.showModal = true;
+      this.AddshowModalJz = true;
       this.addOptionType = "jz";
     },
     // 增加删除矩阵类型
@@ -599,38 +635,38 @@ export default {
       this.qsInputOptions.push(qsOptions);
     },
     validateAddQs() {
-        let qsTitle = this.qsInputTitle.trim();
-        if (this.currEditIndex >= 0) {
-          //編輯
-          let Types = this.qsItem.question[this.currEditIndex];
-          this.qsItem.question[this.currEditIndex].title = qsTitle;
-          if (Types === "checkbox" || Types === "radio") {
-            this.qsItem.question[this.currEditIndex].options.name = JSON.parse(
-              JSON.stringify(this.qsInputOptions)
-            );
-            let qsOptionss = this.qsInputOptions;
-            qsOptionss.forEach((item, index) => {
-              if (item.name === "") {
-                this.$message.error("选项为空");
-              }
-            });
-          }
+      let qsTitle = this.qsInputTitle.trim();
+      if (this.currEditIndex >= 0) {
+        //編輯
+        let Types = this.qsItem.question[this.currEditIndex];
+        console.log(Types);
+        this.qsItem.question[this.currEditIndex].title = qsTitle;
+        if (Types === "checkbox" || Types === "radio") {
+          this.qsItem.question[this.currEditIndex].options.name = JSON.parse(
+            JSON.stringify(this.qsInputOptions)
+          );
+          let qsOptionss = this.qsInputOptions;
+          qsOptionss.forEach((item, index) => {
+            if (item.name === "") {
+              this.$message.error("选项为空");
+            }
+          });
         }
-        if (qsTitle === "") {
-          this.$message.error("题目为空");
-        } else {
-          this.showAddQsDialog = false;
-          this.currEditIndex = -1;
-          this.qsInputOptions = {};
-        }
-      
+      }
+      if (qsTitle === "") {
+        this.$message.error("题目为空");
+      } else {
+        this.showAddQsDialog = false;
+        this.currEditIndex = -1;
+        this.qsInputOptions = {};
+      }
     },
-    validateAddQsJz(){
-        if (this.qsJzTitle === "") {
-          this.$message.error("题目不能为空");
-        } else {
-          this.showAddQsDialog = false;
-        }
+    validateAddQsJz() {
+      if (this.qsJzTitle === "") {
+        this.$message.error("题目不能为空");
+      } else {
+        this.showAddQsDialog = false;
+      }
     },
 
     *save() {
