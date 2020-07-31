@@ -2,8 +2,14 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import { Button, DatePicker,Message,MessageBox,Form,FormItem,Input} from 'element-ui';
+import { Button, DatePicker,Message,MessageBox,Form,FormItem,Input,Drawer,Select,option,Loading,table,Radio} from 'element-ui';
 Vue.use(DatePicker);
+Vue.use(Drawer);
+Vue.use(Select);
+Vue.use(table);
+Vue.use(Radio)
+Vue.use(Loading);
+Vue.use(option);
 Vue.component(Button.name, Button);
 Vue.use(Form);
 Vue.use(FormItem);

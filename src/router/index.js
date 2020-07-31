@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import qsList from '@/components/QS-list'
+import qsList from '../views/QS-list.vue'
 
 Vue.use(VueRouter);
 
@@ -19,7 +19,7 @@ const routes = [{
 			title:'填写问卷'
 		},
 		component: () =>
-			import( /* webpackChunkName: "about" */ "../components/QS-fill.vue")
+			import( /* webpackChunkName: "about" */ "../views/QS-fill.vue")
 	},
 	{
 		path: '/edit/:num',
@@ -28,7 +28,7 @@ const routes = [{
 			title:'编辑问卷'
 		},
 		component: () =>
-			import( /* webpackChunkName: "about" */ "../components/QS-edit.vue")
+			import( /* webpackChunkName: "about" */ "../views/QS-edit.vue")
 	}, {
 		path: '/data/:num',
 		name: 'qsData',
@@ -36,7 +36,7 @@ const routes = [{
 			title:'查看问卷结果'
 		},
 		component: () =>
-			import( /* webpackChunkName: "about" */ "../components/QS-data.vue")
+			import( /* webpackChunkName: "about" */ "../views/QS-data.vue")
 	},
 	{
 		path: '/test',
@@ -45,7 +45,16 @@ const routes = [{
 			title:'我是测试'
 		},
 		component: () =>
-			import( /* webpackChunkName: "about" */ "../components/Test.vue")
+			import( /* webpackChunkName: "about" */ "../views/Test.vue")
+	},
+	{
+		path: '/test/import',
+		name: '	',
+		meta:{
+			title:'我是批量导入'
+		},
+		component: () =>
+			import( /* webpackChunkName: "about" */ "../views/Test-import.vue")
 	}
 ];
 

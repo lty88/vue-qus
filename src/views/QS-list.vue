@@ -3,6 +3,7 @@
     <ul v-if="qsList.length == 0 ? false : true">
       <li></li>
       <li>标题</li>
+      <li>开始时间</li>
       <li>截止时间</li>
       <li>状态</li>
       <li>
@@ -13,10 +14,11 @@
     <div v-for="(item, index) in qsList" :key="index">
       <ul>
         <li>
-          <input type="checkbox" v-model="item.checked" />
+          <input style="cursor: pointer;" type="checkbox" v-model="item.checked" />
         </li>
         <li>{{ item.title }}</li>
-        <li>{{ item.time }}</li>
+        <li>{{ item.starTime }}</li>
+        <li>{{ item.endTime }}</li>
         <li :class="item.state === 'inissue' ? 'inissue' : ''">{{ item.stateTitle}}</li>
         <li>
           <button @click="iterator = edit(item);iterator.next();">编辑</button>
@@ -27,8 +29,8 @@
       </ul>
     </div>
     <div class="list-bottom" v-if="qsList.length == 0 ? false : true">
-      <label>
-        <input type="checkbox" id="all-check" v-model="selectAll" />
+      <label style="cursor: pointer;" >
+        <input style="cursor: pointer;"  type="checkbox" id="all-check" v-model="selectAll" />
         全选
       </label>
       <button @click="iterator = delItems();iterator.next();">删除</button>
@@ -47,7 +49,8 @@
       modalType="middle"
       :showModal="showModal"
       @submit="iterator.next()"
-      @cancel="showModal=false">
+      @cancel="showModal=false"
+    >
       <template v-slot:body>
         <p>{{info}}</p>
       </template>
@@ -76,34 +79,36 @@ export default {
   mounted() {
     if (storage.get() !== null) {
       this.qsList = storage.get();
-      this.qsList.forEach(item => {
-        console.log(item);
-        let [year, month, day] = item.time.split("-");
-        // 从后台获取时间后判断发布的状态
-        if (year < new Date().getFullYear()) {
-        	item.state = "issueed";
-        	item.stateTitle = "已发布";
-        } else if ( 
-        	year == new Date().getFullYear() &&
-        	month < new Date().getMonth() + 1
-        ) {
-        	item.state = "issueed";
-        	item.stateTitle = "已发布";
-        } else if (
-        	year == new Date().getFullYear() &&
-        	month == new Date().getMonth() + 1 &&
-        	day < new Date().getDate()
-        ) {
-        	item.state = "issueed";
-        	item.stateTitle = "已发布";
-        }
-      });
+      // this.qsList.forEach(item => {
+      //   console.log(item);
+      //   let [year, month, day] = item.endTime.split("-");
+      //   // 从后台获取时间后判断发布的状态
+      //   if (year < new Date().getFullYear()) {
+      //     item.state = "issueed";
+      //     item.stateTitle = "已发布";
+      //   } else if (
+      //     year == new Date().getFullYear() &&
+      //     month < new Date().getMonth() + 1
+      //   ) {
+      //     item.state = "issueed";
+      //     item.stateTitle = "已发布";
+      //   } else if (
+      //     year == new Date().getFullYear() &&
+      //     month == new Date().getMonth() + 1 &&
+      //     day < new Date().getDate()
+      //   ) {
+      //     item.state = "issueed";
+      //     item.stateTitle = "已发布";
+      //   }
+      // });
     } else {
       storage.save([
         {
           num: 1,
           title: "第一份问卷",
-          time: "2030-1-1",
+          des:'这是一份针对全体教师教学质量的检查',
+          starTime: "2030-1-1",
+          endTime: "2030-1-2",
           state: "noissue",
           stateTitle: "发布中",
           checked: false,
@@ -113,14 +118,22 @@ export default {
               title: "单选题",
               type: "radio",
               isNeed: true,
-              options: [{name:'选项一'},{name:'选项二'},{name:'选项三'}]
+              options: [
+                { name: "选项一" },
+                { name: "选项二" },
+                { name: "选项三" }
+              ]
             },
             {
               num: "Q2",
               title: "多选题",
               type: "checkbox",
               isNeed: true,
-              options: [{name:'选项一'},{name:'选项二'},{name:'选项三'}]
+              options: [
+                { name: "选项一" },
+                { name: "选项二" },
+                { name: "选项三" }
+              ]
             },
             {
               num: "Q3",
@@ -134,7 +147,9 @@ export default {
         {
           num: 2,
           title: "第二份问卷",
-          time: "2030-1-1",
+          des:'这是一份针对全体学生的入学考试的调查',
+          starTime: "2020-7-31",
+          endTime: "2030-8-1",
           state: "noissue",
           stateTitle: "未发布",
           checked: false,
@@ -144,14 +159,23 @@ export default {
               title: "单选题",
               type: "radio",
               isNeed: true,
-              options:[{name:'选项一'},{name:'选项二'},{name:'选项三'}]
+              options: [
+                { name: "选项一" },
+                { name: "选项二" },
+                { name: "选项三" }
+              ]
             },
             {
               num: "Q2",
               title: "多选题",
               type: "checkbox",
               isNeed: true,
-              options: [{name:'选项一'},{name:'选项二'},{name:'选项三'},{name:'选项四'}]
+              options: [
+                { name: "选项一" },
+                { name: "选项二" },
+                { name: "选项三" },
+                { name: "选项四" }
+              ]
             },
             {
               num: "Q3",
@@ -159,21 +183,46 @@ export default {
               type: "textarea",
               isNeed: true
             },
-             {
+            {
               num: "Q4",
               title: "矩阵题目",
               type: "jz",
               isNeed: true,
-              jzTitle: [{title:'CCTV1'},{title:'CCTV2'},{title:'CCTV3'}],
-              jzOptions: [{name:'非常喜欢'},{name:'喜欢'},{name:'一般'},{name:'不喜欢'},{name:'非常不喜欢'}]
+              jzTitle: [
+                { title: "CCTV1" },
+                { title: "CCTV2" },
+                { title: "CCTV3" }
+              ],
+              jzOptions: [
+                { name: "非常喜欢" },
+                { name: "喜欢" },
+                { name: "一般" },
+                { name: "不喜欢" },
+                { name: "非常不喜欢" }
+              ]
             },
             {
               num: "Q5",
               title: "你最喜欢的中央频道是？",
               type: "jz",
               isNeed: true,
-              jzTitle: [{title:'CCTV1'},{title:'CCTV2'},{title:'CCTV3'},{title:'CCTV4'},{title:'CCTV5'},{title:'CCTV6'}],
-              jzOptions: [{name:'要的'},{name:'阔以'},{name:'非常阔以'},{name:'不得行'},{name:'非常差'},{name:'一般般'},{name:'阿达萨达'}]
+              jzTitle: [
+                { title: "CCTV1" },
+                { title: "CCTV2" },
+                { title: "CCTV3" },
+                { title: "CCTV4" },
+                { title: "CCTV5" },
+                { title: "CCTV6" }
+              ],
+              jzOptions: [
+                { name: "要的" },
+                { name: "阔以" },
+                { name: "非常阔以" },
+                { name: "不得行" },
+                { name: "非常差" },
+                { name: "一般般" },
+                { name: "阿达萨达" }
+              ]
             }
           ]
         },
@@ -181,7 +230,9 @@ export default {
         {
           num: 3,
           title: "第三份问卷",
-          time: "2017-3-27",
+          des:'这是一份针对全体学生的入学考试的调查',
+          starTime: "2020-8-1",
+          endTime: "2030-8-3",
           state: "issueed",
           stateTitle: "已发布",
           checked: false,

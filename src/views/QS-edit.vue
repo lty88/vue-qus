@@ -1,5 +1,6 @@
 <template>
   <div class="edit-container">
+    <drawer></drawer>
     <h2 @click="titleClick" v-if="!titleChange" ref="a">{{ qsItem.title }}</h2>
     <input
       type="text"
@@ -10,6 +11,7 @@
       @keyup.enter="onsubmit"
       ref="titleInput"
     />
+ 
     <!--渲染数据-->
     <div class="content">
       <div class="questions" v-for="(qs, index) in qsItem.question" :key="index">
@@ -185,7 +187,9 @@
         </div>
         <div class="btn-box">
           <button class="yes" @click="validateAddQsJz()">确定</button>
-          <button @click="showAddQsDialogJz = false;  qsInputOptions=[];  jzItemOptions=[], jzTitleOptions=[];">取消</button>
+          <button
+            @click="showAddQsDialogJz = false;  qsInputOptions=[];  jzItemOptions=[], jzTitleOptions=[];"
+          >取消</button>
         </div>
       </div>
     </div>
@@ -247,88 +251,29 @@
       :types="addOptionType"
     ></v-jztemp>
     <footer>
-      <div class="block">
-        <span class="demonstration">开始日期</span>
-        <el-date-picker
-          v-model="selectTime"
-          value-format="yyyy-MM-dd"
-          align="center"
-          type="date"
-          size="small"
-          placeholder="选择日期"
-          :picker-options="pickerOptions"
-        ></el-date-picker>
-      </div>
       <div class="btn-box">
         <el-button type="text" class="save" @click="iterator = save();iterator.next();">保存问卷</el-button>
         <button class="issue" @click="iterator = issueQs();iterator.next();">发布问卷</button>
       </div>
-      <div class="block">
-        <span class="demonstration">截止日期</span>
-        <el-date-picker
-          v-model="selectTime"
-          value-format="yyyy-MM-dd"
-          align="center"
-          type="date"
-          size="small"
-          placeholder="选择日期"
-          :picker-options="pickerOptions"
-        ></el-date-picker>
-      </div>
 
-      <!-- <p>{{selectTime}}</p> -->
+    
     </footer>
   </div>
 </template>
 
 <script>
 import storage from "../store/index";
-import vRadio from '@/components/v-radio'
+import vRadio from "@/components/v-radio";
 import vJztemp from "@/components/v-jztemp";
 import vTextarea from "@/components/v-textarea";
 import vCheckbox from "@/components/v-checkbox";
+import Drawer from '@/components/Drawer'
 export default {
   name: "qsEdit",
-  components: { vRadio, vJztemp, vTextarea, vCheckbox },
+  components: { vRadio, vJztemp, vTextarea, vCheckbox,Drawer },
   data() {
     return {
-      pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() < Date.now();
-        },
-        shortcuts: [
-          {
-            text: "今天",
-            onClick(picker) {
-              picker.$emit("pick", new Date());
-            }
-          },
-          {
-            text: "一天后",
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() + 3600 * 1000 * 24);
-              picker.$emit("pick", date);
-            }
-          },
-          {
-            text: "一周后",
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", date);
-            }
-          },
-          {
-            text: "一月后",
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() + 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", date);
-            }
-          }
-        ]
-      },
+     
       Jzquestion: [
         {
           num: "",
@@ -356,15 +301,16 @@ export default {
       showAddOptionInput: true,
       AddshowModalJz: false, //矩阵的增加modal
       AddshowModalT: false, //textarea的增加modal
-      AddshowModalC:false,//checkbox的增加modal
+      AddshowModalC: false, //checkbox的增加modal
       qsInputTitle: "",
       qsJzTitle: "",
       qsInputOptions: [],
       jzTitleOptions: [],
       jzItemOptions: [],
+      starTime :"",
+      endTime : "",
       info: "",
-      selectTime: "",
-      addOptionType: "",
+      addOptionType: "",//增加的类型
       limit: {},
       showDialog: false,
       iterator: {},
@@ -411,14 +357,15 @@ export default {
     this.fetchData();
   },
   mounted() {
-    console.log(this.qsItem.question);
-    if (this.$route.params.num != 0) {
-      //console.log(typeof this.$route.params)
-      let numID = this.$route.params.num - 1;
-      // console.log(numID);
-      let fir = this.qsList[numID];
-      this.selectTime = fir.time;
-    }
+    //  console.log(this.questionLength);
+    // if (this.$route.params.num != 0) {
+    //   let numID = this.$route.params.num - 1;
+    //   let fir = this.qsList[numID];
+    //   console.log(fir);
+    //   this.selectTime.push(fir.starTime,fir.endTime)
+     
+     
+    // }
   },
   methods: {
     // radio单选子组件传递过来的数据
@@ -430,7 +377,7 @@ export default {
       this.qsItem.question.push(JSON.parse(JSON.stringify(e)));
       // this.qsList.push(this.qsItem);
     },
-     // checkbox单选子组件传递过来的数据
+    // checkbox单选子组件传递过来的数据
     qsDataC(e) {
       console.log(e);
       this.AddshowModalC = false;
@@ -458,14 +405,14 @@ export default {
         let item = {};
         item.num = this.qsList.length + 1;
         item.title = "这里是标题";
-        item.time = "";
+        // item.starTime = "";
+        // item.endTime = "";
         item.state = "noissue";
         item.question = [];
         item.stateTitle = "未发布";
         item.checked = false;
         this.qsItem = item;
         this.qsList.push(this.qsItem);
-        console.log(item.time);
       } else {
         let i = 0;
         for (let length = this.qsList.length; i < length; i++) {
@@ -526,12 +473,6 @@ export default {
     goDown(index) {
       this.swapItems(index, index + 1);
     },
-    // 复用题目按钮
-    // copy(index, qs) {
-    //   // if (this.questionLength === 10) return alert('问卷已满！')
-    //   qs = Object.assign({}, qs);
-    //   this.qsItem.question.splice(index, 0, qs);
-    // },
     del(index) {
       this.qsItem.question.splice(index, 1);
     },
@@ -672,12 +613,17 @@ export default {
     *save() {
       this.showDialog = true;
       this.info = "确认保存?";
-      this.qsItem.time = this.selectTime;
+      let str='这里是标题'
       yield;
+      // debugger
       if (this.qsItem.question.length === 0) {
         this.showDialog = false;
         this.$message.error("问卷为空，不能保存");
-      } else {
+      }else if (this.qsItem.title===str) {
+        this.showDialog = false;
+        this.$message.error("问卷标题为空，不能保存");
+      } 
+      else {
         storage.save(this.qsList);
         this.info = "是否发布?";
         this.isGoIndex = true;
@@ -703,7 +649,6 @@ export default {
       } else {
         this.qsItem.state = "inissue";
         this.qsItem.stateTitle = "发布中";
-        this.qsItem.time = this.selectTime;
         storage.save(this.qsList);
         this.showDialog = false;
         this.$router.push({
@@ -723,7 +668,7 @@ export default {
   computed: {
     questionLength() {
       return this.qsItem.question.length;
-    }
+    },
   },
   watch: {
     $route: "fetchData",
