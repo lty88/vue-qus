@@ -17,6 +17,25 @@
               >
                 <el-input v-model="formData.title"></el-input>
               </el-form-item>
+              <!-- 上传图片视频 -->
+              <el-upload
+                v-if="showAddVido"
+                class="upload-demo"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :on-change="handleChange"
+                :file-list="fileList"
+              >
+                <el-button size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+              </el-upload>
+              <el-form-item
+                v-if="showVido"
+                prop="titleUrl"
+                label="多媒体链接"
+                :rules="[{ required: true, message: '题目不能为空', trigger: 'blur' }]"
+              >
+                <el-input v-model="formData.titleUrl"></el-input>
+              </el-form-item>
               <div v-if="types==='radio'||types==='checkbox'">
                 <el-form-item
                   v-for="(option, index) in formData.options"
@@ -32,6 +51,24 @@
               <el-form-item>
                 <el-button type="primary" @click="submitForm('formData')">提交</el-button>
                 <el-button @click="addDomain" v-if="types==='radio'||types==='checkbox'">新增选项</el-button>
+                <el-popover
+                  class="btn-vido"
+                  placement="top-start"
+                  width="200"
+                  trigger="hover"
+                  content="这是切换为多媒体的题目"
+                >
+                  <el-button slot="reference" @click="changeVido">多媒体题目</el-button>
+                </el-popover>
+                <el-popover
+                  class="btn-vido"
+                  placement="top-start"
+                  width="200"
+                  trigger="hover"
+                  content="这是切换为多媒体的题目"
+                >
+                  <el-button slot="reference" @click="addVido">上传多媒体</el-button>
+                </el-popover>
                 <!--<el-button @click="resetForm('formData')">重置</el-button> /-->
               </el-form-item>
             </el-form>
@@ -67,15 +104,39 @@ export default {
   },
   data() {
     return {
+      showVido: false,
+      showAddVido: false,
       showModals: false,
+      fileList: [
+        {
+          name: "food.jpeg",
+          url:
+            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+        },
+        {
+          name: "food2.jpeg",
+          url:
+            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+        }
+      ],
       formData: {
         title: "",
+        titleUrl: "",
         type: this.types,
         options: [{ name: "" }, { name: "" }, { name: "" }]
       }
     };
   },
   methods: {
+     handleChange(file, fileList) {
+        this.fileList = fileList.slice(-3);
+      },
+    changeVido() {
+      this.showVido = !this.showVido;
+    },
+    addVido() {
+      this.showAddVido = !this.showAddVido;
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -92,14 +153,14 @@ export default {
     },
     removeDomain(item) {
       var types = this.types;
-      let numOption=this.formData.options.length
+      let numOption = this.formData.options.length;
       console.log(item);
       console.log(numOption);
-      if (types === "radio" || types === "checkbox") {  
-        if (numOption>= 3) {
+      if (types === "radio" || types === "checkbox") {
+        if (numOption >= 3) {
           this.formData.options.splice(item, 1);
         } else {
-          this.$message.error('选项至少有两项')
+          this.$message.error("选项至少有两项");
           return;
         }
       }
@@ -126,5 +187,10 @@ export default {
 }
 .form {
   margin: 0 auto !important;
+}
+.upload-demo {
+      width: 614px;
+    border: 1px solid;
+    margin: 20px auto;
 }
 </style>

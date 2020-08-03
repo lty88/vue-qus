@@ -44,12 +44,12 @@
             <el-radio v-model="form.enabled" label="2">测试</el-radio>
             <el-radio v-model="form.enabled" label="3">禁用</el-radio>
           </el-form-item>
-          <el-form-item label="活动形式">
+          <el-form-item label="问卷描述">
             <el-input type="textarea" v-model="form.desc"></el-input>
           </el-form-item>
         </el-form>
         <div class="demo-drawer__footer">
-          <el-button @click="cancelForm">取 消</el-button>
+          <el-button @click="cancelForm" >取 消</el-button>
           <el-button
             type="primary"
             @click="$refs.drawer.closeDrawer()"

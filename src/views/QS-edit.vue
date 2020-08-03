@@ -11,12 +11,23 @@
       @keyup.enter="onsubmit"
       ref="titleInput"
     />
- 
     <!--渲染数据-->
     <div class="content">
       <div class="questions" v-for="(qs, index) in qsItem.question" :key="index">
         <div class="qs-left">
-          <p class="qs-title">{{ qs.num }}&nbsp;{{ qs.title }}&nbsp;{{ getMsg(qs) }}</p>
+          <div class="demo-image__placeholder">
+            <div class="block">
+              <p class="qs-title">{{ qs.num }}&nbsp;{{ qs.title }}&nbsp;{{ getMsg(qs) }}</p>
+              <el-image class="titleImg" v-if="qs.titleType==='img'" :src="qs.titleUrl"></el-image>
+              <video-player
+                v-if="qs.titleType==='vido'"
+                class="video-player vjs-custom-skin"
+                ref="videoPlayer"
+                :playsinline="true"
+                :options="playerOptions"
+              ></video-player>
+            </div>
+          </div>
           <p v-for="(option, index) in qs.options" class="option" :key="index">
             <label>
               <input type="radio" :name="`${qs.num}-${qs.title}`" v-if="qs.type === 'radio'" />
@@ -88,8 +99,7 @@
             <el-button @click="addRadio" type="info" plain>单选</el-button>
             <el-button @click="addCheckbox" type="info" plain>多选</el-button>
             <el-button @click="addTextarea" type="info" plain>文本框</el-button>
-            <el-button @click="addJz" type="info" plain class="btn_add_text">多选矩阵</el-button>
-            <el-button @click="addJz" type="info" plain class="btn_add_text">单选矩阵</el-button>
+            <el-button @click="addJz" type="info" plain class="btn_add_text">矩阵</el-button>
           </div>
         </transition>
         <div class="add-item" @click="addItemClick">
@@ -255,8 +265,6 @@
         <el-button type="text" class="save" @click="iterator = save();iterator.next();">保存问卷</el-button>
         <button class="issue" @click="iterator = issueQs();iterator.next();">发布问卷</button>
       </div>
-
-    
     </footer>
   </div>
 </template>
@@ -267,13 +275,12 @@ import vRadio from "@/components/v-radio";
 import vJztemp from "@/components/v-jztemp";
 import vTextarea from "@/components/v-textarea";
 import vCheckbox from "@/components/v-checkbox";
-import Drawer from '@/components/Drawer'
+import Drawer from "@/components/Drawer";
 export default {
   name: "qsEdit",
-  components: { vRadio, vJztemp, vTextarea, vCheckbox,Drawer },
+  components: { vRadio, vJztemp, vTextarea, vCheckbox, Drawer },
   data() {
     return {
-     
       Jzquestion: [
         {
           num: "",
@@ -290,6 +297,34 @@ export default {
           ]
         }
       ],
+
+      // 视频播放
+      playerOptions: {
+        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+        autoplay: false, //如果true,浏览器准备好时开始回放。
+        muted: false, // 默认情况下将会消除任何音频。
+        loop: false, // 导致视频一结束就重新开始。
+        preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+        language: "zh-CN",
+        aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+        sources: [
+          {
+            type: "",
+            src: "https://vdept.bdstatic.com/6a4866586a3665726942687841535a6e/474831396b68526d/e17c2731bdceff3ffefe4f03d97fb1c8f76d531e12681137cd69de7a0c75e80a0ffe7cbbdcef87eb32b465b79ad17950e74de424b255dd10658df8212f2248a6.mp4?auth_key=1596446680-0-0-ac85402ed4d0fcd82aff75cc1ecd6db8" //url地址
+            // src: "" //url地址
+          }
+        ],
+        poster: "", //你的封面地址
+        // width: document.documentElement.clientWidth,
+        notSupportedMessage: "此视频暂无法播放，请稍后再试", //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        controlBar: {
+          timeDivider: true,
+          durationDisplay: true,
+          remainingTimeDisplay: false,
+          fullscreenToggle: true //全屏按钮
+        }
+      },
       qsItem: {},
       qsList: storage.get(),
       isError: false,
@@ -307,10 +342,10 @@ export default {
       qsInputOptions: [],
       jzTitleOptions: [],
       jzItemOptions: [],
-      starTime :"",
-      endTime : "",
+      starTime: "",
+      endTime: "",
       info: "",
-      addOptionType: "",//增加的类型
+      addOptionType: "", //增加的类型
       limit: {},
       showDialog: false,
       iterator: {},
@@ -357,17 +392,19 @@ export default {
     this.fetchData();
   },
   mounted() {
+    // this.playerOptions.sources.src = this.qsList.question[1].titleUrl;
     //  console.log(this.questionLength);
     // if (this.$route.params.num != 0) {
     //   let numID = this.$route.params.num - 1;
     //   let fir = this.qsList[numID];
     //   console.log(fir);
     //   this.selectTime.push(fir.starTime,fir.endTime)
-     
-     
     // }
   },
   methods: {
+    qs(item) {
+      console.log(item);
+    },
     // radio单选子组件传递过来的数据
     qsData(e) {
       console.log(e);
@@ -405,8 +442,8 @@ export default {
         let item = {};
         item.num = this.qsList.length + 1;
         item.title = "这里是标题";
-        // item.starTime = "";
-        // item.endTime = "";
+        item.starTime = "";
+        item.endTime = "";
         item.state = "noissue";
         item.question = [];
         item.stateTitle = "未发布";
@@ -609,21 +646,20 @@ export default {
         this.showAddQsDialog = false;
       }
     },
-
+    // 保存问卷
     *save() {
       this.showDialog = true;
       this.info = "确认保存?";
-      let str='这里是标题'
+      let str = "这里是标题";
       yield;
       // debugger
       if (this.qsItem.question.length === 0) {
         this.showDialog = false;
         this.$message.error("问卷为空，不能保存");
-      }else if (this.qsItem.title===str) {
+      } else if (this.qsItem.title === str) {
         this.showDialog = false;
         this.$message.error("问卷标题为空，不能保存");
-      } 
-      else {
+      } else {
         storage.save(this.qsList);
         this.info = "是否发布?";
         this.isGoIndex = true;
@@ -638,6 +674,7 @@ export default {
         path: "/"
       });
     },
+    //发布问卷
     *issueQs() {
       this.showDialog = true;
       this.info = "确认发布?";
@@ -668,7 +705,7 @@ export default {
   computed: {
     questionLength() {
       return this.qsItem.question.length;
-    },
+    }
   },
   watch: {
     $route: "fetchData",

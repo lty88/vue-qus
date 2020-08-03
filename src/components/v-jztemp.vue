@@ -33,7 +33,7 @@
                     <el-button @click.prevent="removeRowTitle(Rowindex)">删除</el-button>
                   </el-form-item>
                   <el-form-item>
-                  <el-button @click.prevent="addRowTitle">新增选项</el-button>
+                    <el-button @click.prevent="addRowTitle">新增选项</el-button>
                   </el-form-item>
                 </div>
                 <!-- 矩阵行标题 -->
@@ -57,6 +57,7 @@
               <el-form-item>
                 <el-button id="submitFormBtn" type="primary" @click="submitForm('formDataJz')">提交</el-button>
               </el-form-item>
+               <el-switch v-model="formDataJz.isCheckboxJz" active-text="多选矩阵" inactive-text="单选矩阵"></el-switch>
             </el-form>
           </div>
         </div>
@@ -96,7 +97,7 @@ export default {
         title: "",
         type: this.types,
         isNeed: true,
-        isRadioJz: true,
+        isCheckboxJz: false,
         jzOptions: [{ name: "" }, { name: "" }, { name: "" }],
         jzTitle: [{ title: "" }, { title: "" }, { title: "" }]
       }

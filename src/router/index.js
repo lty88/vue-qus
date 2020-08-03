@@ -55,6 +55,15 @@ const routes = [{
 		},
 		component: () =>
 			import( /* webpackChunkName: "about" */ "../views/Test-import.vue")
+	},
+	{
+		path: '/upload',
+		name: 'upload',
+		meta:{
+			title:'我是批量导入'
+		},
+		component: () =>
+			import( /* webpackChunkName: "about" */ "../components/Upload.vue")
 	}
 ];
 
