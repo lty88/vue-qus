@@ -121,7 +121,7 @@ export default {
               num: "Q1", //第一道题目
               score: 5, //分数
               title: "请辨认出下列动物的名称", //题目
-              titleType: "img", //默认为纯文本  题目类型: img：图片题目类型 text vido:视频 mp3：音频
+              // titleType: "img", //默认为纯文本  题目类型: img：图片题目类型 text vido:视频 mp3：音频
               //链接
               titleUrl:
                 "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596431285883&di=56e98ae5023e06c48e72dffd5daf4f96&imgtype=0&src=http%3A%2F%2Fa2.att.hudong.com%2F86%2F10%2F01300000184180121920108394217.jpg",

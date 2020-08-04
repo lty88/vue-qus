@@ -1,6 +1,6 @@
 <template>
   <div class="edit-container">
-    <drawer></drawer>
+    <set-drawer></set-drawer>
     <h2 @click="titleClick" v-if="!titleChange" ref="a">{{ qsItem.title }}</h2>
     <input
       type="text"
@@ -55,12 +55,14 @@
                 >{{jzOption.name}}</td>
               </tr>
               <!-- 渲染的矩阵的radio-->
-              <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.jzTitle" :key="jztIndex">
-                <td class="lefttd_qk">{{jzTitle.title}}</td>
-                <td v-for="(jzOption,jzIndex) in qs.jzOptions" :key="jzIndex">
-                  <input type="radio" :name="`${jzIndex}`" v-if="qs.type === 'jz'" />
-                </td>
-              </tr>
+         
+                <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.jzTitle" :key="jztIndex">
+                  <td class="lefttd_qk">{{jzTitle.title}}</td>
+                  <td v-for="(jzOption,jzIndex) in qs.jzOptions" :key="jzIndex">
+                    <input type="radio" :name="`${jzIndex}`" v-if="qs.type === 'jz'" />
+                  </td>
+                </tr>
+           
             </table>
           </div>
         </div>
@@ -275,10 +277,10 @@ import vRadio from "@/components/v-radio";
 import vJztemp from "@/components/v-jztemp";
 import vTextarea from "@/components/v-textarea";
 import vCheckbox from "@/components/v-checkbox";
-import Drawer from "@/components/Drawer";
+import SetDrawer from "@/components/SetDrawer";
 export default {
   name: "qsEdit",
-  components: { vRadio, vJztemp, vTextarea, vCheckbox, Drawer },
+  components: { vRadio, vJztemp, vTextarea, vCheckbox, SetDrawer },
   data() {
     return {
       Jzquestion: [
@@ -311,7 +313,8 @@ export default {
         sources: [
           {
             type: "",
-            src: "https://vdept.bdstatic.com/6a4866586a3665726942687841535a6e/474831396b68526d/e17c2731bdceff3ffefe4f03d97fb1c8f76d531e12681137cd69de7a0c75e80a0ffe7cbbdcef87eb32b465b79ad17950e74de424b255dd10658df8212f2248a6.mp4?auth_key=1596446680-0-0-ac85402ed4d0fcd82aff75cc1ecd6db8" //url地址
+            src:
+              "https://vdept.bdstatic.com/51317a444d3144484b55786e42343963/3568507048455241/53e38ee9f94698636312475caacf13ed88bdce4fa0bf467bc42e2f30f1461af8997c446f6f5f129f5ff36fc9d140b12f.mp4?auth_key=1596532980-0-0-ec3558b185cee02b5b759befd4b5a1e8" //url地址
             // src: "" //url地址
           }
         ],
@@ -402,9 +405,6 @@ export default {
     // }
   },
   methods: {
-    qs(item) {
-      console.log(item);
-    },
     // radio单选子组件传递过来的数据
     qsData(e) {
       console.log(e);
@@ -412,6 +412,7 @@ export default {
       let res = JSON.stringify(e);
       console.log("子组件传过来的值：" + res);
       this.qsItem.question.push(JSON.parse(JSON.stringify(e)));
+
       // this.qsList.push(this.qsItem);
     },
     // checkbox单选子组件传递过来的数据
@@ -434,6 +435,8 @@ export default {
     // 矩阵子组件传递过来的数据
     fDataJz(e) {
       this.AddshowModalJz = false;
+      let res = JSON.stringify(e);
+      console.log("子组件传过来的值：" + res);
       this.qsItem.question.push(JSON.parse(JSON.stringify(e)));
       console.log(e);
     },

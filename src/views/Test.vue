@@ -21,18 +21,17 @@
     <p v-for='(item,index) in jzOptions' :key="index">
         <input type="checkbox" :name="index">
     </p>
-  <drawer>  
-  </drawer>
+ 
   </div>
 </template>
 
 <script>
 import Dialog from "@/components/Dialog";
 import  vJztemp from '@/components/v-jztemp'
-import Drawer from '@/components/Drawer'
+
 export default {
   name: "Test",
-  components: { Dialog,vJztemp,Drawer},
+  components: { Dialog,vJztemp},
   data() {
     return {
       msg: "测试",
