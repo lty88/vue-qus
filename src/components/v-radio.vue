@@ -16,8 +16,8 @@
                 :rules="[{ required: true, message: '题目不能为空', trigger: 'blur' }]"
               >
                 <el-input v-model="formData.title"></el-input>
-                <br>
-                 <el-popover
+                <br />
+                <el-popover
                   class="btn-vido"
                   placement="top-start"
                   width="200"
@@ -65,7 +65,7 @@
                 <el-button size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
-              <div v-if="types==='radio'||types==='checkbox'">
+              <div >
                 <el-form-item
                   v-for="(option, index) in formData.options"
                   :label="'选项' +`${index+1}`"
@@ -80,7 +80,7 @@
               <el-form-item>
                 <el-button type="primary" @click="submitForm('formData')">提交</el-button>
                 <el-button @click="addDomain" v-if="types==='radio'||types==='checkbox'">新增选项</el-button>
-               
+
                 <el-button @click="resetForm('formData')">重置</el-button>
               </el-form-item>
             </el-form>
@@ -98,6 +98,12 @@ export default {
       type: Boolean,
       default: false
     },
+    editData: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     types: {
       type: String
     }
@@ -112,6 +118,9 @@ export default {
     },
     types(newVal) {
       this.formData.type = this.types;
+    },
+    editData(newVal) {
+      this.formData = newVal;
     }
   },
   data() {
@@ -237,5 +246,4 @@ export default {
 .select-type {
   width: 120px !important;
 }
-
 </style>

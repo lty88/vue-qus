@@ -19,13 +19,7 @@
             <div class="block">
               <p class="qs-title">{{ qs.num }}&nbsp;{{ qs.title }}&nbsp;{{ getMsg(qs) }}</p>
               <el-image class="titleImg" v-if="qs.titleType==='img'" :src="qs.titleUrl"></el-image>
-              <video-player
-                v-if="qs.titleType==='vido'"
-                class="video-player vjs-custom-skin"
-                ref="videoPlayer"
-                :playsinline="true"
-                :options="playerOptions"
-              ></video-player>
+              <vido-player v-if="qs.titleType==='vido'"></vido-player>
             </div>
           </div>
           <p v-for="(option, index) in qs.options" class="option" :key="index">
@@ -55,14 +49,12 @@
                 >{{jzOption.name}}</td>
               </tr>
               <!-- 渲染的矩阵的radio-->
-         
-                <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.jzTitle" :key="jztIndex">
-                  <td class="lefttd_qk">{{jzTitle.title}}</td>
-                  <td v-for="(jzOption,jzIndex) in qs.jzOptions" :key="jzIndex">
-                    <input type="radio" :name="`${jzIndex}`" v-if="qs.type === 'jz'" />
-                  </td>
-                </tr>
-           
+              <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.jzTitle" :key="jztIndex">
+                <td class="lefttd_qk">{{jzTitle.title}}</td>
+                <td v-for="(jzOption,jzIndex) in qs.jzOptions" :key="jzIndex">
+                  <input type="radio" :name="`${jzIndex}`" v-if="qs.type === 'jz'" />
+                </td>
+              </tr>
             </table>
           </div>
         </div>
@@ -124,6 +116,11 @@
           <label>
             输入题目标题
             <el-input v-model="qsInputTitle" placeholder="请输入标题"></el-input>
+
+            <label v-if="qsTitleUrl!=''">
+              多媒体链接
+              <el-input v-model="qsTitleUrl" placeholder="请输入标题"></el-input>
+            </label>
           </label>
           <label v-if="showAddOptionInput" id="edit-box">
             <div v-for="(qsOptions,optionsIndex) in qsInputOptions " :key="optionsIndex">
@@ -239,6 +236,7 @@
       @formData="qsData"
       :showModal="showModal"
       :types="addOptionType"
+      :editData="dataObj"
       @cancel="showModal=false"
     ></v-radio>
     <!--对应添加问题 新增checkbox模板 -->
@@ -278,56 +276,29 @@ import vJztemp from "@/components/v-jztemp";
 import vTextarea from "@/components/v-textarea";
 import vCheckbox from "@/components/v-checkbox";
 import SetDrawer from "@/components/SetDrawer";
+import vidoPlayer from "@/components/vido";
 export default {
   name: "qsEdit",
-  components: { vRadio, vJztemp, vTextarea, vCheckbox, SetDrawer },
+  components: { vRadio, vJztemp, vTextarea, vCheckbox, SetDrawer, vidoPlayer },
   data() {
     return {
-      Jzquestion: [
-        {
-          num: "",
-          title: "",
-          type: "",
-          isNeed: true,
-          jzTitle: [{ title: "" }, { title: "" }, { title: "" }],
-          jzOptions: [
-            { name: "" },
-            { name: "" },
-            { name: "" },
-            { name: "" },
-            { name: "" }
-          ]
-        }
-      ],
+      // Jzquestion: [
+      //   {
+      //     num: "",
+      //     title: "",
+      //     type: "",
+      //     isNeed: true,
+      //     jzTitle: [{ title: "" }, { title: "" }, { title: "" }],
+      //     jzOptions: [
+      //       { name: "" },
+      //       { name: "" },
+      //       { name: "" },
+      //       { name: "" },
+      //       { name: "" }
+      //     ]
+      //   }
+      // ],
 
-      // 视频播放
-      playerOptions: {
-        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-        autoplay: false, //如果true,浏览器准备好时开始回放。
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 导致视频一结束就重新开始。
-        preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: "zh-CN",
-        aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [
-          {
-            type: "",
-            src:
-              "https://vdept.bdstatic.com/51317a444d3144484b55786e42343963/3568507048455241/53e38ee9f94698636312475caacf13ed88bdce4fa0bf467bc42e2f30f1461af8997c446f6f5f129f5ff36fc9d140b12f.mp4?auth_key=1596532980-0-0-ec3558b185cee02b5b759befd4b5a1e8" //url地址
-            // src: "" //url地址
-          }
-        ],
-        poster: "", //你的封面地址
-        // width: document.documentElement.clientWidth,
-        notSupportedMessage: "此视频暂无法播放，请稍后再试", //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
-          fullscreenToggle: true //全屏按钮
-        }
-      },
       qsItem: {},
       qsList: storage.get(),
       isError: false,
@@ -341,6 +312,7 @@ export default {
       AddshowModalT: false, //textarea的增加modal
       AddshowModalC: false, //checkbox的增加modal
       qsInputTitle: "",
+      qsTitleUrl: "", //用户上传的链接
       qsJzTitle: "",
       qsInputOptions: [],
       jzTitleOptions: [],
@@ -355,7 +327,8 @@ export default {
       isGoIndex: false,
       numID: 0,
       currEditIndex: -1,
-      showModal: false
+      showModal: false,
+      dataObj: {}
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -518,7 +491,7 @@ export default {
     },
     addItemClick() {
       if (this.showBtn === false) {
-        this.questionLength === 10
+        this.questionLength === 20
           ? alert("问卷已满！")
           : (this.showBtn = !this.showBtn);
       } else {
@@ -526,54 +499,60 @@ export default {
       }
     },
     editTitle(qs, index) {
-      this.qsInputTitle = "";
-      this.qsJzTitle = "";
-      this.qsInputOptions = [];
-      this.jzTitleOptions = [];
-      this.jzItemOptions = [];
-      console.log("yyb=" + JSON.stringify(qs));
-      console.log(qs.type);
-      let typeOne =
-        qs.type === "checkbox" || qs.type === "radio" || qs.type === "textarea";
-      let typeTwo = qs.type === "checkbox" || qs.type === "radio";
-      if (typeOne) {
-        if (typeOne) {
-          this.qsInputTitle = qs.title;
-          this.currEditIndex = index;
-          if (typeTwo) {
-            this.qsInputOptions = qs.options;
-            this.showAddQsDialog = true;
-          }
-        }
-        this.showAddQsDialog = true;
-      } else {
-        if (qs.type === "jz") {
-          this.showAddQsDialogJz = true;
-          this.qsJzTitle = qs.title;
-          this.currEditIndex = index;
-          this.jzTitleOptions = qs.jzTitle;
-          this.jzItemOptions = qs.jzOptions;
-        }
-        this.showAddQsDialogJz = true;
+      // this.qsInputTitle = "";
+      // this.qsJzTitle = "";
+      // this.qsInputOptions = [];
+      // this.jzTitleOptions = [];
+      // this.jzItemOptions = [];
+      // console.log("yyb=" + JSON.stringify(qs));
+      // console.log(qs.type);
+      // let typeOne =
+      //   qs.type === "checkbox" || qs.type === "radio" || qs.type === "textarea";
+      // let typeTwo = qs.type === "checkbox" || qs.type === "radio";
+      // this.qsTitleUrl = qs.titleUrl;
+      // if (typeOne) {
+      //   if (typeOne) {
+      //     this.qsInputTitle = qs.title;
+      //     this.currEditIndex = index;
+      //     if (typeTwo) {
+      //       this.qsInputOptions = qs.options;
+      //       this.showAddQsDialog = true;
+      //     }
+      //   }
+      //   this.showAddQsDialog = true;
+      // } else {
+      //   if (qs.type === "jz") {
+      //     this.showAddQsDialogJz = true;
+      //     this.qsJzTitle = qs.title;
+      //     this.currEditIndex = index;
+      //     this.jzTitleOptions = qs.jzTitle;
+      //     this.jzItemOptions = qs.jzOptions;
+      //   }
+      //   this.showAddQsDialogJz = true;
+      // }
+      console.log(qs);
+      if (qs.type == "radio") {
+        this.showModal = true;
+        this.dataObj = qs;
       }
     },
     addRadio() {
-      if (this.questionLength === 10) return alert("问卷已满！");
+      if (this.questionLength === 20) return alert("问卷已满！");
       this.showModal = true;
       this.addOptionType = "radio";
     },
     addCheckbox() {
-      if (this.questionLength === 10) return alert("问卷已满！");
+      if (this.questionLength === 20) return alert("问卷已满！");
       this.AddshowModalC = true;
       this.addOptionType = "checkbox";
     },
     addTextarea() {
-      if (this.questionLength === 10) return alert("问卷已满！");
+      if (this.questionLength === 20) return alert("问卷已满！");
       this.AddshowModalT = true;
       this.addOptionType = "textarea";
     },
     addJz() {
-      if (this.questionLength === 10) return alert("问卷已满！");
+      if (this.questionLength === 20) return alert("问卷已满！");
       this.AddshowModalJz = true;
       this.addOptionType = "jz";
     },

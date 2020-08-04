@@ -123,8 +123,8 @@ export default {
               title: "请辨认出下列动物的名称", //题目
               // titleType: "img", //默认为纯文本  题目类型: img：图片题目类型 text vido:视频 mp3：音频
               //链接
-              titleUrl:
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596431285883&di=56e98ae5023e06c48e72dffd5daf4f96&imgtype=0&src=http%3A%2F%2Fa2.att.hudong.com%2F86%2F10%2F01300000184180121920108394217.jpg",
+              titleType: "img",
+              titleUrl:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596431285883&di=56e98ae5023e06c48e72dffd5daf4f96&imgtype=0&src=http%3A%2F%2Fa2.att.hudong.com%2F86%2F10%2F01300000184180121920108394217.jpg",
               type: "radio", //题目类型 radio checkbox text jz（矩阵）
               isNeed: true, //此题是否为必选
               options: [{ name: "乌龟" }, { name: "癞虾膜" }, { name: "蜻蜓" }] //选项名称 单选 多选有返回options选项数组，文本无，矩阵的选项要做区别名
@@ -134,8 +134,7 @@ export default {
               title: "看下面視頻回答問題",
               type: "checkbox",
               titleType: "vido",
-              titleUrl:
-                "https://vdept.bdstatic.com/78396d4e764c44626569794d48476343/57515a47634b6659/8c9244beaac2a568db1bffb234a36dc26adedb2776f3cb4e2ca0b025ce2d57782817553b017416b969a629eacff5a075fdd0d03f2700fb0c94707f84dd0ca66a.mp4?auth_key=1596436591-0-0-6b5446fc80b5555d9f0659f6cf79023b",
+              titleUrl:"https://vdept.bdstatic.com/78396d4e764c44626569794d48476343/57515a47634b6659/8c9244beaac2a568db1bffb234a36dc26adedb2776f3cb4e2ca0b025ce2d57782817553b017416b969a629eacff5a075fdd0d03f2700fb0c94707f84dd0ca66a.mp4?auth_key=1596436591-0-0-6b5446fc80b5555d9f0659f6cf79023b",
               isNeed: true,
               options: [
                 { name: "視頻中的主人公叫李磊" },
