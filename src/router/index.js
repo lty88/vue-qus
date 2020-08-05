@@ -5,66 +5,84 @@ import qsList from '../views/QS-list.vue'
 Vue.use(VueRouter);
 
 const routes = [{
-		path: "/",
-		name: "qsList",
-		component: qsList,
-		meta:{
-			title:'问卷列表'
-		}
-	},
-	{
-		path: '/fill/:num',
-		name: 'qsFill',
-		meta:{
-			title:'填写问卷'
-		},
-		component: () =>
-			import( /* webpackChunkName: "about" */ "../views/QS-fill.vue")
-	},
-	{
-		path: '/edit/:num',
-		name: 'qsEdit',
-		meta:{
-			title:'编辑问卷'
-		},
-		component: () =>
-			import( /* webpackChunkName: "about" */ "../views/QS-edit.vue")
-	}, {
-		path: '/data/:num',
-		name: 'qsData',
-		meta:{
-			title:'查看问卷结果'
-		},
-		component: () =>
-			import( /* webpackChunkName: "about" */ "../views/QS-data.vue")
-	},
-	{
-		path: '/test',
-		name: '	',
-		meta:{
-			title:'我是测试'
-		},
-		component: () =>
-			import( /* webpackChunkName: "about" */ "../views/Test.vue")
-	},
-	{
-		path: '/test/import',
-		name: '	',
-		meta:{
-			title:'我是批量导入'
-		},
-		component: () =>
-			import( /* webpackChunkName: "about" */ "../views/Test-import.vue")
-	},
-	{
-		path: '/upload',
-		name: 'upload',
-		meta:{
-			title:'我是批量导入'
-		},
-		component: () =>
-			import( /* webpackChunkName: "about" */ "../components/Upload.vue")
+	path: "/",
+	name: "qsList",
+	component: qsList,
+	meta: {
+		title: '问卷列表',
+		keepAlive: true
+
 	}
+},
+{
+	path: '/login',
+	name: 'login',
+	meta: {
+		title: '登录',
+		keepAlive: false
+	},
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/login.vue")
+},
+{
+	path: '/fill/:num',
+	name: 'qsFill',
+	meta: {
+		title: '填写问卷',
+		keepAlive: true
+	},
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/QS-fill.vue")
+},
+{
+	path: '/edit/:num',
+	name: 'qsEdit',
+	meta: {
+		title: '编辑问卷',
+		keepAlive: true
+	},
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/QS-edit.vue")
+}, {
+	path: '/data/:num',
+	name: 'qsData',
+	meta: {
+		title: '查看问卷结果',
+		keepAlive: true
+	},
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/QS-data.vue")
+},
+{
+	path: '/test',
+	name: '	',
+	meta: {
+		title: '我是测试',
+		keepAlive: true
+	},
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/Test.vue")
+},
+{
+	path: '/import',
+	name: '	',
+	meta: {
+		title: '我是批量导入',
+		keepAlive: true
+	},
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/Test-import.vue")
+},
+{
+	path: '/upload',
+	name: 'upload',
+	meta: {
+		title: '我是批量导入',
+		keepAlive: true
+	},
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../components/Upload.vue")
+}
 ];
 
 

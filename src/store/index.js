@@ -1,10 +1,13 @@
-const STORAGE_KEY = "questionnaire";
-
-export default {
-  get(key = STORAGE_KEY) {
-    return JSON.parse(window.localStorage.getItem(key));
-  },
-  save(items, key = STORAGE_KEY) {
-    window.localStorage.setItem(key, JSON.stringify(items));
-  }
-};
+import Vue from 'vue'
+import Vuex from 'vuex'
+import mutations from './mutations'
+import actions from './action'
+Vue.use(Vuex)
+const state = {
+  username: '', //登录用户名
+}
+export default new Vuex.Store({
+  state,
+  mutations,
+  actions,
+})

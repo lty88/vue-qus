@@ -1,18 +1,21 @@
 <template>
   <div id="app">
-    <v-header></v-header>
-    <router-view></router-view>
+    <div v-if="$route.meta.keepAlive">
+      <v-header></v-header>
+      <router-view></router-view>
+    </div>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 
 <script>
-import vHeader from './components/public/header'
+import vHeader from "./components/public/header";
 export default {
-  name: 'app',
+  name: "app",
   components: {
     vHeader
   }
-}
+};
 </script>
 
 <style lang="scss">

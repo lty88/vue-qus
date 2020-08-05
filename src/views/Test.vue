@@ -3,7 +3,7 @@
     <button @click="tap">点击我，跳出Dailog</button>
     <button @click="tapt">点击我展示Jztem</button>
     <h1>{{msg}}</h1>
-    <v-Jztemp  :showModal="showModalJz" @formDataJz="fDataJz"></v-Jztemp>
+    <v-Jztemp :showModal="showModalJz" @formDataJz="fDataJz"></v-Jztemp>
     <Dialog
       title="提示"
       btnType="3"
@@ -18,38 +18,44 @@
         <p>成功！</p>
       </template>
     </Dialog>
-    <p v-for='(item,index) in jzOptions' :key="index">
-        <input type="checkbox" :name="index">
+    <p v-for="(item,index) in jzOptions" :key="index">
+      <input type="checkbox" :name="index" />
     </p>
- 
   </div>
 </template>
 
 <script>
 import Dialog from "@/components/Dialog";
-import  vJztemp from '@/components/v-jztemp'
+import vJztemp from "@/components/v-jztemp";
 
 export default {
   name: "Test",
-  components: { Dialog,vJztemp},
+  components: { Dialog, vJztemp },
   data() {
     return {
       msg: "测试",
       showModal: false,
-      showModalJz:false,
-      jzOptions: [{name: "非常喜欢"}, {name: "喜欢"}, {name: "一般"}, {name: "不喜欢"}]
+      showModalJz: false,
+      jzOptions: [
+        { name: "非常喜欢" },
+        { name: "喜欢" },
+        { name: "一般" },
+        { name: "不喜欢" }
+      ]
     };
   },
   methods: {
     tap() {
       this.showModal = true;
-     
+      this.axios.get("/apiv1/getQuestionInfo").then(res => {
+       console.log(res);
+        });
     },
-     tapt() {
-       this.showModalJz=true
+    tapt() {
+      this.showModalJz = true;
     },
-    fDataJz(e){
-      console.log(e)
+    fDataJz(e) {
+      console.log(e);
     },
     goIndex() {
       // this.$router.push('/')

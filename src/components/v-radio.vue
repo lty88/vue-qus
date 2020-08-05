@@ -42,7 +42,6 @@
                 v-if="showVido"
                 prop="titleUrl"
                 label="多媒体链接"
-                :rules="[{ required: true, message: '链接不能为空', trigger: 'blur' }]"
               >
                 <el-input v-model="formData.titleUrl "></el-input>
                 <el-select v-model="formData.titleType" placeholder="选择类型" class="select-type">
@@ -53,7 +52,7 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-button @click.prevent="removeTitleUrl()">删除</el-button>
+                <!-- <el-button @click.prevent="removeTitleUrl()">删除</el-button> -->
               </el-form-item>
               <el-upload
                 v-if="showAddVido"
@@ -181,6 +180,7 @@ export default {
     removeTitleUrl() {
       console.log(this);
     },
+    //提交表单
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

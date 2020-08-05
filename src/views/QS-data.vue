@@ -1,5 +1,6 @@
  <template>
   <div class="data-container">
+     <v-header></v-header>
     <template v-if="!isError">
       <span class="back" @click="goBack()"><i class="el-icon-arrow-left" style="font-size:25px;font-weight: bold"></i></span>
       <h2>{{ qsItem.title }}</h2>
@@ -61,7 +62,7 @@
 </template>
 
 <script>
-import storage from "../store/index.js";
+import storage from "../store/seesion.js";
 import echarts from "echarts/lib/echarts";
 import "echarts/lib/chart/pie";
 import "echarts/lib/component/tooltip";

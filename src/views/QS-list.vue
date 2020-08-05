@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import storage from "../store/index.js";
+import storage from "../store/seesion.js";
 import Dialog from "@/components/Dialog";
 export default {
   name: "qsList",
@@ -77,6 +77,11 @@ export default {
     document.title = "我的问卷";
   },
   mounted() {
+    this.axios
+      .get("/apiv1/getQuestionnaire")
+      .then(res => {
+        console.log(res);
+      });
     if (storage.get() !== null) {
       this.qsList = storage.get();
       // this.qsList.forEach(item => {
@@ -106,9 +111,9 @@ export default {
         {
           num: 1, //问卷序号 =>第一份问卷
           title: "第一份问卷", //问卷题目
-          Sponsor:'成都市第一中学',//发起单位
-          OpenTypes:true,//问卷类型  开发性 和指定性
-          isActive:false,//问卷属性  静态问卷 动态问卷
+          Sponsor: "成都市第一中学", //发起单位
+          OpenTypes: true, //问卷类型  开发性 和指定性
+          isActive: false, //问卷属性  静态问卷 动态问卷
           des: "这是一份针对全体教师教学质量的检查", //问卷描述
           starTime: "2030-1-1", //问卷开始时间
           endTime: "2030-1-2", //问卷结束时间
@@ -124,7 +129,8 @@ export default {
               // titleType: "img", //默认为纯文本  题目类型: img：图片题目类型 text vido:视频 mp3：音频
               //链接
               titleType: "img",
-              titleUrl:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596431285883&di=56e98ae5023e06c48e72dffd5daf4f96&imgtype=0&src=http%3A%2F%2Fa2.att.hudong.com%2F86%2F10%2F01300000184180121920108394217.jpg",
+              titleUrl:
+                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596431285883&di=56e98ae5023e06c48e72dffd5daf4f96&imgtype=0&src=http%3A%2F%2Fa2.att.hudong.com%2F86%2F10%2F01300000184180121920108394217.jpg",
               type: "radio", //题目类型 radio checkbox text jz（矩阵）
               isNeed: true, //此题是否为必选
               options: [{ name: "乌龟" }, { name: "癞虾膜" }, { name: "蜻蜓" }] //选项名称 单选 多选有返回options选项数组，文本无，矩阵的选项要做区别名
@@ -134,7 +140,8 @@ export default {
               title: "看下面視頻回答問題",
               type: "checkbox",
               titleType: "vido",
-              titleUrl:"https://vdept.bdstatic.com/78396d4e764c44626569794d48476343/57515a47634b6659/8c9244beaac2a568db1bffb234a36dc26adedb2776f3cb4e2ca0b025ce2d57782817553b017416b969a629eacff5a075fdd0d03f2700fb0c94707f84dd0ca66a.mp4?auth_key=1596436591-0-0-6b5446fc80b5555d9f0659f6cf79023b",
+              titleUrl:
+                "https://vdept.bdstatic.com/78396d4e764c44626569794d48476343/57515a47634b6659/8c9244beaac2a568db1bffb234a36dc26adedb2776f3cb4e2ca0b025ce2d57782817553b017416b969a629eacff5a075fdd0d03f2700fb0c94707f84dd0ca66a.mp4?auth_key=1596436591-0-0-6b5446fc80b5555d9f0659f6cf79023b",
               isNeed: true,
               options: [
                 { name: "視頻中的主人公叫李磊" },
@@ -191,7 +198,7 @@ export default {
                 { name: "选项四" }
               ]
             },
-            { 
+            {
               num: "Q3",
               title: "文本题",
               type: "textarea",

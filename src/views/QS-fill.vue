@@ -49,7 +49,7 @@
 </template>
 
 <script>
-	import storage from "../store/index.js";
+	import storage from "../store/seesion.js";
 	export default {
 		name: "qsFill",
 		data() {

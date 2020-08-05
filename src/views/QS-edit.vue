@@ -270,35 +270,19 @@
 </template>
 
 <script>
-import storage from "../store/index";
+import storage from "../store/seesion.js";
 import vRadio from "@/components/v-radio";
 import vJztemp from "@/components/v-jztemp";
 import vTextarea from "@/components/v-textarea";
 import vCheckbox from "@/components/v-checkbox";
 import SetDrawer from "@/components/SetDrawer";
 import vidoPlayer from "@/components/vido";
+
 export default {
   name: "qsEdit",
   components: { vRadio, vJztemp, vTextarea, vCheckbox, SetDrawer, vidoPlayer },
   data() {
     return {
-      // Jzquestion: [
-      //   {
-      //     num: "",
-      //     title: "",
-      //     type: "",
-      //     isNeed: true,
-      //     jzTitle: [{ title: "" }, { title: "" }, { title: "" }],
-      //     jzOptions: [
-      //       { name: "" },
-      //       { name: "" },
-      //       { name: "" },
-      //       { name: "" },
-      //       { name: "" }
-      //     ]
-      //   }
-      // ],
-
       qsItem: {},
       qsList: storage.get(),
       isError: false,
@@ -368,14 +352,6 @@ export default {
     this.fetchData();
   },
   mounted() {
-    // this.playerOptions.sources.src = this.qsList.question[1].titleUrl;
-    //  console.log(this.questionLength);
-    // if (this.$route.params.num != 0) {
-    //   let numID = this.$route.params.num - 1;
-    //   let fir = this.qsList[numID];
-    //   console.log(fir);
-    //   this.selectTime.push(fir.starTime,fir.endTime)
-    // }
   },
   methods: {
     // radio单选子组件传递过来的数据
@@ -450,7 +426,7 @@ export default {
         msg = "(文本题)";
       }
       return item.isNeed ? `${msg} *` : msg;
-    },
+    },  
     onblur() {
       this.titleValue = this.titleValue.trim();
       this.qsItem.title =
@@ -530,8 +506,9 @@ export default {
       //   }
       //   this.showAddQsDialogJz = true;
       // }
+      
       console.log(qs);
-      if (qs.type == "radio") {
+      if (qs.type === "radio") {
         this.showModal = true;
         this.dataObj = qs;
       }
