@@ -21,19 +21,20 @@
 </template>
 
 <script>
-import seesion from "../store/seesion.js";
+import { login } from "../api/user.js";
+
 export default {
   name: "",
   props: [""],
   data() {
     var validatePass = (rule, value, callback) => {
-      let reg = /^[a-zA-Z0-9_-]{6,16}$/;
+      let reg = /^[a-zA-Z0-9]{6,16}$/;
       if (value === "") {
         return callback(new Error("请输入密码"));
       }
       setTimeout(() => {
         if (!reg.test(value)) {
-          callback(new Error("请输入6-16位（字母，数字，下划线，减号）"));
+          callback(new Error("请输入6-16位的密码"));
         } else {
           callback();
         }
@@ -69,15 +70,16 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.axios
-            .post("/apiv1/login", {
-              account: this.formLogin.account,
-              password: this.formLogin.password
-            }).then(res => {
-             console.log(res);
-              const token = res.data.obj.token;
-              window.localStorage.setItem("token", token);
+          login({
+            account: this.formLogin.account,
+            password: this.formLogin.password
+          })
+            .then(res => {
+              console.log(res);
               if (res.data.code === 200) {
+                const token = res.data.obj.token;
+                console.log(token);
+                window.localStorage.setItem("token", token);
                 this.$router.push({
                   name: "qsList",
                   params: {
@@ -85,10 +87,35 @@ export default {
                   }
                 });
               }
+              if (res.data.code === 503) {
+                console.log(res.data.code);
+                this.$message.error(res.data.msg);
+              }
             })
-            // .catch(err=>{
-            //   this.$message.error(err.data.msg);
-            // });
+            .catch(err => {
+              console.log(err);
+              this.$message.error('服务器异常，请联系客服')
+            });
+          //   this.axios
+          //     .post("/apiv1/login", {
+          //       account: this.formLogin.account,
+          //       password: this.formLogin.password
+          //     }).then(res => {
+          //      console.log(res);
+          //       const token = res.data.obj.token;
+          //       window.localStorage.setItem("token", token);
+          //       if (res.data.code === 200) {
+          //         this.$router.push({
+          //           name: "qsList",
+          //           params: {
+          //             from: "/"
+          //           }
+          //         });
+          //       }
+          //     })
+          // .catch(err=>{
+          //   this.$message.error(err.data.msg);
+          // });
         } else {
           console.log("error submit!!");
           return false;
@@ -122,7 +149,7 @@ export default {
     background-color: #ffffff;
     width: 40.5rem;
     font-size: 20px;
-    border: 1px solid pink;
+
     position: absolute;
     left: 50%;
     top: 40%;

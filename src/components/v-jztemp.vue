@@ -260,7 +260,6 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/config.scss";
 @import "../assets/mixin.scss";
-@import "../assets/modal.scss";
 @import "../assets/button.scss";
 @import "../style/Jztemp.scss";
 .el-input {
@@ -279,5 +278,9 @@ export default {
 }
 .select-type {
   width: 120px !important;
+}
+.title-box{
+  max-height: 40.5rem;
+  overflow-y: auto;
 }
 </style>

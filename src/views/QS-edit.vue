@@ -13,23 +13,28 @@
     />
     <!--渲染数据-->
     <div class="content">
-      <div class="questions" v-for="(qs, index) in qsItem.question" :key="index">
+      <div class="questions" v-for="(qs, index) in datas" :key="index">
         <div class="qs-left">
           <div class="demo-image__placeholder">
             <div class="block">
-              <p class="qs-title">{{ qs.num }}&nbsp;{{ qs.title }}&nbsp;{{ getMsg(qs) }}</p>
-              <el-image class="titleImg" v-if="qs.titleType==='img'" :src="qs.titleUrl"></el-image>
-              <vido-player v-if="qs.titleType==='vido'"></vido-player>
+              <p class="qs-title">{{ qs.title }}&nbsp;{{ qs.content}}&nbsp;{{ getMsg(qs) }}</p>
+              <el-image class="titleImg" v-if="qs.type==='1'" :src="qs.titleUrl"></el-image>
+              <vido-player v-if="qs.type===3||qs.type===2"></vido-player>
             </div>
           </div>
-          <p v-for="(option, index) in qs.options" class="option" :key="index">
+          <p v-for="(item, index) in qs.items" class="option" :key="index">
             <label>
-              <input type="radio" :name="`${qs.num}-${qs.title}`" v-if="qs.type === 'radio'" />
-              <input type="checkbox" :name="`${qs.num}-${qs.title}`" v-if="qs.type === 'checkbox'" />
-              {{ option.name }}
+              <div v-if="qs.answerType === 0">
+                <input type="radio" :name="`${qs.title}`" />
+                {{item.content}}
+              </div>
+              <div v-if="qs.answerType === 1">
+                <input type="checkbox" :name="`${qs.title}`" />
+                {{item.content}}
+              </div>
             </label>
           </p>
-          <textarea v-if="qs.type === 'textarea'"></textarea>
+          <textarea v-if="qs.answerType === 2"></textarea>
           <!-- 矩阵题-->
           <div class="wjdc_list">
             <table
@@ -38,21 +43,21 @@
               cellspacing="0"
               cellpadding="0"
               class="tswjdc_table"
-              v-if="qs.type==='jz'"
+              v-if="qs.answerType === 4"
             >
               <tr>
                 <td class="lefttd_qk">&nbsp;</td>
                 <td
                   class="lefttd_tit"
-                  v-for="(jzOption,jzIndex) in qs.jzOptions"
+                  v-for="(jzOption,jzIndex) in qs.subTitles"
                   :key="jzIndex"
-                >{{jzOption.name}}</td>
+                >{{jzOption.title}}</td>
               </tr>
               <!-- 渲染的矩阵的radio-->
-              <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.jzTitle" :key="jztIndex">
-                <td class="lefttd_qk">{{jzTitle.title}}</td>
-                <td v-for="(jzOption,jzIndex) in qs.jzOptions" :key="jzIndex">
-                  <input type="radio" :name="`${jzIndex}`" v-if="qs.type === 'jz'" />
+              <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.items" :key="jztIndex">
+                <td class="lefttd_qk">{{jzTitle.content}}</td>
+                <td v-for="(jzOption,jzIndex) in qs.subTitles" :key="jzIndex">
+                  <input type="radio" :name="`${jzIndex}`" />
                 </td>
               </tr>
             </table>
@@ -72,13 +77,8 @@
               plain
               icon="el-icon-upload2"
             ></el-button>
-            <el-button
-              v-if="index !== qsItem.question.length - 1"
-              @click="goDown(index)"
-              plain
-              type="success"
-              icon="el-icon-download "
-            ></el-button>
+            <!-- v-if="index !== qsItem.question.length - 1" -->
+            <el-button @click="goDown(index)" plain type="success" icon="el-icon-download "></el-button>
           </p>
           <p id="edit-btn-box">
             <!-- <el-button @click="copy(index, qs)" type="success"  plain>复用</el-button> -->
@@ -116,7 +116,6 @@
           <label>
             输入题目标题
             <el-input v-model="qsInputTitle" placeholder="请输入标题"></el-input>
-
             <label v-if="qsTitleUrl!=''">
               多媒体链接
               <el-input v-model="qsTitleUrl" placeholder="请输入标题"></el-input>
@@ -149,7 +148,7 @@
           <span>提示</span>
           <span class="close-btn" @click="showAddQsDialogJz= false ;qsInputOptions=[]">X</span>
         </header>
-        <p>{{ info }}</p>
+        <p>{{info}}</p>
         <div class="shadow-body">
           <label>
             输入题目标题
@@ -277,6 +276,8 @@ import vTextarea from "@/components/v-textarea";
 import vCheckbox from "@/components/v-checkbox";
 import SetDrawer from "@/components/SetDrawer";
 import vidoPlayer from "@/components/vido";
+import { editQuestionInfo } from "../api/QS-edit";
+import { getList } from "../api/QS-list";
 
 export default {
   name: "qsEdit",
@@ -284,7 +285,7 @@ export default {
   data() {
     return {
       qsItem: {},
-      qsList: storage.get(),
+      qsList: {},
       isError: false,
       showBtn: false,
       titleChange: false,
@@ -312,46 +313,23 @@ export default {
       numID: 0,
       currEditIndex: -1,
       showModal: false,
-      dataObj: {}
+      dataObj: {},
+      datas: []
     };
-  },
-  beforeRouteEnter(to, from, next) {
-    // console.log(to);
-    let num = to.params.num;
-    let theItem = {};
-    let length = storage.get().length;
-    // console.log(num);
-    // console.log(length);
-    next(vm => {
-      // console.log(vm);
-    });
-    if (num != 0) {
-      let length = storage.get().length;
-      if (num < 0 || num > length) {
-        alert("非法路由!");
-        next("/");
-      } else {
-        for (let i = 0; i < length; i++) {
-          if (storage.get()[i].num == num) {
-            theItem = storage.get()[i];
-            break;
-          }
-        }
-      }
-      if (theItem.state === "noissue") {
-        next();
-      } else {
-        alert("非法路由");
-        next("/");
-      }
-    } else {
-      next();
-    }
   },
   created() {
     this.fetchData();
   },
   mounted() {
+    let nums = this.$route.params.num;
+    // 获取列表数据接口
+    editQuestionInfo({
+      qncode: nums
+    }).then(res => {
+      // console.log(res.data.obj);
+      this.datas = res.data.obj;
+      console.log(this.datas);
+    });
   },
   methods: {
     // radio单选子组件传递过来的数据
@@ -402,16 +380,17 @@ export default {
         item.checked = false;
         this.qsItem = item;
         this.qsList.push(this.qsItem);
-      } else {
-        let i = 0;
-        for (let length = this.qsList.length; i < length; i++) {
-          if (this.qsList[i].num == this.$route.params.num) {
-            this.qsItem = this.qsList[i];
-            break;
-          }
-        }
-        if (i === this.qsList.length) this.isError = true;
       }
+      // else {
+      //   let i = 0;
+      //   for (let length = this.qsList.length; i < length; i++) {
+      //     if (this.qsList[i].num == this.$route.params.num) {
+      //       this.qsItem = this.qsList[i];
+      //       break;
+      //     }
+      //   }
+      //   if (i === this.qsList.length) this.isError = true;
+      // }
     },
     getMsg(item) {
       let msg = "";
@@ -426,7 +405,7 @@ export default {
         msg = "(文本题)";
       }
       return item.isNeed ? `${msg} *` : msg;
-    },  
+    },
     onblur() {
       this.titleValue = this.titleValue.trim();
       this.qsItem.title =
@@ -475,43 +454,43 @@ export default {
       }
     },
     editTitle(qs, index) {
-      // this.qsInputTitle = "";
-      // this.qsJzTitle = "";
-      // this.qsInputOptions = [];
-      // this.jzTitleOptions = [];
-      // this.jzItemOptions = [];
-      // console.log("yyb=" + JSON.stringify(qs));
-      // console.log(qs.type);
-      // let typeOne =
-      //   qs.type === "checkbox" || qs.type === "radio" || qs.type === "textarea";
-      // let typeTwo = qs.type === "checkbox" || qs.type === "radio";
-      // this.qsTitleUrl = qs.titleUrl;
-      // if (typeOne) {
-      //   if (typeOne) {
-      //     this.qsInputTitle = qs.title;
-      //     this.currEditIndex = index;
-      //     if (typeTwo) {
-      //       this.qsInputOptions = qs.options;
-      //       this.showAddQsDialog = true;
-      //     }
-      //   }
-      //   this.showAddQsDialog = true;
-      // } else {
-      //   if (qs.type === "jz") {
-      //     this.showAddQsDialogJz = true;
-      //     this.qsJzTitle = qs.title;
-      //     this.currEditIndex = index;
-      //     this.jzTitleOptions = qs.jzTitle;
-      //     this.jzItemOptions = qs.jzOptions;
-      //   }
-      //   this.showAddQsDialogJz = true;
-      // }
-      
-      console.log(qs);
-      if (qs.type === "radio") {
-        this.showModal = true;
-        this.dataObj = qs;
+      this.qsInputTitle = "";
+      this.qsJzTitle = "";
+      this.qsInputOptions = [];
+      this.jzTitleOptions = [];
+      this.jzItemOptions = [];
+      console.log("yyb=" + JSON.stringify(qs));
+      console.log(qs.type);
+      let typeOne =
+        qs.type === "checkbox" || qs.type === "radio" || qs.type === "textarea";
+      let typeTwo = qs.type === "checkbox" || qs.type === "radio";
+      this.qsTitleUrl = qs.titleUrl;
+      if (typeOne) {
+        if (typeOne) {
+          this.qsInputTitle = qs.title;
+          this.currEditIndex = index;
+          if (typeTwo) {
+            this.qsInputOptions = qs.options;
+            this.showAddQsDialog = true;
+          }
+        }
+        this.showAddQsDialog = true;
+      } else {
+        if (qs.type === "jz") {
+          this.showAddQsDialogJz = true;
+          this.qsJzTitle = qs.title;
+          this.currEditIndex = index;
+          this.jzTitleOptions = qs.jzTitle;
+          this.jzItemOptions = qs.jzOptions;
+        }
+        this.showAddQsDialogJz = true;
       }
+
+      // console.log(qs);
+      // if (qs.type === "radio") {
+      //   this.showModal = true;
+      //   this.dataObj = qs;
+      // }
     },
     addRadio() {
       if (this.questionLength === 20) return alert("问卷已满！");

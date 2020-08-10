@@ -37,7 +37,6 @@
     "prettier": "^1.19.1",
     "sass-loader": "^8.0.2",
     "vue-cli-plugin-wyz-echarts": "^1.0.5",
-    "vue-lazyload": "^1.3.3",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {

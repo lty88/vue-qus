@@ -1,56 +1,81 @@
 $orange: #ee7419;
 $lightorange: #fcf0e5;
 $green: #9fef96;
+
 .qs-list {
   width: 120rem;
   margin: 50px auto;
   color: #666;
   font-size: 1.6rem;
+
   ul {
     height: 6rem;
+
     margin: {
       left: 2rem;
       right: 2rem;
     }
+
     list-style: none;
     line-height: 6rem;
     border-bottom: 1px solid #eee;
     background-color: #fff;
+
     &:hover {
       background-color: $lightorange;
     }
+
     &:nth-of-type(1) {
       background-color: #efefef;
+
       padding: {
         left: 3rem;
         right: 2rem;
       }
+
       margin: 0;
     }
+
     li {
       // border-top: 1px solid #b2bbd8;
       display: inline-block;
+      text-align: center;
+    
+
       &:nth-of-type(1) {
-        width: 3.5rem;
-        border:none;
+        width: 3rem;
+        border: none;
         text-align: center;
       
       }
+
       &:nth-of-type(2) {
-        width: 30rem;
+        width: 33rem;
+        box-sizing: border-box;
+        vertical-align: middle;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+        white-space: nowrap;
+        text-align: left;
+      
       }
+
       &:nth-of-type(3) {
-        width: 18rem;
-      } 
-      &:nth-of-type(4) {
-        width: 18rem;
+        width: 17rem;
       }
+
+      &:nth-of-type(4) {
+        width: 17rem; 
+      }
+
       &:nth-of-type(5) {
         width: 10rem;
       }
+
       &:nth-of-type(6) {
         width: 33.5rem;
-        text-align: center;
+         text-align: right;;
+
         span {
           display: inline-block;
           height: 2.5rem;
@@ -64,6 +89,7 @@ $green: #9fef96;
           border-radius: .3rem;
           background-color: $orange;
           cursor: pointer;
+
           &:hover {
             box-shadow: 0 0 5px $orange;
           }
@@ -71,42 +97,51 @@ $green: #9fef96;
       }
     }
   }
+
   .inissue {
     color: $green;
   }
+
   button {
     width: 7rem;
     height: 2.5rem;
+
     padding: {
       top: .3rem;
       bottom: .3rem;
     }
+
     line-height: 100%;
     color: #777;
     border: 1px solid #555;
     border-radius: .2rem;
     background-color: #fff;
     cursor: pointer;
+
     &:hover {
       box-shadow: 0 0 5px #bbb;
     }
   }
+
   .list-bottom {
     box-sizing: border-box;
     height: 8rem;
     margin: 0 2rem;
     padding: 2rem 0;
     background-color: #fff;
+
     label {
       margin: {
         left: 1.8rem;
         right: 4rem;
       }
+
       input {
         margin-right: 2.3rem;
       }
     }
   }
+
   .shadow {
     position: fixed;
     left: 0;
@@ -114,6 +149,7 @@ $green: #9fef96;
     width: 100%;
     height: 100%;
     background: rgba(85, 85, 85, .7);
+
     .del-dialog {
       position: absolute;
       left: 50%;
@@ -125,32 +161,40 @@ $green: #9fef96;
       box-shadow: 0 0 5px #555;
       background-color: #fff;
     }
+
     header {
       height: 5rem;
+
       padding: {
         left: 3rem;
         right: 3rem;
       }
+
       line-height: 5rem;
       border-radius: .5rem;
       background-color: #f7f7f7;
+
       span:nth-of-type(1) {
         font-weight: 700;
       }
+
       .close-btn {
         position: absolute;
         right: 3rem;
         color: #bbb;
         cursor: pointer;
+
         &:hover {
           color: $orange;
         }
       }
     }
+
     .del-dialog p {
       margin-top: 3rem;
       margin-left: 3rem;
     }
+
     .btn-box {
       position: absolute;
       bottom: 0;
@@ -158,17 +202,20 @@ $green: #9fef96;
       height: 6rem;
       text-align: center;
       line-height: 6rem;
+
       .yes {
         margin-right: 1rem;
         color: #fff;
         background-color: $orange;
         border: 1px solid $orange;
+
         &:hover {
           box-shadow: 0 0 5px $orange;
         }
       }
     }
   }
+
   .add-qs {
     width: 100rem;
     height: 30rem;
@@ -179,6 +226,7 @@ $green: #9fef96;
     border-radius: .5rem;
     box-shadow: 1px 1px 4px #aaa;
     background-color: #fff;
+
     .add-btn {
       width: 20rem;
       height: 5rem;
@@ -186,6 +234,7 @@ $green: #9fef96;
       font-size: 2rem;
       border: 1px solid $orange;
       background-color: $orange;
+
       &:hover {
         background-color: #ff7f1f;
         box-shadow: 0 0 5px $orange;

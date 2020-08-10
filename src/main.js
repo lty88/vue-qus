@@ -2,7 +2,6 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from './store'
-import seesion from '../src/store/seesion.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
@@ -31,20 +30,9 @@ Vue.config.productionTip = false;
 
 Vue.use(VueAxios, axios);
 //axios
-axios.defaults.baseURL = '/api';
-axios.defaults.timeout = 9090;
-//处理axios fordata
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.transformRequest = [function (data) {
-    let src = ''
-    for (let item in data) {
-      src += encodeURIComponent(item) + '=' + encodeURIComponent(data[item]) + '&'
-    }
-    return src
-}]
-
-
+// axios.defaults.baseURL = '/api';
+// axios.defaults.timeout = 5000;
+// 判断是否有token 
 router.beforeEach(({name}, from, next) => {
   // 获取 JWT Token
   if (localStorage.getItem('token')) {
@@ -63,23 +51,20 @@ router.beforeEach(({name}, from, next) => {
   }
 });
 // 携带token
-axios.interceptors.request.use(
-  config => {
-    if (localStorage.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-      config.headers.Authorization = `token ${localStorage.token}`;
-    }
-    return config;
-  },
-  err => {
-    return Promise.reject(err);
-  });
+// axios.interceptors.request.use(config => {
+//     console.log(config);
+//     if (config.url != "/apiv1/login") {
+//         if (localStorage.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
+//             config.headers.Authorization = `token ${localStorage.token}`;
+//         }
+//         return config;
+//     }
+//     err => {
+//         console.log(err);
+//         // return Promise.reject(err);
+//     }
+// })
   
-//引入懒加载
-import VueLazyLoad from 'vue-lazyload'
-Vue.use(VueLazyLoad, {
-  error: require('../src/assets/img/u=2305334543,4052052284&fm=26&gp=0.jpg'),
-  loading: require('../src/assets/img/loading-spinning-bubbles.svg')
-});
 import VideoPlayer from 'vue-video-player'
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')

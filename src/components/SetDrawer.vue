@@ -49,7 +49,7 @@
           </el-form-item>
         </el-form>
         <div class="demo-drawer__footer">
-          <el-button @click="cancelForm" >取 消</el-button>
+          <el-button @click="cancelForm">取 消</el-button>
           <el-button
             type="primary"
             @click="$refs.drawer.closeDrawer()"
@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import { getList } from "../api/QS-list";
 export default {
   name: "Drawer",
   data() {
@@ -71,7 +72,6 @@ export default {
           return time.getTime() < Date.now() - 3600 * 1000 * 24;
         }
       },
-
       table: false,
       dialog: false,
       loading: false,
@@ -86,6 +86,13 @@ export default {
       formLabelWidth: "100px",
       timer: null
     };
+  },
+  mounted() {
+    //获取问卷属性接口
+    getList().then(res => {
+      // console.log(res);
+      this.form=res.data
+    });
   },
   methods: {
     handleClose(done) {
