@@ -25,7 +25,7 @@ const routes = [{
 		import( /* webpackChunkName: "about" */ "../views/login.vue")
 },
 {
-	path: '/fill/:num',
+	path: '/fill/:code',
 	name: 'qsFill',
 	meta: {
 		title: '填写问卷',
@@ -35,7 +35,7 @@ const routes = [{
 		import( /* webpackChunkName: "about" */ "../views/QS-fill.vue")
 },
 {
-	path: '/edit/:num',
+	path: '/edit/:code',
 	name: 'qsEdit',
 	meta: {
 		title: '编辑问卷',
@@ -44,7 +44,7 @@ const routes = [{
 	component: () =>
 		import( /* webpackChunkName: "about" */ "../views/QS-edit.vue")
 }, {
-	path: '/data/:num',
+	path: '/data/:code',
 	name: 'qsData',
 	meta: {
 		title: '查看问卷结果',

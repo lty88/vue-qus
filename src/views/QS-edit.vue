@@ -1,23 +1,13 @@
 <template>
   <div class="edit-container">
     <set-drawer></set-drawer>
-    <h2 @click="titleClick" v-if="!titleChange" ref="a">{{ qsItem.title }}</h2>
-    <input
-      type="text"
-      name="qsTitle"
-      v-if="titleChange"
-      v-model="titleValue"
-      @blur="onblur"
-      @keyup.enter="onsubmit"
-      ref="titleInput"
-    />
     <!--渲染数据-->
     <div class="content">
-      <div class="questions" v-for="(qs, index) in datas" :key="index">
+      <div class="questions" v-for="(qs, index) in qsItem" :key="index">
         <div class="qs-left">
           <div class="demo-image__placeholder">
             <div class="block">
-              <p class="qs-title">{{ qs.title }}&nbsp;{{ qs.content}}&nbsp;{{ getMsg(qs) }}</p>
+              <p class="qs-title">{{ qs.title }}.&nbsp;{{ getMsg(qs)}}&nbsp;&nbsp;{{ qs.content}}</p>
               <el-image class="titleImg" v-if="qs.type==='1'" :src="qs.titleUrl"></el-image>
               <vido-player v-if="qs.type===3||qs.type===2"></vido-player>
             </div>
@@ -69,19 +59,7 @@
             <input type="checkbox" :value="qs.isNeed" v-model="qs.isNeed" />
             此题是否必填
           </label>
-          <p id="edit-btn-box-top">
-            <el-button
-              v-if="index !== 0"
-              @click="goUp(index)"
-              type="success"
-              plain
-              icon="el-icon-upload2"
-            ></el-button>
-            <!-- v-if="index !== qsItem.question.length - 1" -->
-            <el-button @click="goDown(index)" plain type="success" icon="el-icon-download "></el-button>
-          </p>
           <p id="edit-btn-box">
-            <!-- <el-button @click="copy(index, qs)" type="success"  plain>复用</el-button> -->
             <el-button @click="del(index)" type="warning" plain>删除</el-button>
             <el-button @click="editTitle(qs,index)" type="success" plain>编辑</el-button>
           </p>
@@ -124,7 +102,7 @@
           <label v-if="showAddOptionInput" id="edit-box">
             <div v-for="(qsOptions,optionsIndex) in qsInputOptions " :key="optionsIndex">
               <span>选项{{optionsIndex+1}}</span>
-              <el-input v-model="qsOptions.name" placeholder="请输入内容"></el-input>
+              <el-input v-model="qsOptions.content" placeholder="请输入内容"></el-input>
               <el-button
                 @click="delItemOption(qsOptions,optionsIndex)"
                 el-icon-circle-plus
@@ -135,8 +113,8 @@
             </div>
           </label>
         </div>
-        <div class="btn-box">
-          <button class="yes" @click="validateAddQs()">确定</button>
+        <div class="btn-box" v-for="(validqs, validIndex) in qsItem" :key="validIndex">
+          <button class="yes" @click="validateAddQs(validqs,validIndex)">确定</button>
           <button @click="showAddQsDialog = false;qsInputOptions=[];">取消</button>
         </div>
       </div>
@@ -159,7 +137,7 @@
               <h3>横标题</h3>
               <div v-for="(rowOptions,roptionsIndex) in jzItemOptions" :key="roptionsIndex">
                 <span>选项{{roptionsIndex+1}}</span>
-                <el-input v-model="rowOptions.name" placeholder="请输入内容"></el-input>
+                <el-input v-model="rowOptions.title" placeholder="请输入内容"></el-input>
                 <el-button
                   @click="delJzItemOption(rowOptions,roptionsIndex)"
                   el-icon-circle-plus
@@ -177,7 +155,7 @@
               <h3>竖标题</h3>
               <div v-for="(colOptions,coptionsIndex) in jzTitleOptions " :key="coptionsIndex">
                 <span>选项{{coptionsIndex+1}}</span>
-                <el-input v-model="colOptions.title" placeholder="请输入内容"></el-input>
+                <el-input v-model="colOptions.content" placeholder="请输入内容"></el-input>
                 <el-button
                   @click="delJzTitleOptions(colOptions,coptionsIndex)"
                   el-icon-circle-plus
@@ -276,7 +254,7 @@ import vTextarea from "@/components/v-textarea";
 import vCheckbox from "@/components/v-checkbox";
 import SetDrawer from "@/components/SetDrawer";
 import vidoPlayer from "@/components/vido";
-import { editQuestionInfo } from "../api/QS-edit";
+import { editQuestionInfo, UpdateQuestion } from "../api/QS-edit";
 import { getList } from "../api/QS-list";
 
 export default {
@@ -284,12 +262,12 @@ export default {
   components: { vRadio, vJztemp, vTextarea, vCheckbox, SetDrawer, vidoPlayer },
   data() {
     return {
-      qsItem: {},
-      qsList: {},
+      qsItem: [],
+      qsList: [],
       isError: false,
       showBtn: false,
-      titleChange: false,
-      titleValue: "",
+      // titleChange: false,
+      // titleValue: "",
       showAddQsDialog: false,
       showAddQsDialogJz: false,
       showAddOptionInput: true,
@@ -302,33 +280,30 @@ export default {
       qsInputOptions: [],
       jzTitleOptions: [],
       jzItemOptions: [],
-      starTime: "",
-      endTime: "",
       info: "",
       addOptionType: "", //增加的类型
-      limit: {},
       showDialog: false,
       iterator: {},
       isGoIndex: false,
-      numID: 0,
       currEditIndex: -1,
       showModal: false,
-      dataObj: {},
-      datas: []
+      dataObj: {}, //子传给父亲的修改数据
+      datas: [] // 获取列表数据信息
     };
   },
   created() {
     this.fetchData();
   },
   mounted() {
-    let nums = this.$route.params.num;
-    // 获取列表数据接口
+     console.log(this.$route.params.code);
+    let Code = this.$route.params.code;
+    // 获取列表数据信息接口
     editQuestionInfo({
-      qncode: nums
+      qncode: Code
     }).then(res => {
       // console.log(res.data.obj);
-      this.datas = res.data.obj;
-      console.log(this.datas);
+      this.qsItem = res.data.obj;
+      console.log(this.qsItem);
     });
   },
   methods: {
@@ -392,54 +367,19 @@ export default {
       //   if (i === this.qsList.length) this.isError = true;
       // }
     },
+    //处理类型
     getMsg(item) {
       let msg = "";
-      if (item.type === "radio") {
+      if (item.answerType === 0) {
         msg = "(单选题)";
-      } else if (item.type === "checkbox") {
+      } else if (item.answerType === 1) {
         msg = "(多选题)";
-      }
-      if (item.type === "jz") {
+      } else if (item.answerType === 3 || item.answerType === 4) {
         msg = "(矩阵题)";
       } else {
         msg = "(文本题)";
       }
       return item.isNeed ? `${msg} *` : msg;
-    },
-    onblur() {
-      this.titleValue = this.titleValue.trim();
-      this.qsItem.title =
-        this.titleValue === "" ? this.qsItem.title : this.titleValue;
-      this.titleChange = false;
-    },
-    onsubmit() {
-      this.titleValue = this.titleValue.trim();
-      this.qsItem.title =
-        this.titleValue === "" ? this.qsItem.title : this.titleValue;
-      this.titleChange = false;
-    },
-    titleClick() {
-      console.log(this.$refs.a.innerHTML);
-      this.titleChange = !this.titleChange;
-      setTimeout(() => {
-        this.$refs.titleInput.focus();
-        // console.log(this.$refs.titleInput);
-      }, 150);
-    },
-    swapItems(oldIndex, newIndex) {
-      let [newVal] = this.qsItem.question.splice(
-        newIndex,
-        1,
-        this.qsItem.question[oldIndex]
-      );
-      this.qsItem.question.splice(oldIndex, 1, newVal);
-    },
-    goUp(index) {
-      this.swapItems(index, index - 1);
-      console.log("index :>> ", index);
-    },
-    goDown(index) {
-      this.swapItems(index, index + 1);
     },
     del(index) {
       this.qsItem.question.splice(index, 1);
@@ -459,29 +399,32 @@ export default {
       this.qsInputOptions = [];
       this.jzTitleOptions = [];
       this.jzItemOptions = [];
-      console.log("yyb=" + JSON.stringify(qs));
-      console.log(qs.type);
-      let typeOne =
-        qs.type === "checkbox" || qs.type === "radio" || qs.type === "textarea";
-      let typeTwo = qs.type === "checkbox" || qs.type === "radio";
+      // console.log("yyb=" + JSON.stringify(qs));
+      // console.log(qs.answerType);
+      // debugger;
+      let typeOne =qs.answerType === 0 || qs.answerType === 1 || qs.answerType === 2;
+      let typeTwo = qs.answerType === 0 || qs.answerType === 1;
       this.qsTitleUrl = qs.titleUrl;
+      //排除除矩阵以外的题目
       if (typeOne) {
-        if (typeOne) {
-          this.qsInputTitle = qs.title;
-          this.currEditIndex = index;
-          if (typeTwo) {
-            this.qsInputOptions = qs.options;
-            this.showAddQsDialog = true;
-          }
+        this.qsInputTitle = qs.content;
+        this.currEditIndex = index;
+        //排除除矩阵跟文本以外的选项
+        if (typeTwo) {
+          this.qsInputOptions = qs.items;
+          // console.log(this.qsInputOptions);
+          this.showAddQsDialog = true;
         }
+
         this.showAddQsDialog = true;
       } else {
-        if (qs.type === "jz") {
+        //处理矩阵相关的
+        if (qs.answerType === 4 || qs.answerType === 3) {
           this.showAddQsDialogJz = true;
-          this.qsJzTitle = qs.title;
+          this.qsJzTitle = qs.content;
           this.currEditIndex = index;
-          this.jzTitleOptions = qs.jzTitle;
-          this.jzItemOptions = qs.jzOptions;
+          this.jzTitleOptions = qs.items;
+          this.jzItemOptions = qs.subTitles;
         }
         this.showAddQsDialogJz = true;
       }
@@ -550,32 +493,26 @@ export default {
       let qsOptions = { name: "" };
       this.qsInputOptions.push(qsOptions);
     },
-    validateAddQs() {
-      let qsTitle = this.qsInputTitle.trim();
-      if (this.currEditIndex >= 0) {
-        //編輯
-        let Types = this.qsItem.question[this.currEditIndex];
-        console.log(Types);
-        this.qsItem.question[this.currEditIndex].title = qsTitle;
-        if (Types === "checkbox" || Types === "radio") {
-          this.qsItem.question[this.currEditIndex].options.name = JSON.parse(
-            JSON.stringify(this.qsInputOptions)
-          );
-          let qsOptionss = this.qsInputOptions;
-          qsOptionss.forEach((item, index) => {
-            if (item.name === "") {
-              this.$message.error("选项为空");
-            }
-          });
-        }
-      }
-      if (qsTitle === "") {
-        this.$message.error("题目为空");
-      } else {
-        this.showAddQsDialog = false;
-        this.currEditIndex = -1;
-        this.qsInputOptions = {};
-      }
+    validateAddQs(validqs, validIndex) {
+      let typeOne =validqs.answerType === 0 ||validqs.answerType === 0 ||validqs.answerType === 2;
+      let typeTwo = validqs.answerType === 0 || validqs.answerType === 1;
+      console.log("yyb=" + JSON.stringify(validqs));
+      console.log(validqs);
+     
+      UpdateQuestion({
+        qnCode:this.$route.params.code,
+        code:validqs.code,
+        title:validqs.title,
+        order:validqs.order,
+        content:validqs.content,
+        answerType:validqs.answerType,
+        type:validqs.type,
+        url:validqs.url,
+        Items:validqs.Items,
+        subTitles:validqs.subTitles
+      }).then(res=>{
+        console.log(res);
+      })
     },
     validateAddQsJz() {
       if (this.qsJzTitle === "") {
@@ -642,19 +579,19 @@ export default {
   },
   computed: {
     questionLength() {
-      return this.qsItem.question.length;
+      return this.datas.length;
     }
   },
   watch: {
-    $route: "fetchData",
-    qsItem: {
-      handler(newVal) {
-        newVal.question.forEach((item, index) => {
-          item.num = `Q${index + 1}`;
-        });
-      },
-      deep: true
-    }
+    // $route: "fetchData",
+    // qsItem: {
+    //   handler(newVal) {
+    //     newVal.question.forEach((item, index) => {
+    //       item.num = `Q${index + 1}`;
+    //     });
+    //   },
+    //   deep: true
+    // }
   }
 };
 </script>

@@ -49,13 +49,12 @@
 </template>
 
 <script>
-	import storage from "../store/seesion.js";
 	export default {
 		name: "qsFill",
 		data() {
 			return {
 				qsItem: [],
-				qsList: storage.get(),
+				qsList:[],
 				isError: false,
 				showDialog: false,
 				info: "",

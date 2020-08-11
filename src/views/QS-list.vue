@@ -79,6 +79,7 @@ export default {
     getList().then(res => {
       console.log(res.data.obj);
       this.qsList = res.data.obj;
+      
       if (this.qsList !== null) {
         // this.qsList = storage.get();
         this.qsList.forEach(item => {
@@ -146,7 +147,7 @@ export default {
       this.$router.push({
         name: "qsEdit",
         params: {
-          num: item.code
+          code:item.code 
         }
       });
       // yield (() => {

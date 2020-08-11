@@ -6,3 +6,11 @@ export const editQuestionInfo = function (data) {
         params: data
     });
 };
+
+//题目保存接口
+export const UpdateQuestion = function (data) {
+    return request({
+        url: '/apiv1/insertOrUpdateQuestion',
+        params: data
+    });
+};
