@@ -1,25 +1,19 @@
  <template>
   <div class="data-container">
-     <v-header></v-header>
     <template v-if="!isError">
-      <span class="back" @click="goBack()"><i class="el-icon-arrow-left" style="font-size:25px;font-weight: bold"></i></span>
+      <span class="back" @click="goBack()">
+        <i class="el-icon-arrow-left" style="font-size:25px;font-weight: bold"></i>
+      </span>
       <h2>{{ qsItem.title }}</h2>
       <p>此统计分析只包含完整回收的数据(数据皆为自制数据模拟来mock数据)</p>
     </template>
-
     <div class="content" v-if="!isError">
       <template>
         <div v-for="(item, index) in qsItem.question" :key="index">
           <div class="content-item">
             <div class="item-left">
               <p>{{ item.num }} &nbsp; {{ item.title }}</p>
-              <p
-                class="option"
-                v-for="(option, index) in item.options"
-                :key="index"
-              >
-                {{ option }}
-              </p>
+              <p class="option" v-for="(option, index) in item.options" :key="index">{{ option }}</p>
             </div>
             <div class="item-right" v-if="item.type === 'radio'">
               <p>数据占比</p>
@@ -37,9 +31,11 @@
                     ></div>
                   </div>
                 </div>
-                <span class="percent">{{
+                <span class="percent">
+                  {{
                   renderProgressMath(item.options.length, index)
-                }}</span>
+                  }}
+                </span>
               </template>
             </div>
             <div class="item-right" v-else-if="item.type === 'textarea'">
@@ -68,6 +64,7 @@ import "echarts/lib/chart/pie";
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/toolbox";
 export default {
+  comments: {},
   name: "qsData",
   data() {
     return {

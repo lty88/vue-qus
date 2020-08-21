@@ -1,148 +1,127 @@
 <template>
-	<div class="fill-container">
-		<div class="fill" v-if="!isError">
-			<router-link to="/" tag="span" class="back"><i class="el-icon-arrow-left" style="font-size:25px;font-weight: bold"></i></router-link>
-			<h2>{{ qsItem.title }}</h2>
-			<div class="content">
-				<div class="content-item" v-for="(item, index) in qsItem.question" :key="index">
-					<p class="qs-title">
-						{{ item.num }}&nbsp;{{ item.title }}&nbsp;{{ getMsg(item) }}
-					</p>
-					<p v-for="(option, index) in item.options" class="option" :key="index">
-						<label>
-							<input type="radio" :name="`${item.num}-${item.title}`" v-model="requiredItem[item.num]" v-if="item.type === 'radio'"
-							 :value="option" />
-							<input type="checkbox" :name="`${item.num}-${item.title}`" v-model="requiredItem[item.num]" v-if="item.type === 'checkbox'"
-							 :value="option" />
-							{{ option.name }}
-						</label>
-					</p>
-					<textarea v-if="item.type === 'textarea'" v-model="requiredItem[item.num]"></textarea>
-				</div>
-			</div>
-			<transition name="fade">
-				<div class="dialog" v-if="showDialog">
-					<div class="submit-dialog" v-if="submitError">
-						<header>
-							<span>提示</span>
-							<span class="close-btn" @click="showDialog = false">X</span>
-						</header>
-						<p>{{ info }}</p>
-						<div class="btn-box">
-							<button class="yes" @click="showDialog = false">确定</button>
-							<button @click="showDialog = false">取消</button>
-						</div>
-					</div>
-					<div class="submit-dialog" v-else>
-						<header>
-							<span>提示</span>
-							<span class="close-btn" @click="showDialog = false">X</span>
-						</header>
-						<p>{{ info }}</p>
-					</div>
-				</div>
-			</transition>
-			<footer><button @click="submit" class="submit">提交</button></footer>
-		</div>
-		<div class="error" v-else>404 Not Found</div>
-	</div>
+  <div class="edit-container">
+    <router-link to="/" tag="span" class="back">
+      <i class="el-icon-arrow-left" style="font-size:25px;font-weight: bold"></i>
+    </router-link>
+    <!--渲染数据-->
+    <div class="content">
+      <div class="questions" v-for="(qs, index) in qsItem" :key="index">
+        <div class="qs-left">
+          <div class="demo-image__placeholder">
+            <div class="block">
+              <p class="qs-title">{{`${index+1}`}}.&nbsp;{{ getMsg(qs)}}&nbsp;&nbsp;{{ qs.content}}</p>
+              <el-image class="titleImg" v-if="qs.type===1" :src="qs.url"></el-image>
+              <vido-player v-if="qs.type===3||qs.type===2"></vido-player>
+            </div>
+          </div>
+          <p v-for="(item, index) in qs.items" class="option" :key="index">
+            <label>
+              <div v-if="qs.answerType === 0">
+                <input type="radio" :name="`${qs.title}`" />
+                {{item.content}}
+              </div>
+              <div v-if="qs.answerType === 1">
+                <input type="checkbox" :name="`${qs.title}`" />
+                {{item.content}}
+              </div>
+            </label>
+          </p>
+          <textarea v-if="qs.answerType === 2"></textarea>
+          <!-- 矩阵题-->
+          <div class="wjdc_list">
+            <table
+              width="100%"
+              border="0"
+              cellspacing="0"
+              cellpadding="0"
+              class="tswjdc_table"
+              v-if="qs.answerType === 4||qs.answerType === 3"
+            >
+              <tr>
+                <td class="lefttd_qk">&nbsp;</td>
+                <td
+                  class="lefttd_tit"
+                  v-for="(jzOption,jzIndex) in qs.subTitles"
+                  :key="jzIndex"
+                >{{jzOption.title}}</td>
+              </tr>
+              <!-- 渲染的矩阵的radio-->
+              <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.items" :key="jztIndex">
+                <td class="lefttd_qk">{{jzTitle.content}}</td>
+                <td v-for="(jzOption,jzIndex) in qs.subTitles" :key="jzIndex">
+                  <input type="radio" :name="`${jzIndex}`" />
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="btn-box">
+        <button class="issue">提交问卷</button>
+      </div>
+    </footer>
+  </div>
 </template>
 
 <script>
-	export default {
-		name: "qsFill",
-		data() {
-			return {
-				qsItem: [],
-				qsList:[],
-				isError: false,
-				showDialog: false,
-				info: "",
-				submitError: false,
-				requiredItem: {}
-			};
-		},
-		created() {
-			this.fetchData();
-		},
-		mounted() {
-			this.getRequiredItem();
-		},
-		methods: {
-			fetchData() {
-				let i = 0;
-				for (let length = this.qsList.length; i < length; i++) {
-					if (this.qsList[i].num == this.$route.params.num) {
-						this.qsItem = this.qsList[i];
-						break;
-					}
-				}
-				if (i === this.qsList.length) this.isError = true;
-			},
-			getMsg(item) {
-				let msg = "";
-				if (item.type === "radio") {
-					msg = "(单选题)";
-				} else if (item.type === "checkbox") {
-					msg = "(多选题)";
-				} else {
-					msg = "(文本题)";
-				}
+import vidoPlayer from "@/components/vido";
+import { GetQuestionInfo, UpdateQsInfo, DeleteQsItems } from "../api/QS-edit";
+import { getList } from "../api/QS-list";
+import { getAvailableQn } from "../api/user";
 
-				return item.isNeed ? `${msg} *` : msg;
-			},
-			submit() {
-				if (this.qsItem.state === "inissue") {
-					let result = this.validate();
-					if (result) {
-						this.showDialog = true;
-						this.submitError = false;
-						this.info = "提交成功！";
-						setTimeout(() => {
-							this.showDialog = false;
-						}, 500);
-						setTimeout(() => {
-							this.$router.push({
-								path: "/"
-							});
-						}, 1500);
-					} else {
-						this.showDialog = true;
-						this.submitError = true;
-						this.info = "提交失败！ 存在必填项未填";
-					}
-				} else {
-					this.showDialog = true;
-					this.submitError = true;
-					this.info = "提交失败！ 只有发布中的问卷才能提交";
-				}
-			},
-			getRequiredItem() {
-				this.qsItem.question.forEach(item => {
-					if (item.isNeed) {
-						if (item.isNeed) {
-							if (item.type === "checkbox") {
-								this.requiredItem[item.num] = [];
-							} else {
-								this.requiredItem[item.num] = "";
-							}
-						}
-					}
-				});
-			},
-			validate() {
-				for (let i in this.requiredItem) {
-					if (this.requiredItem[i].length === 0) return false;
-				}
-				return true;
-			}
-		},
-		watch: {
-			$route: "fetchData"
-		}
-	};
+export default {
+  name: "qsEdit",
+  components: { vidoPlayer },
+  data() {
+    return {
+      qsItem: [],
+
+      code: 1
+    };
+  },
+  mounted() {
+    this.fetchData();
+    this.fetchAvailableQn();
+  },
+  methods: {
+    fetchData() {
+      this.code = this.$route.params.code;
+      // 获取列表数据信息接口
+      if (this.code != 0) {
+        GetQuestionInfo({
+          qncode: this.code
+        }).then(res => {
+          console.log(res);
+          this.qsItem = res.data.obj;
+          console.log(this.qsItem);
+        });
+      }
+    },
+    fetchAvailableQn() {
+      getAvailableQn().then(res => {
+        console.log(res);
+      });
+    },
+    //处理类型
+    getMsg(item) {
+      let msg = "";
+      if (item.answerType === 0) {
+        msg = "(单选题)";
+      } else if (item.answerType === 1) {
+        msg = "(多选题)";
+      } else if (item.answerType === 3 || item.answerType === 4) {
+        msg = "(矩阵题)";
+      } else {
+        msg = "(文本题)";
+      }
+      return item.isNeed ? `${msg} *` : msg;
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-	@import "../style/QS-fill";
+@import "../style/QS-edit";
 </style>

@@ -7,3 +7,11 @@ export const login = function (data) {
         params: data
     });
 };
+// 回答
+export const getAvailableQn = function (data) {
+    return request({
+        url: '/apiv1/getAvailableQn',
+        method: 'GET',
+        params: data
+    });
+};

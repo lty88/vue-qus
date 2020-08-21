@@ -22,6 +22,13 @@
 </template>
 
 <script>
+import {
+  getUser,
+  deleteUser,
+  uploadUser,
+  deleteAllUser
+} from "../api/Import-user";
+import { getList } from "../api/QS-list";
 export default {
   data() {
     return {

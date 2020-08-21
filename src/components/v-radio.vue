@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="modal" v-show="showModals">
+    <div class="modal" v-show="showf">
       <div class="mask"></div>
       <div class="modal-dialog">
         <div class="modal-header">
@@ -11,12 +11,34 @@
           <div class="form">
             <el-form :model="formData" ref="formData" label-width="100px" class="demo-dynamic">
               <el-form-item
-                prop="title"
+                prop="content"
                 label="题目"
                 :rules="[{ required: true, message: '题目不能为空', trigger: 'blur' }]"
               >
-                <el-input v-model="formData.title"></el-input>
-                <br />
+                <el-input v-model="formData.content"></el-input>
+              </el-form-item>
+              <el-form-item
+                prop="title"
+                :rules="[{ required: true, message: '题号不能为空', trigger: 'blur' }]"
+              >
+                <el-input placeholder="请输入题号" v-model="formData.title">
+                  <template slot="prepend">题号:</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                prop="order"
+                :rules="[{ required: true, message: '题目序号不能为空', trigger: 'blur' }]"
+              >
+                <el-input
+                  placeholder="请输入题目序号"
+                  v-model="formData.order"
+                  type="number"
+                  oninput="if(value.length>2)value=value.slice(0,2)"
+                >
+                  <template slot="prepend">题目序号:</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item label>
                 <el-popover
                   class="btn-vido"
                   placement="top-start"
@@ -36,15 +58,11 @@
                   <el-button slot="reference" @click="addVido">上传多媒体</el-button>
                 </el-popover>
               </el-form-item>
-              <!-- 上传图片视频 -->
 
-              <el-form-item
-                v-if="showVido"
-                prop="titleUrl"
-                label="多媒体链接"
-              >
-                <el-input v-model="formData.titleUrl "></el-input>
-                <el-select v-model="formData.titleType" placeholder="选择类型" class="select-type">
+              <!-- 上传图片视频 -->
+              <el-form-item v-if="showVido" label="多媒体链接">
+                <el-input v-model="formData.url "></el-input>
+                <el-select v-model="formData.Types" placeholder="选择类型" class="select-type">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -59,27 +77,61 @@
                 class="upload-demo"
                 action="https://jsonplaceholder.typicode.com/posts/"
                 :on-change="handleChange"
-                :file-list="fileList"
+                :headers="headerObj"
               >
                 <el-button size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
-              <div >
+              <!-- 选项内容 -->
+              <div v-for="(option, index) in formData.options" :key="option.key">
                 <el-form-item
-                  v-for="(option, index) in formData.options"
                   :label="'选项' +`${index+1}`"
-                  :key="option.key"
-                  :prop="'options.' + index + '.name'"
-                  :rules="[{ required: true, message: '选项不能为空', trigger: 'blur' }]"
+                  :prop="'options.' + index + '.content'"
+                  :rules="[{ required: true, message: '选项内容不能为空', trigger: 'blur' }]"
                 >
-                  <el-input v-model="option.name"></el-input>
-                  <el-button @click.prevent="removeDomain(index)">删除</el-button>
+                  <el-input v-model="option.content" placeholder="请输入选项内容"></el-input>
+                  <el-button class="del" @click.prevent="removeDomain(index)">删除选项</el-button>
                 </el-form-item>
+
+                <el-form-item
+                  prop="title"
+                  :rules="[{ required: true, message: '选项号不能为空', trigger: 'blur' }]"
+                >
+                  <el-input placeholder="请输入选项号" v-model="option.title">
+                    <template slot="prepend">选项号:</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-input placeholder="需要流程控制请输入分值" type="number" v-model="option.point">
+                    <template slot="prepend">分值:</template>
+                  </el-input>
+                </el-form-item>
+                <!-- 选项多媒体 -->
+                <el-form-item>
+                  <el-input placeholder="请输入链接" v-model="option.url" class="input-with-select">
+                    <el-select v-model="option.type" slot="prepend" placeholder="请选择类型">
+                      <el-option label="文本" value="0"></el-option>
+                      <el-option label="图片" value="1"></el-option>
+                      <el-option label="视频" value="2"></el-option>
+                      <el-option label="音频" value="3"></el-option>
+                    </el-select>
+                  </el-input>
+                </el-form-item>
+                <!-- <el-button @click="itemsAddVido(index)">上传多媒体</el-button>
+                  <el-upload
+                    v-if="itemsAddVidoShow"
+                    class="upload-demo"
+                    action="https://jsonplaceholder.typicode.com/posts/"
+                    :on-change="handleChange"
+                    :headers="headerObj"
+                  >
+                    <el-button size="small" type="primary">点击上传</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>-->
               </div>
-              <el-form-item>
+              <el-form-item class="modal-footer">
                 <el-button type="primary" @click="submitForm('formData')">提交</el-button>
                 <el-button @click="addDomain" v-if="types==='radio'||types==='checkbox'">新增选项</el-button>
-
                 <el-button @click="resetForm('formData')">重置</el-button>
               </el-form-item>
             </el-form>
@@ -91,17 +143,16 @@
 </template>
 
 <script>
+import { UpdateQsInfo } from "../api/QS-edit";
 export default {
   props: {
-    showModal: {
+    show: {
       type: Boolean,
       default: false
     },
-    editData: {
-      type: Object,
-      default() {
-        return {};
-      }
+    watchList: {
+      type: Boolean,
+      default: false
     },
     types: {
       type: String
@@ -111,56 +162,89 @@ export default {
     console.log(this.types);
   },
   watch: {
-    showModal(newVal) {
+    show(newVal, o) {
       console.log(newVal);
-      this.showModals = newVal;
+      console.log(o);
+      this.showf = newVal;
     },
     types(newVal) {
       this.formData.type = this.types;
     },
-    editData(newVal) {
-      this.formData = newVal;
+    wlist(newValue) {
+      this.$emit("isChangeList", this.wlist);
     }
   },
   data() {
     return {
+      itemsAddVidoShow: false,
+      wlist: this.watchList,
+      showf: false,
+      headerObj: {
+        Authorization: window.sessionStorage.getItem("token")
+      }, //图片上传时手动设置请求头请求对象
       options: [
         {
-          value: "img",
+          value: 0,
+          label: "文本"
+        },
+        {
+          value: 1,
           label: "图片"
         },
         {
-          value: "vido",
+          value: 2,
           label: "视频"
         },
         {
-          value: "mp3",
+          value: 3,
           label: "音频"
         }
       ],
       showVido: false,
       showAddVido: false,
       showModals: false,
-      fileList: [
-        {
-          name: "food.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        },
-        {
-          name: "food2.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        }
-      ],
+      code: 1,
       formData: {
-        titleType: "",
-        title: "",
-        titleUrl: "",
-        type: this.types,
-        options: [{ name: "" }, { name: "" }, { name: "" }]
+        title: "", //题号
+        content: "", //题目
+        order: 1,
+        Types: 0, //题目类型（0：文本，1：图片，2：音频，3：视频）
+        url: "", //多媒体内容链接
+        options: [
+          {
+            code: "",
+            title: "",
+            content: "",
+            point: 0,
+            order: 1,
+            type: "0",
+            url: ""
+          },
+          {
+            code: "",
+            title: "",
+            content: "",
+            point: 0,
+            order: 2,
+            type: "0",
+            url: ""
+          },
+          {
+            code: "",
+            title: "",
+            content: "",
+            point: 0,
+            order: 3,
+            type: "0",
+            url: ""
+          }
+        ]
       }
     };
+  },
+
+  mounted() {
+    this.code = this.$route.params.code;
   },
   methods: {
     //删除文件
@@ -185,7 +269,24 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           console.log(this.formData);
-          this.$emit("formData", this.formData);
+          let obj = {
+            qnCode: this.code,
+            order: this.formData.order,
+            title: this.formData.title,
+            content: this.formData.content,
+            type: this.formData.Types,
+            url: this.formData.url,
+            answerType: 0, //在radio组件里面
+            item: JSON.stringify(this.formData.options)
+          };
+          console.log(obj);
+          UpdateQsInfo(obj).then(res => {
+            console.log(res);
+            if (res.data.code === 200) {
+              this.wlist = true;
+            }
+          });
+          // this.$emit("formData", this.formData);
           this.$refs[formName].resetFields();
           this.creatGroup = false;
         } else {
@@ -212,7 +313,6 @@ export default {
         }
       }
       console.log(item);
-      // this.formData.options.splice(item, 1);
     },
     addDomain() {
       this.formData.options.push({
@@ -229,21 +329,29 @@ export default {
 @import "../assets/mixin.scss";
 @import "../assets/modal.scss";
 @import "../assets/button.scss";
-.modal-dialog {
-  width: 90rem !important;
-}
+// .modal-dialog {
+//   width: 100rem !important;
+
+// }
 .form {
   margin: 0 auto !important;
 }
+
 .upload-demo {
   width: 614px;
   border: 1px solid;
   margin: 20px auto;
 }
 .el-input {
-  width: 88% !important;
+  width: 70% !important;
 }
 .select-type {
-  width: 120px !important;
+  width: 110px !important;
+}
+.el-input-group__prepend {
+  .el-select {
+    display: block;
+    width: 120px !important;
+  }
 }
 </style>

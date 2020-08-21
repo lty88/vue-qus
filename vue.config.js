@@ -13,6 +13,7 @@
         }
       }
     },
+    // target:'http://192.168.1.80:9090',
     // publicPath:'../../',
     // publicPath:'/app',
     // outputDir:'dist',

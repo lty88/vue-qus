@@ -10,10 +10,15 @@
     >
       <div class="login-title">账号登录</div>
       <el-form-item label="用户名" prop="account">
-        <el-input v-model="formLogin.account"></el-input>
+        <el-input v-model="formLogin.account" prefix-icon="el-icon-user-solid"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="formLogin.password" autocomplete="off"></el-input>
+        <el-input
+          type="password"
+          v-model="formLogin.password"
+          autocomplete="off"
+          prefix-icon="el-icon-lock"
+        ></el-input>
       </el-form-item>
       <el-button type="success" class="login-btn" @click="submitForm('formLogin')">登录</el-button>
     </el-form>
@@ -79,7 +84,7 @@ export default {
               if (res.data.code === 200) {
                 const token = res.data.obj.token;
                 console.log(token);
-                window.localStorage.setItem("token", token);
+                window.sessionStorage.setItem("token", token);
                 this.$router.push({
                   name: "qsList",
                   params: {
@@ -94,28 +99,8 @@ export default {
             })
             .catch(err => {
               console.log(err);
-              this.$message.error('服务器异常，请联系客服')
+              this.$message.error("服务器异常，请联系客服");
             });
-          //   this.axios
-          //     .post("/apiv1/login", {
-          //       account: this.formLogin.account,
-          //       password: this.formLogin.password
-          //     }).then(res => {
-          //      console.log(res);
-          //       const token = res.data.obj.token;
-          //       window.localStorage.setItem("token", token);
-          //       if (res.data.code === 200) {
-          //         this.$router.push({
-          //           name: "qsList",
-          //           params: {
-          //             from: "/"
-          //           }
-          //         });
-          //       }
-          //     })
-          // .catch(err=>{
-          //   this.$message.error(err.data.msg);
-          // });
         } else {
           console.log("error submit!!");
           return false;
@@ -141,6 +126,7 @@ export default {
   background-image: url("../assets/img/login_wps图片.png");
   height: 100%;
   .form {
+    position: relative;
     box-sizing: border-box;
     padding-left: 31px;
     padding-right: 31px;
@@ -164,10 +150,10 @@ export default {
     .login-btn {
       background-color: #ff6600;
       width: 60%;
-      position: relative;
+      position: absolute;
       left: 50%;
-      top: 50%;
-      transform: translate(-50%, 0%);
+      bottom: 10%;
+      transform: translate(-50%, 50%);
     }
   }
 }

@@ -2,13 +2,19 @@
   <div class="header">
     <router-link to="/">问卷管理</router-link>
     <router-link to="/">我的问卷</router-link>
-    <!-- <router-link to="/login">退出<span class="userName"></span></router-link> -->
+    <span @click="logout" class="userName">退出</span>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Vheader"
+  name: "Vheader",
+  methods: {
+    logout() {
+      window.sessionStorage.clear();
+      this.$router.push("/login");
+    }
+  }
 };
 </script>
 

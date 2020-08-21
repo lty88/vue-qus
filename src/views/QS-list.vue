@@ -1,44 +1,36 @@
 <template>
   <div class="qs-list">
     <ul v-if="qsList.length == 0 ? false : true">
-      <li></li>
-      <li>标题</li>
-      <li>开始时间</li>
-      <li>截止时间</li>
-      <li>状态</li>
-      <li>
+      <li class="color">标题</li>
+      <li class="color">开始时间</li>
+      <li class="color">截止时间</li>
+      <li class="color">状态</li>
+      <li class="color">
         操作
-        <span @click="$router.push({ name: 'qsEdit', params: { code: 0 } })">+新建问卷</span>
+        <span @click="$router.push({ name: 'Add-Qs', params: { code: 0 } })">+新建问卷</span>
       </li>
     </ul>
     <div v-for="(item, index) in qsList" :key="index">
-      <ul>
-        <li>
-          <input style="cursor: pointer;" type="checkbox" v-model="item.checked" />
-        </li>
+      <ul id="list-item">
         <li>{{ item.title }}</li>
         <li style="font-size:15px">{{item.startTime}}</li>
         <li style="font-size:15px">{{item.endTime}}</li>
         <li :class="item.state === 'inissue' ? 'inissue' : ''">{{ item.stateTitle}}</li>
         <li>
-          <button @click="iterator = edit(item);iterator.next();">编辑</button>
-          <button @click="iterator = delItem(item.num);iterator.next();">删除</button>
-          <router-link :to="`/fill/${item.num}`" tag="button">查看问卷</router-link>
+          <button @click="iterator = edit(item.code);iterator.next();">编辑</button>
+          <button @click="iterator = delItem(item);iterator.next();">删除</button>
+          <!-- <router-link :to="`/fill/${item.code}`" tag="button">回答问卷</router-link> -->
+          <router-link v-if="item.type===1" :to="`/importUser/${item.code}`" tag="button">参与控制</router-link>
           <button @click="iterator = watchData(item);iterator.next();">查看数据</button>
+          <router-link v-if="item.condition===1" :to="`/condition/${item.code}`" tag="button">流程控制</router-link>
         </li>
       </ul>
     </div>
-    <div class="list-bottom" v-if="qsList.length == 0 ? false : true">
-      <label style="cursor: pointer;">
-        <input style="cursor: pointer;" type="checkbox" id="all-check" v-model="selectAll" />
-        全选
-      </label>
-      <button @click="iterator = delItems();iterator.next();">删除</button>
-    </div>
+    <!-- <flow-control :ControlModal="showControlModal" @cancel="showControlModal=false" :qnCode="code"></flow-control> -->
     <div class="add-qs" v-if="qsList.length === 0">
       <button
         class="add-btn"
-        @click="$router.push({ name: 'qsEdit', params: { num: 0 } })"
+        @click="$router.push({ name: 'Add-Qs', params: { code: 0 } })"
       >+&nbsp;&nbsp;新建问卷</button>
     </div>
     <Dialog
@@ -46,7 +38,7 @@
       btnType="3"
       sureText="确定"
       cancelText="取消"
-      modalType="middle"
+      modalType="small"
       :showModal="showModal"
       @submit="iterator.next()"
       @cancel="showModal=false"
@@ -60,8 +52,9 @@
 
 <script>
 import storage from "../store/seesion.js";
-import Dialog from "@/components/Dialog";
 import { getList, delList } from "../api/QS-list";
+// import FlowControl from "@/components/FlowControl";
+import Dialog from "@/components/Dialog";
 export default {
   name: "qsList",
   components: { Dialog },
@@ -71,83 +64,77 @@ export default {
       showDialog: false,
       showModal: false,
       iterator: {},
-      info: ""
+      info: "",
+      showControlModal: false,
+      code: "1" //问卷的qncode
     };
   },
   created() {},
   mounted() {
-    getList().then(res => {
-      console.log(res.data.obj);
-      this.qsList = res.data.obj;
-      
-      if (this.qsList !== null) {
-        // this.qsList = storage.get();
-        this.qsList.forEach(item => {
-          let [year, month, day] = item.endTime.split("-");
-          // 从后台获取时间后判断发布的状态
-          if (year < new Date().getFullYear()) {
-            item.state = "issueed";
-            item.stateTitle = "已发布";
-          } else if (
-            year == new Date().getFullYear() &&
-            month < new Date().getMonth() + 1
-          ) {
-            item.state = "issueed";
-            item.stateTitle = "已发布";
-          } else if (
-            year == new Date().getFullYear() &&
-            month == new Date().getMonth() + 1 &&
-            day < new Date().getDate()
-          ) {
-            item.state = "issueed";
-            item.stateTitle = "已发布";
-          }
-        });
-      }
-    });
+    this.fetchList();
   },
   methods: {
+    showControl(code) {
+      console.log(code);
+      this.code = code;
+      this.showControlModal = true;
+    },
+    fetchList() {
+      getList().then(res => {
+        console.log(res.data.obj);
+        this.qsList = res.data.obj;
+        if (this.qsList !== null) {
+          this.qsList.forEach(item => {
+            let [year, month, day] = item.endTime.split("-");
+            // 从后台获取时间后判断发布的状态
+            if (year < new Date().getFullYear()) {
+              item.state = "issueed";
+              item.stateTitle = "已发布";
+            } else if (
+              year == new Date().getFullYear() &&
+              month < new Date().getMonth() + 1
+            ) {
+              item.state = "issueed";
+              item.stateTitle = "已发布";
+            } else if (
+              year == new Date().getFullYear() &&
+              month == new Date().getMonth() + 1 &&
+              day < new Date().getDate()
+            ) {
+              item.state = "issueed";
+              item.stateTitle = "已发布";
+            }
+          });
+        }
+      });
+    },
     showDialogMsg(info) {
       this.showModal = true;
       this.info = info;
+      console.log(info);
     },
     //删除单个问卷
-    *delItem(num) {
+    *delItem(item) {
+      console.log(item);
       yield this.showDialogMsg("确认要删除此问卷");
       yield (() => {
-        let index = 0;
-        for (let length = this.qsList.length; index < length; index++) {
-          if (this.qsList[index].num === num) break;
-        }
-        this.qsList.splice(index, 1);
+        delList({ code: item.code }).then(res => {
+          console.log(res);
+          if (res.data.code === 200) {
+            this.fetchList();
+          }
+        });
         this.showModal = false;
         this.$message.success("刪除成功！");
       })();
     },
-    //删除选中的问卷
-    *delItems() {
-      yield this.showDialogMsg("确认要删除选中的问卷？");
-      yield (() => {
-        this.showModal = false;
-        if (this.selectAll) {
-          this.qsList = [];
-          return;
-        }
-        if (this.selectGroup == []) return;
-
-        this.selectGroup.forEach(item => {
-          if (this.qsList.indexOf(item) > -1)
-            this.qsList.splice(this.qsList.indexOf(item), 1);
-        });
-      })();
-    },
     //编辑问卷
-    *edit(item) {
+    *edit(code) {
       this.showModal = false;
       this.$router.push({
         name: "qsEdit",
         params: {
-          code:item.code 
+          code
         }
       });
       // yield (() => {
@@ -180,7 +167,7 @@ export default {
           this.$router.push({
             name: "qsData",
             params: {
-              num: item.num
+              code: item.code
             }
           });
         }
@@ -188,46 +175,8 @@ export default {
       yield (this.showModal = false);
     }
   },
-  computed: {
-    selectAll: {
-      get() {
-        return (
-          this.selectCount === this.qsList.length && this.selectCount !== 0
-        );
-      },
-      set(value) {
-        this.qsList.forEach(item => {
-          item.checked = value;
-        });
-        return value;
-      }
-    },
-    selectCount() {
-      let i = 0;
-      this.qsList.forEach(item => {
-        if (item.checked) i++;
-      });
-      return i;
-    },
-    selectGroup() {
-      let group = [];
-      this.qsList.forEach(item => {
-        if (item.checked) group.push(item);
-      });
-      return group;
-    }
-  },
-  watch: {
-    qsList: {
-      handler(val) {
-        val.forEach((item, index) => {
-          item.num = index + 1;
-        });
-        storage.save(val);
-      },
-      deep: true
-    }
-  }
+  computed: {},
+  watch: {}
 };
 </script>
 

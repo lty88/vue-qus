@@ -3,31 +3,35 @@ $lightorange: #fcf0e5;
 $green: #9fef96;
 
 .qs-list {
-  width: 120rem;
+  max-width: 120rem;
   margin: 50px auto;
   color: #666;
   font-size: 1.6rem;
+  background-color: #fff !important;
+  border-radius: .4rem;
+  box-shadow: 0 0 1rem #aaa;
+
+  #list-item {
+    &:hover {
+      background-color: $lightorange !important;
+    }
+  }
 
   ul {
     height: 6rem;
+    border-top: 1px solid #e5e5e5;
+    list-style: none;
+    line-height: 6rem;
+    font-size: 16px;
 
     margin: {
       left: 2rem;
       right: 2rem;
     }
 
-    list-style: none;
-    line-height: 6rem;
-    border-bottom: 1px solid #eee;
-    background-color: #fff;
 
-    &:hover {
-      background-color: $lightorange;
-    }
 
     &:nth-of-type(1) {
-      background-color: #efefef;
-
       padding: {
         left: 3rem;
         right: 2rem;
@@ -37,44 +41,35 @@ $green: #9fef96;
     }
 
     li {
-      // border-top: 1px solid #b2bbd8;
       display: inline-block;
       text-align: center;
-    
-
       &:nth-of-type(1) {
-        width: 3rem;
-        border: none;
-        text-align: center;
-      
-      }
-
-      &:nth-of-type(2) {
-        width: 33rem;
+        width: 30rem;
         box-sizing: border-box;
         vertical-align: middle;
         text-overflow: ellipsis;
         overflow-x: hidden;
         white-space: nowrap;
         text-align: left;
-      
+
+      }
+
+      &:nth-of-type(2) {
+        width: 18rem;
       }
 
       &:nth-of-type(3) {
-        width: 17rem;
+        width: 18rem;
       }
 
       &:nth-of-type(4) {
-        width: 17rem; 
-      }
-
-      &:nth-of-type(5) {
         width: 10rem;
       }
 
-      &:nth-of-type(6) {
-        width: 33.5rem;
-         text-align: right;;
+      &:nth-of-type(5) {
+        width: 35.5rem;
+        text-align: left;
+        
 
         span {
           display: inline-block;

@@ -4,6 +4,16 @@ $orange: #EE7419;
   height: 6rem;
   line-height: 6rem;
   background-color: $orange;
+  position: relative;
+
+    .userName{
+      
+      position: absolute;
+      right: 40.375rem;
+      font-size: 1.6rem;
+      color:  #fff;
+      cursor: pointer;
+  }
   a {
     color: #fff;
     text-decoration: none;
@@ -29,14 +39,7 @@ $orange: #EE7419;
     &:nth-of-type(2) {
       font-size: 1.6rem;
     }
-    &:nth-of-type(3) {
-      font-size: 1.6rem;
-      margin-left: 100rem;
-      .userName{
-        font-size: 1.2rem;
-        color: #d60a0af6;
-      }
-    }
+   
   }
 }
 @media screen and (max-width: 640px) {

@@ -1,11 +1,11 @@
 <template>
-  <transition name="slide">
-    <div class="modal" v-show="showModalJz">
+  <transition name="slide" v-if="formDataJz.answerType===3||formDataJz.answerType===4">
+    <div class="modal" v-show="showModal">
       <div class="mask"></div>
       <div class="modal-dialog">
         <div class="modal-header">
-          <span>矩阵题目</span>
-          <a href="JavaScript:;" class="icon-close" @click="$emit('cancel')">x</a>
+          <span>{{getMsg(formDataJz.answerType)}}</span>
+          <a href="JavaScript:;" class="icon-close" @click="$emit('canceljz')">x</a>
         </div>
         <div class="modal-body">
           <div class="form">
@@ -73,7 +73,7 @@
                 <div class="rowTitle Tbox">
                   <h2 class="hTit">行标题</h2>
                   <el-form-item
-                    v-for="(Rowoption, Rowindex) in formDataJz.item"
+                    v-for="(Rowoption, Rowindex) in formDataJz.items"
                     :label="'选项' +`${Rowindex+1}`"
                     :key="Rowoption.key"
                   >
@@ -100,20 +100,17 @@
                     <el-button @click.prevent="addRowTitle">新增选项</el-button>
                   </el-form-item>
                 </div>
-                <!-- 矩阵行标题 -->
+                <!-- 矩阵竖标题 -->
                 <div class="CluTitle Tbox">
                   <h2 class="hTit">竖选项</h2>
                   <el-form-item
                     v-for="(Cluoption, Cluindex) in formDataJz.subTitles"
                     :label="'选项' +`${Cluindex+1}`"
                     :key="Cluoption.key"
+                    :prop="'Cluoption.' + Cluindex + '.title'"
+                    :rules="[{ required: true, message: '题目题目不能为空', trigger: 'blur' }]"
                   >
                     <el-input v-model="Cluoption.title"></el-input>
-
-                    <!-- <el-input placeholder="请输入选项编号" v-model="Cluoption.code">
-                      <template slot="prepend">编号:</template>
-                    </el-input>-->
-
                     <el-button @click.prevent="removeCluTitle(Cluindex)">删除</el-button>
                   </el-form-item>
                   <el-form-item>
@@ -141,27 +138,18 @@ export default {
       type: Boolean,
       default: false
     },
-    types: {
-      type: String
+    formDataJz: {
+      type: Object,
+      default: function() {
+        return {};
+      }
     }
   },
   mounted() {},
-  watch: {
-    showModal(newVal, o) {
-      console.log(newVal);
-      console.log(o);
-      this.showModalJz = newVal;
-    },
-    types(newVal) {
-      this.formDataJz.type = this.types;
-    },
-    wlist(newValue) {
-      this.$emit("isChangeList", this.wlist);
-    }
-  },
   data() {
     return {
-      wlist: false,
+      dataList: this.editQsList,
+      // showModal:this.show,
       options: [
         {
           value: 0,
@@ -180,66 +168,45 @@ export default {
           label: "音频"
         }
       ],
-      showModalJz: false,
       showVido: false,
       showAddVido: false,
-      showModals: false,
-      code: 1, //问卷的code
-      formDataJz: {
-        title: "", //题号
-        content: "", //题目
-        order: 1,
-        answer_type: 0, //题目类型（0：文本，1：图片，2：音频，3：视频）
-        url: "", //多媒体内容链接
-        // 行选项
-        item: [
-          {
-            code: "",
-            title: "",
-            content: "",
-            point: 0,
-            order: 100,
-            type: "0",
-            url: ""
-          },
-          {
-            code: "",
-            title: "",
-            content: "",
-            point: 0,
-            order: 200,
-            type: "0",
-            url: ""
-          },
-          {
-            code: "",
-            title: "",
-            content: "",
-            point: 0,
-            order: 300,
-            type: "0",
-            url: ""
-          }
-        ],
-        // code	子题目编号
-        // title	子题目内容
-        subTitles: [
-          { code: "", title: "" },
-          { code: "", title: "" },
-          { code: "", title: "" }
-        ]
-      }
+      showModals: this.showModal,
+      code: 1
+      //   formDataJz: {
+      //     title: "", //题号
+      //     content: "", //题目
+      //     order: 100,
+      //     Types: 0, //题目类型（0：文本，1：图片，2：音频，3：视频）
+      //     url: "", //多媒体内容链接
+      //     options: [
+      //       { code: "", title: "", content: "", point: 1, order: 100 },
+      //       { code: "", title: "", content: "", point: 1, order: 200 },
+      //       { code: "", title: "", content: "", point: 1, order: 300 }
+      //     ]
+      //   }
     };
   },
   mounted() {
     this.code = this.$route.params.code;
+    console.log(this.code);
+    console.log(this.showModal);
   },
   methods: {
-    sa() {
-      console.log(this.formDataJz.isCheckboxJz);
+    //   处理题目类型
+    getMsg(answerType) {
+      let msg = "";
+      if (answerType === 0) {
+        msg = "单选题";
+      } else if (answerType === 1) {
+        msg = "多选题";
+      } else if (answerType === 3 || answerType === 4) {
+        msg = "矩阵题";
+      } else {
+        msg = "文本题";
+      }
+      return msg;
     },
     //新增多媒体题目
-
     changeVido() {
       this.showVido = !this.showVido;
     },
@@ -255,25 +222,23 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          //   console.log(this.formDataJz);
           let obj = {
-            code: "",
             qnCode: this.code,
-            order: this.formDataJz.order,
+            code: this.formDataJz.code,
+            answerType: this.formDataJz.answerType,
             title: this.formDataJz.title,
             content: this.formDataJz.content,
             type: this.formDataJz.answer_type,
             url: this.formDataJz.url,
-            answerType: 3, //在radio组件里面
-            subTitles: JSON.stringify(this.formDataJz.subTitles),
-            item: JSON.stringify(this.formDataJz.item)
+            item: JSON.stringify(this.formDataJz.items)
           };
           console.log(obj);
           UpdateQsInfo(obj).then(res => {
             console.log(res);
             if (res.data.code === 200) {
-              this.wlist = true;
+              console.log(res.data.msg);
             }
+            this.$emit("EditShowModalJz", this.showModal);
           });
           // this.$emit("formDataJz", this.formDataJz);
           this.$refs[formName].resetFields();
@@ -290,10 +255,10 @@ export default {
     },
     removeRowTitle(Rowitem) {
       // debugger
-      let numLength = this.formDataJz.item.length;
+      let numLength = this.formDataJz.items.length;
       console.log(numLength);
       if (numLength > 2) {
-        this.formDataJz.item.splice(Rowitem, 1);
+        this.formDataJz.items.splice(Rowitem, 1);
       } else {
         this.$message.error("选项至少有两项");
         return;
@@ -309,7 +274,7 @@ export default {
       }
     },
     addRowTitle() {
-      this.formDataJz.item.push({
+      this.formDataJz.items.push({
         name: "",
         key: Date.now()
       });
@@ -327,13 +292,13 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/config.scss";
 @import "../assets/mixin.scss";
+@import "../assets/modal.scss";
 @import "../assets/button.scss";
-@import "../style/Jztemp.scss";
-.el-input {
-  width: 88% !important;
+.modal-dialog {
+  width: 90rem !important;
 }
-.select-type {
-  width: 120px !important;
+.form {
+  margin: 0 auto !important;
 }
 .upload-demo {
   width: 614px;
@@ -341,14 +306,10 @@ export default {
   margin: 20px auto;
 }
 .el-input {
-  width: 88% !important;
+  width: 80% !important;
 }
 .select-type {
-  width: 120px !important;
-}
-.title-box {
-  max-height: 40.5rem;
-  overflow-y: auto;
+  width: 110px !important;
 }
 .el-input-group__prepend {
   .el-select {
