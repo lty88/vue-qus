@@ -1,0 +1,100 @@
+@import "../assets/base.scss";
+@import "../assets/config.scss";
+
+/***************************** 视频****************************/
+.video-bg {
+    background: url("../assets/img/gallery-1.png") no-repeat center;
+    background-size: cover;
+    max-width: 62.5rem;
+    height: 30.75rem;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.video-box {
+    .overlay {
+        @include position(fixed);
+        background-color: $colorB;
+        opacity: 0.4;
+        z-index: 10;
+    }
+
+    //定义animation动画名  @keyframes
+    @keyframes slideDown {
+        from {
+            top: -50%;
+            opacity: 0;
+        }
+
+        to {
+            top: 50%;
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            top: 50%;
+            opacity: 1;
+        }
+
+        to {
+            top: -50%;
+            opacity: 0;
+        }
+    }
+
+    .video {
+        position: fixed;
+        top: -50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        width: 100rem;
+        height: 60.75rem;
+        opacity: 1;
+
+        @media screen and(min-width: 375px)and(max-width: 392px) {
+            width: 90%;
+            height: 50%;
+        }
+
+        @media screen and(min-width: 401px)and(max-width: 500px) {
+            width: 90%;
+            height: 50%;
+        }
+
+        @media screen and (min-width:500px) and (max-width:768px) {
+            width: 90%;
+            height: 50%;
+        }
+
+
+        &.slideDown {
+            animation: slideDown 0.6s linear;
+            top: 45%;
+        }
+
+        &.slideUp {
+            animation: slideUp 0.6s linear;
+        }
+
+        .icon-close {
+            padding: 10px;
+            position: absolute;
+            top: 0px;
+            right: 10px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #bbbbbb;
+            z-index: 11;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            outline: none;
+        }
+    }
+}

@@ -82,6 +82,20 @@
                     <el-input placeholder="请输入选项编号" v-model="Rowoption.title">
                       <template slot="prepend">选项号:</template>
                     </el-input>
+                    <el-form-item
+                      :prop="'items.' + Rowindex + '.order'"
+                      :rules="[{ required: true, message: '选项序号不能为空', trigger: 'blur' }]"
+                    >
+                      <el-input
+                        placeholder="请输入选项序号"
+                        v-model="Rowoption.order"
+                        type="number"
+                        oninput="if(value.length>2)value=value.slice(0,2)"
+                        min="0"
+                      >
+                        <template slot="prepend">选项序号:</template>
+                      </el-input>
+                    </el-form-item>
                     <el-input placeholder="需要流程控制请输入分值" type="number" v-model="Rowoption.point">
                       <template slot="prepend">分值:</template>
                     </el-input>
@@ -107,7 +121,7 @@
                     v-for="(Cluoption, Cluindex) in formDataJz.subTitles"
                     :label="'选项' +`${Cluindex+1}`"
                     :key="Cluoption.key"
-                    :prop="'Cluoption.' + Cluindex + '.title'"
+                    :prop="'subTitles.' + Cluindex + '.title'"
                     :rules="[{ required: true, message: '题目题目不能为空', trigger: 'blur' }]"
                   >
                     <el-input v-model="Cluoption.title"></el-input>

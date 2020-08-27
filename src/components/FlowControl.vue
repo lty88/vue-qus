@@ -17,7 +17,7 @@
                 </el-radio-group>
               </el-form-item>
               <!-- 题目 -->
-              <el-form-item label="题目：" :label-width="formLabelWidth">
+              <el-form-item label="题目：" :label-width="formLabelWidth" prop="fromTitle">
                 <el-select @change="showItems" v-model="formData.fromTitle" placeholder="请选择">
                   <el-option
                     v-for="(item,index) in formData.dataOption"
@@ -28,32 +28,32 @@
                 </el-select>
               </el-form-item>
               <!-- 选项跳转 分数跳转 -->
-              <el-form-item v-if="flagT==0" label="选项：" :label-width="formLabelWidth">
+              <el-form-item v-if="flagT==0" label="选项：" :label-width="formLabelWidth" prop="ItemTitle">
                 <el-select
                   v-model="formData.ItemTitle"
                   placeholder="请选择要跳转到的选项"
-                  @change="nameChange"
+                  @change="$forceUpdate()"
                 >
                   <el-option
-                    v-for="(item,index) in formData.itemCode"
-                    :key="index"
+                    v-for="item in formData.itemCode"
+                    :key="item.code"
                     :label="item.title"
                     :value="item.code"
                   ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item v-if="flagT==1" label="分数：" :label-width="formLabelWidth">
+              <el-form-item v-if="flagT==1" label="分数：" :label-width="formLabelWidth" prop="score">
                 <el-input class="ipt" placeholder="请选择累计分数" type="number" v-model="formData.score"></el-input>
               </el-form-item>
               <!-- 跳转到 -->
-              <el-form-item label="跳转到：">
-                <el-select v-model="formData.toTitle" placeholder="跳转到" @change="nameChange">
+              <el-form-item label="跳转到：" prop="toTitle">
+                <el-select v-model="formData.toTitle" placeholder="跳转到" @change="$forceUpdate()">
                   <el-option
                     v-for="(item,index) in formData.dataOption"
                     :key="index"
                     :label="item.title"
                     :value="item.code"
-                  ></el-option>
+                  ></el-option> 
                 </el-select>
               </el-form-item>
               <el-form-item>
@@ -62,20 +62,20 @@
               </el-form-item>
             </el-form>
             <!-- 表格 -->
-            <el-table :data="tableData" height="250" border style="width: 100%">
-              <el-table-column type="index" label="序号" width="50"></el-table-column>
-              <el-table-column align="center" prop="type" label="跳转方式" width="130">
+            <el-table :data="tableData" height="250" border align="center" style="width: 100%">
+              <el-table-column type="index" label="序号"></el-table-column>
+              <el-table-column align="center" prop="type" label="跳转方式">
                 <template
                   slot-scope="scope"
                 >{{ scope.row.type === 0 ? '选项跳转' : scope.row.type == 1?'累计得分跳转': '' }}</template>
               </el-table-column>
-              <el-table-column align="center" prop="questionTitle" label="题目" width="70"></el-table-column>
-              <el-table-column align="center" prop="itemTitle" width="200" label="题目选项"></el-table-column>
-              <el-table-column align="center" prop="point" width="80" label="累计分数">
+              <el-table-column align="center" prop="questionTitle" label="题目"></el-table-column>
+              <el-table-column align="center" prop="itemTitle" label="题目选项"></el-table-column>
+              <el-table-column align="center" prop="point" label="累计分数">
                 <template slot-scope="scope">{{ scope.row.point/100}}</template>
               </el-table-column>
-              <el-table-column align="center" prop="nextQuestionTitle" width="200" label="下一题目"></el-table-column>
-              <el-table-column align="center" prop="address" width="160" label="操作">
+              <el-table-column align="center" prop="nextQuestionTitle" label="下一题目"></el-table-column>
+              <el-table-column align="center" prop="address" label="操作">
                 <template slot-scope="scope">
                   <el-button
                     size="mini"
@@ -97,18 +97,6 @@ import { getCondition, addCondition, deleteCondition } from "../api/Condition";
 import { GetQuestionInfo } from "../api/QS-edit";
 
 export default {
-  // props: {
-  //   ControlModal: {
-  //     type: Boolean,
-  //     default: false
-  //   },
-  //   qnCode: {
-  //     type: String,
-  //     default: () => {
-  //       "";
-  //     }
-  //   }
-  // },
   mounted() {},
   data() {
     return {
@@ -125,7 +113,7 @@ export default {
         score: 1, //累计分数
         dataOption: [], //题目title
         fromTitle: 1, //跳转题目
-        ItemTitle: 1, //跳转选项
+        ItemTitle: '', //跳转选项
         itemCode: [], //选项title
         toTitle: 1 //跳转到
       }
@@ -141,21 +129,18 @@ export default {
     this.fetchQuestionInfo();
   },
   methods: {
-    nameChange(val) {
-      this.$forceUpdate();
-    },
     //控制跳转方式
     ChangeMethods(e) {
       console.log(e.target.value);
       this.flagT = e.target.value;
     },
-    //控制
+    //计算选项跳转
     showItems(code) {
-      let questions = this.formData.dataOption.filter(m => {
-        return m.code == code;
+      let questions = this.formData.dataOption.filter(item => {
+        return item.code == code;
       });
-      console.log(questions);
-      this.formData.itemCode = questions[0].items;
+      console.log(questions[0].items);
+      this.formData.itemCode=questions[0].items;
     },
     // 获取流程控制的数据并展示到table里面
     fetchControlData() {
@@ -238,6 +223,7 @@ export default {
       });
     },
     resetForm(formName) {
+      console.log("resetForm");
       this.$refs[formName].resetFields();
       this.creatGroup = false;
     },

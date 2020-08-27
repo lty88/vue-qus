@@ -11,9 +11,30 @@ const routes = [{
 	meta: {
 		title: '问卷列表',
 		keepAlive: true
-
 	}
-}, {
+},
+{
+	path: '/AvailableQn',
+	name: 'AvailableQn',
+	meta: {
+		title: '有效问卷列表',
+		keepAlive: false
+	},
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/AvailableQn.vue")
+
+},
+{
+	path: '/fill/:code',
+	name: 'fill',
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/QS-fill.vue"),
+	meta: {
+		title: '填写问卷',
+		keepAlive: false
+	}
+},
+{
 	path: '/Add-Qs',
 	name: 'Add-Qs',
 	meta: {
@@ -33,16 +54,7 @@ const routes = [{
 	component: () =>
 		import( /* webpackChunkName: "about" */ "../views/login.vue")
 },
-{
-	path: '/fill/:code',
-	name: 'qsFill',
-	meta: {
-		title: '填写问卷',
-		keepAlive: true
-	},
-	component: () =>
-		import( /* webpackChunkName: "about" */ "../views/QS-fill.vue")
-},
+
 {
 	path: '/edit/:code',
 	name: 'qsEdit',
@@ -61,16 +73,6 @@ const routes = [{
 	},
 	component: () =>
 		import( /* webpackChunkName: "about" */ "../views/QS-data.vue")
-},
-{
-	path: '/test',
-	name: '	',
-	meta: {
-		title: '我是测试',
-		keepAlive: true
-	},
-	component: () =>
-		import( /* webpackChunkName: "about" */ "../views/Test.vue")
 },
 {
 	path: '/importUser/:code',

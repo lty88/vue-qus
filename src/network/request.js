@@ -3,7 +3,7 @@ let request = axios.create({
     baseURL: '/api'
 });
 // // 携带token
-request.defaults.timeout =8000;
+request.defaults.timeout = 5000;
 request.interceptors.request.use(config => {
     // console.log(config);
     if (config.url != "/apiv1/login") {

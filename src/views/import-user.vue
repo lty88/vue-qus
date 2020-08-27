@@ -12,7 +12,7 @@
       <div class="Dowlaod-template">
         <el-button type="primary" plain>
           <i style="font-size:20px" class="el-icon-s-promotion"></i>
-          <a style="color:blue" download href="../../public/user.xlsx">下载模板</a>
+          <a style="color:blue;font-style:none" :href="`${publicPath}Template/user.xlsx`" target="_blank" download="模板.xls">下载模板</a>
         </el-button>
       </div>
       <div class="upload">
@@ -86,7 +86,8 @@ export default {
       tableData: [], //参与人员表
       formMaxSize: 10, // 上传文件大小
       formFileList: [], // 显示上传文件
-      uploadFormFileList: [] // 确定上传文件
+      uploadFormFileList: [], // 确定上传文件
+       publicPath: process.env.BASE_URL
     };
   },
   created() {

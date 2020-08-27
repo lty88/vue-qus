@@ -5,26 +5,43 @@
       <div class="modal-dialog">
         <div class="modal-header">
           <span>矩阵题目</span>
-          <a href="JavaScript:;" class="icon-close" @click="$emit('cancel')">x</a>
+          <a href="JavaScript:;" class="icon-close" @click.self="close" @click="$emit('cancel')">x</a>
         </div>
         <div class="modal-body">
           <div class="form">
             <el-form :model="formDataJz" ref="formDataJz" label-width="100px" class="demo-dynamic">
               <!-- 矩阵题目标题 -->
               <el-form-item
-                prop="title"
+                prop="content"
                 label="题目标题"
                 :rules="[{ required: true, message: '题目题目不能为空', trigger: 'blur' }]"
               >
                 <el-input v-model="formDataJz.content"></el-input>
+              </el-form-item>
+              <el-form-item
+                prop="title"
+                :rules="[{ required: true, message: '题目题号不能为空', trigger: 'blur' }]"
+              >
                 <el-input placeholder="请输入题号" v-model="formDataJz.title">
                   <template slot="prepend">题号:</template>
                 </el-input>
-                <el-input placeholder="请输入题号" v-model="formDataJz.order">
+              </el-form-item>
+              <el-form-item
+                prop="order"
+                :rules="[{ required: true, message: '题目序号不能为空', trigger: 'blur' }]"
+              >
+                <el-input
+                  placeholder="请输入序号"
+                  v-model="formDataJz.order"
+                  type="number"
+                  oninput="if(value.length>2)value=value.slice(0,2)"
+                  min="0"
+                >
                   <template slot="prepend">题目序号:</template>
                 </el-input>
-                <!-- 多媒体标题 -->
-                <br />
+              </el-form-item>
+              <!-- 多媒体标题 -->
+              <el-form-item>
                 <el-popover
                   class="btn-vido"
                   placement="top-start"
@@ -72,29 +89,66 @@
               <div class="title-box">
                 <div class="rowTitle Tbox">
                   <h2 class="hTit">行标题</h2>
-                  <el-form-item
-                    v-for="(Rowoption, Rowindex) in formDataJz.item"
-                    :label="'选项' +`${Rowindex+1}`"
-                    :key="Rowoption.key"
+                  <div
+                    class="listData"
+                    v-for="(Rowoption,Rowindex) in formDataJz.item"
+                    :key="Rowindex"
                   >
-                    <el-input v-model="Rowoption.content"></el-input>
-                    <el-button @click.prevent="removeRowTitle(Rowindex)">删除</el-button>
-                    <el-input placeholder="请输入选项编号" v-model="Rowoption.title">
-                      <template slot="prepend">选项号:</template>
-                    </el-input>
-                    <el-input placeholder="需要流程控制请输入分值" type="number" v-model="Rowoption.point">
-                      <template slot="prepend">分值:</template>
-                    </el-input>
+                    <el-form-item
+                      :prop="'item.' + Rowindex + '.content'"
+                      :label="'选项' +`${Rowindex+1}`"
+                      :rules="[{ required: true, message: '选项内容不能为空', trigger: 'blur' }]"
+                    >
+                      <el-input v-model="Rowoption.content" placeholder="请输入选项内容"></el-input>
+                      <el-button @click.prevent="removeRowTitle(Rowindex)">删除</el-button>
+                    </el-form-item>
+
+                    <el-form-item
+                      :prop="'item.' + Rowindex + '.title'"
+                      :rules="[{ required: true, message: '选项内容不能为空', trigger: 'blur' }]"
+                    >
+                      <el-input placeholder="请输入选项号" v-model="Rowoption.title">
+                        <template slot="prepend">选项号:</template>
+                      </el-input>
+                    </el-form-item>
+                    <el-form-item
+                      :prop="'item.' + Rowindex + '.order'"
+                      :rules="[{ required: true, message: '题目序号不能为空', trigger: 'blur' }]"
+                    >
+                      <el-input
+                        placeholder="请输入选项序号"
+                        v-model="Rowoption.order"
+                        type="number"
+                        oninput="if(value.length>2)value=value.slice(0,2)"
+                        min="0"
+                      >
+                        <template slot="prepend">选项序号:</template>
+                      </el-input>
+                    </el-form-item>
+                    <el-form-item
+                      :prop="'item.' + Rowindex + '.point'"
+                      :rules="[{ required: true, message: '选项内容不能为空', trigger: 'blur' }]"
+                    >
+                      <el-input placeholder="需要流程控制请输入分值" type="number" v-model="Rowoption.point">
+                        <template slot="prepend">分值:</template>
+                      </el-input>
+                    </el-form-item>
                     <!-- 选项多媒体 -->
-                    <el-input placeholder="请输入链接" v-model="Rowoption.url" class="input-with-select">
-                      <el-select v-model="Rowoption.type" slot="prepend" placeholder="请选择类型">
-                        <el-option label="文本" value="0"></el-option>
-                        <el-option label="图片" value="1"></el-option>
-                        <el-option label="视频" value="2"></el-option>
-                        <el-option label="音频" value="3"></el-option>
-                      </el-select>
-                    </el-input>
-                  </el-form-item>
+                    <el-form-item :prop="'item.' + Rowindex + '.url'">
+                      <el-input
+                        placeholder="请输入链接"
+                        v-model="Rowoption.url"
+                        class="input-with-select"
+                      >
+                        <el-select v-model="Rowoption.type" slot="prepend" placeholder="请选择类型">
+                          <el-option label="文本" value="0"></el-option>
+                          <el-option label="图片" value="1"></el-option>
+                          <el-option label="视频" value="2"></el-option>
+                          <el-option label="音频" value="3"></el-option>
+                        </el-select>
+                      </el-input>
+                    </el-form-item>
+                  </div>
 
                   <el-form-item>
                     <el-button @click.prevent="addRowTitle">新增选项</el-button>
@@ -103,19 +157,20 @@
                 <!-- 矩阵行标题 -->
                 <div class="CluTitle Tbox">
                   <h2 class="hTit">竖选项</h2>
-                  <el-form-item
+                  <div
+                    class="CluTitle"
                     v-for="(Cluoption, Cluindex) in formDataJz.subTitles"
-                    :label="'选项' +`${Cluindex+1}`"
-                    :key="Cluoption.key"
+                    :key="Cluindex"
                   >
-                    <el-input v-model="Cluoption.title"></el-input>
-
-                    <!-- <el-input placeholder="请输入选项编号" v-model="Cluoption.code">
-                      <template slot="prepend">编号:</template>
-                    </el-input>-->
-
-                    <el-button @click.prevent="removeCluTitle(Cluindex)">删除</el-button>
-                  </el-form-item>
+                    <el-form-item
+                      :prop="'subTitles.' + Cluindex + '.title'"
+                      :rules="[{ required: true, message: '选项内容不能为空', trigger: 'blur' }]"
+                      :label="'选项' +`${Cluindex+1}`"
+                    >
+                      <el-input v-model="Cluoption.title"></el-input>
+                      <el-button @click.prevent="removeCluTitle(Cluindex)">删除</el-button>
+                    </el-form-item>
+                  </div>
                   <el-form-item>
                     <el-button @click.prevent="addCluTitle">新增选项</el-button>
                   </el-form-item>
@@ -198,7 +253,7 @@ export default {
             title: "",
             content: "",
             point: 0,
-            order: 100,
+            order: 1,
             type: "0",
             url: ""
           },
@@ -207,7 +262,7 @@ export default {
             title: "",
             content: "",
             point: 0,
-            order: 200,
+            order: 2,
             type: "0",
             url: ""
           },
@@ -216,7 +271,7 @@ export default {
             title: "",
             content: "",
             point: 0,
-            order: 300,
+            order: 3,
             type: "0",
             url: ""
           }
@@ -235,8 +290,10 @@ export default {
     this.code = this.$route.params.code;
   },
   methods: {
-    sa() {
-      console.log(this.formDataJz.isCheckboxJz);
+    //退出时候清重置表单
+    close() {
+      this.$refs.formDataJz.resetFields();
+      this.creatGroup = false;
     },
     //新增多媒体题目
 
@@ -282,6 +339,7 @@ export default {
           console.log("error submit!!");
           return false;
         }
+        this.$emit("showjz", this.showModalJz);
       });
     },
     resetForm(formName) {
@@ -329,9 +387,7 @@ export default {
 @import "../assets/mixin.scss";
 @import "../assets/button.scss";
 @import "../style/Jztemp.scss";
-.el-input {
-  width: 88% !important;
-}
+
 .select-type {
   width: 120px !important;
 }
@@ -341,7 +397,7 @@ export default {
   margin: 20px auto;
 }
 .el-input {
-  width: 88% !important;
+  width: 80% !important;
 }
 .select-type {
   width: 120px !important;

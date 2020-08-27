@@ -5,21 +5,42 @@
       <div class="modal-dialog">
         <div class="modal-header">
           <span>多选题</span>
-          <a href="JavaScript:;" class="icon-close" @click="$emit('cancel')">x</a>
+          <a href="JavaScript:;" class="icon-close" @click.self="close" @click="$emit('cancel')">x</a>
         </div>
         <div class="modal-body">
           <div class="form">
             <el-form :model="formDataC" ref="formDataC" label-width="100px" class="demo-dynamic">
               <el-form-item
-                prop="title"
+                prop="content"
                 label="题目"
                 :rules="[{ required: true, message: '题目不能为空', trigger: 'blur' }]"
               >
                 <el-input v-model="formDataC.content"></el-input>
+              </el-form-item>
+              <el-form-item
+                prop="title"
+                :rules="[{ required: true, message: '题号不能为空', trigger: 'blur' }]"
+              >
                 <el-input placeholder="请输入题号" v-model="formDataC.title">
                   <template slot="prepend">题号:</template>
                 </el-input>
-                <br />
+              </el-form-item>
+              <el-form-item
+                prop="order"
+                :rules="[{ required: true, message: '题目序号不能为空', trigger: 'blur' }]"
+              >
+                <el-input
+                  placeholder="请输入题目序号"
+                  v-model="formDataC.order"
+                  type="number"
+                  oninput="if(value.length>2)value=value.slice(0,2)"
+                  min="0"
+                >
+                  <template slot="prepend">题目序号:</template>
+                </el-input>
+              </el-form-item>
+
+              <el-form-item>
                 <el-popover
                   class="btn-vido"
                   placement="top-start"
@@ -39,10 +60,16 @@
                   <el-button slot="reference" @click="addVido">上传多媒体</el-button>
                 </el-popover>
               </el-form-item>
+
               <!-- 上传图片视频 -->
-              <el-form-item v-if="showVido" label="多媒体链接">
-                <el-input v-model="formDataC.url "></el-input>
-                <el-select v-model="formDataC.Types" placeholder="选择类型" class="select-type">
+              <el-form-item v-if="showVido" label="多媒体链接" prop="url">
+                <el-input v-model="formDataC.url " prop="url"></el-input>
+                <el-select
+                  v-model="formDataC.Types"
+                  placeholder="选择类型"
+                  prop="Types"
+                  class="select-type"
+                >
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -63,26 +90,46 @@
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
               <!-- 选项内容 -->
-              <div>
+              <div v-for="(option, index) in formDataC.options" :key="option.key">
                 <el-form-item
-                  v-for="(option, index) in formDataC.options"
                   :label="'选项' +`${index+1}`"
-                  :key="option.key"
                   :prop="'options.' + index + '.content'"
                   :rules="[{ required: true, message: '选项不能为空', trigger: 'blur' }]"
                 >
                   <el-input v-model="option.content" placeholder="请输入选项内容"></el-input>
                   <el-button class="del" @click.prevent="removeDomain(index)">删除选项</el-button>
+                </el-form-item>
+
+                <el-form-item
+                  :prop="'options.' + index + '.title'"
+                  :rules="[{ required: true, message: '选项编号不能为空', trigger: 'blur' }]"
+                >
                   <el-input placeholder="请输入选项编号" v-model="option.title">
                     <template slot="prepend">编号:</template>
                   </el-input>
+                </el-form-item>
+                <el-form-item
+                  :prop="'options.' + index + '.order'"
+                  :rules="[{ required: true, message: '选项序号不能为空', trigger: 'blur' }]"
+                >
+                  <el-input placeholder="请输入选项序号" v-model="option.order">
+                    <template slot="prepend">选项序号:</template>
+                  </el-input>
+                </el-form-item>
+
+                <el-form-item :prop="'options.' + index + '.point'">
                   <el-input
                     placeholder="需要流程控制请输入分值"
                     type="number"
                     v-model="option.point"
+                    oninput="if(value.length>2)value=value.slice(0,3)"
+                    min="0"
                   >
                     <template slot="prepend">分值:</template>
                   </el-input>
+                </el-form-item>
+
+                <el-form-item :prop="'options.' + index + '.url'">
                   <el-input placeholder="请输入链接" v-model="option.url" class="input-with-select">
                     <el-select v-model="option.type" slot="prepend" placeholder="请选择类型">
                       <el-option label="文本" value="0"></el-option>
@@ -176,7 +223,7 @@ export default {
       formDataC: {
         title: "", //题号
         content: "", //题目
-        order: 100,
+        order: 1,
         Types: 0, //题目类型（0：文本，1：图片，2：音频，3：视频）
         url: "", //多媒体内容链接
         options: [
@@ -216,6 +263,10 @@ export default {
   },
   computed: {},
   methods: {
+    close() {
+      this.$refs.formDataC.resetFields();
+      this.creatGroup = false;
+    },
     //删除文件
     handleChange(file, fileList) {
       this.fileList = fileList.slice(-3);
@@ -246,14 +297,14 @@ export default {
             if (res.data.code === 200) {
               this.wlist = true;
             }
-            this.showModalC = false;
+            this.resetForm(formName);
           });
-          // this.$emit("formDataC", this.formDataC);
-          this.$refs[formName].resetFields();
         } else {
           console.log("error submit!!");
           return false;
+          this.resetForm(formName);
         }
+        this.$emit("showModalC", this.showModalC);
       });
     },
     resetForm(formName) {
@@ -294,6 +345,7 @@ export default {
 .modal-dialog {
   width: 90rem !important;
 }
+
 .form {
   margin: 0 auto !important;
 }
@@ -303,7 +355,7 @@ export default {
   margin: 20px auto;
 }
 .el-input {
-  width: 88% !important;
+  width: 80% !important;
 }
 .select-type {
   width: 120px !important;

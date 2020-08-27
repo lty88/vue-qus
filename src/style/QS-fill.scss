@@ -1,166 +1,275 @@
 $orange: #ee7419;
 $lightorange: #fcf0e5;
-.fill-container {
-  max-width: 100rem;
+@import "../assets/base.scss";
+@import "../assets/config.scss";
+
+/***************************** 媒体查询****************************/
+
+@media screen and(min-width: 320px)and(max-width: 359px) {
+  html {
+    font-size: 12.8px;
+  }
+}
+
+@media screen and(min-width: 360px)and(max-width: 374px) {
+  html {
+    font-size: 14.4px;
+  }
+}
+
+@media screen and(min-width: 375px)and(max-width: 385px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and(min-width: 386px)and(max-width: 392px) {
+  html {
+    font-size: 15.44px;
+  }
+}
+
+@media screen and(min-width: 393px)and(max-width: 400px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media screen and(min-width: 401px)and(max-width: 414px) {
+  html {
+    font-size: 16.48px;
+  }
+}
+
+@media screen and(min-width: 750px)and(max-width: 799px) {
+  html {
+    font-size: 30.72px;
+  }
+}
+
+
+
+
+
+#fill-container {
+  max-width: 110rem;
   margin: 5rem auto;
-  padding: 5rem;
   color: #666;
   background-color: #fff;
   border-radius: .4rem;
   box-shadow: 0 0 1rem #aaa;
-  h2 {
-    margin-bottom: 3rem;
-    text-align: center;
-    font-size: 2rem;
-    color: #555;
+
+  @media only screen and (min-width: 768px) {
+    padding: 1rem;
+    height: 100%;
   }
-  .back {
-    font-size: 1.6rem;
-    cursor: pointer;
-    &:hover {
-      color: $orange;
+
+  @media only screen and (max-width: 500px) {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    border-radius: .2rem;
+
+    .el-message-box {
+      width: 200px !important;
     }
   }
+
+  @media only screen and (max-width: 768px) {
+    margin: 0 auto;
+    border-radius: .2rem;
+    width: 100%;
+    height: 100%;
+
+  }
+
+
+  input[name="qsTitle"] {
+    height: 6rem;
+    width: 100%;
+    margin-bottom: 3rem;
+    font-size: 2rem;
+    text-align: center;
+    border: 1px solid #ccc;
+    background-color: #ccc;
+  }
+
   .content {
-    padding: 3rem;
+    .el-page-header {
+      padding-bottom: 1rem;
+      border-bottom: .2rem solid #ccc !important;
+    }
+
+    .submit {
+      width: 100%;
+    }
+
+
+    @media only screen and (min-width: 768px) {
+      padding: 4rem;
+    }
+
+
+
     border: {
-      top: .2rem solid #ccc;
       bottom: .2rem solid #ccc;
     }
   }
-  .content-item{
+
+  .questions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
     padding: 1.5rem 2rem;
-    &:hover {
-      background-color: $lightorange;
+    margin-bottom: 2rem;
+
+    .item-content {
+      margin-left: 5px;
     }
-    > {
-      p {
-        margin: {
-          top: 1.5rem;
-          bottom: 1.5rem;
-        }
+
+    @media only screen and (max-width: 768px) {
+      padding: 0.5rem .5rem;
+      margin-bottom: .35rem;
+    }
+
+    @media only screen and (min-width: 768px) {
+      &:hover {
+        background-color: $lightorange;
       }
-      textarea {
+
+    }
+
+    p {
+      margin: {
+        top: 1.5rem;
+        bottom: 1.5rem;
+      }
+    }
+
+    textarea {
+      font-size: 15px;
+      width: 50rem;
+      height: 10rem;
+      margin-left: 2.5rem;
+      text-indent: 2em;
+      padding: 0.9375rem;
+
+      @media screen and(min-width: 375px)and(max-width: 392px) {
+        font-size: 14px;
+        margin-left: 1rem;
+        text-indent: 1em;
+        width: 19rem;
+        height: 8rem;
+      }
+
+      @media screen and(min-width: 401px)and(max-width: 500px) {
+        margin-left: 1.5rem;
+        width: 23rem;
+        height: 10rem;
+      }
+
+      @media screen and (min-width:500px) and (max-width:760px) {
+        font-size: 14px;
+        margin-left: 1.8rem;
+        text-indent: 2em;
         width: 35rem;
-        height: 15rem;
-        margin-left: 2.5rem;
+        height: 8rem;
       }
+
+
     }
+
     .qs-title {
       font-size: 1.6rem;
       font-weight: 700;
       color: #333;
-    }
-    .option {
-      margin-left: 2.5rem;
-    }
-  }
-  footer {
-    height: 6rem;
-    margin-top: 3rem;
-    text-align: center;
-    line-height: 6rem;
-    .submit {
-      width: 10rem;
-      height: 3rem;
-      padding: {
-        top: .3rem;
-        bottom: .3rem;
+
+
+      @media only screen and (max-width: 768px) {
+        font-size: 1.5rem;
+        font-weight: 600;
+
       }
-      line-height: 100%;
-      color: #fff;
-      border: .1rem solid $orange;
-      border-radius: .2rem;
-      background-color: $orange;
-      cursor: pointer;
-      &:hover {
-        box-shadow: 0 0 5px $orange;
+
+      .titleImg {
+        max-width: 62.5rem;
       }
-    }
-  }
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s
-  }
-  .fade-enter, .fade-leave-active {
-    opacity: 0
-  }
-  .dialog {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(85, 85, 85, .7);
-    .submit-dialog {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 40rem;
-      height: 20rem;
-      transform: translateX(-50%) translateY(-50%);
-      border-radius: .5rem;
-      box-shadow: 0 0 5px #555;
-      background-color: #fff;
-    }
-    header {
-      height: 5rem;
-      padding: {
-        left: 3rem;
-        right: 3rem;
-      }
-      line-height: 5rem;
-      border-radius: .5rem;
-      background-color: #f7f7f7;
-      span:nth-of-type(1) {
-        font-weight: 700;
-      }
-      .close-btn {
-        position: absolute;
-        right: 3rem;
-        color: #bbb;
-        cursor: pointer;
-        &:hover {
-          color: $orange;
+
+      // .video-player{
+      //   min-width: 50.5rem;
+      // }
+      .option {
+        margin-left: 2.5rem;
+
+        @media only screen and (max-width: 768px) {
+          margin-left: 1.5rem;
+        }
+
+        @media screen and (min-width:421px) and (max-width:400px) {
+          margin-left: 1.2rem;
+        }
+
+        @media screen and (min-width:351px) and (max-width:420px) {
+          margin-left: 1.5rem;
         }
       }
+
     }
-    .submit-dialog p {
-      margin-top: 3rem;
-      margin-left: 3rem;
+
+    .wjdc_list {
+      box-sizing: border-box;
+      overflow: hidden;
     }
-    .btn-box {
-      button {
-        width: 7rem;
-        height: 2.5rem;
-        padding: {
-          top: .3rem;
-          bottom: .3rem;
-        }
-        line-height: 100%;
-        color: #777;
-        border: 1px solid #555;
-        border-radius: .2rem;
-        background-color: #fff;
-        cursor: pointer;
-        &:hover {
-          box-shadow: 0 0 5px #bbb;
-        }
-      }
-      position: absolute;
-      bottom: 0;
+
+    .tswjdc_table {
       width: 100%;
-      height: 6rem;
+
+    }
+
+    .lefttd_tit {
+      min-width: 100px;
+
+      @media only screen and (max-width: 500px) {
+        min-width: 5rem;
+      }
+
+      @media screen and (min-width:500px) and (max-width:760px) {
+        min-width: 5rem;
+      }
+
+      // border: 1px solid blue;
+    }
+
+    .tswjdc_table td {
       text-align: center;
-      line-height: 6rem;
-      .yes {
-        margin-right: 1rem;
-        color: #fff;
-        background-color: $orange;
-        border: 1px solid $orange;
-        &:hover {
-          box-shadow: 0 0 5px $orange;
-        }
+      width: 20%;
+
+    }
+
+    .tswjdc_table td.lefttd_qk {
+      text-align: left;
+      padding-left: 10px;
+      // border: 1px solid red;
+      min-width: 200px;
+      height: 62px;
+
+      @media only screen and (max-width: 500px) {
+        padding-left: 0px;
+        text-align: left;
+        min-width: 4rem;
+        // border: 1px solid red;
+      }
+
+      @media screen and (min-width:500px) and (max-width:760px) {
+        padding-left: 0px;
+        text-align: left;
+        min-width: 5rem;
+        // border: 1px solid rgb(120, 245, 4);
       }
     }
+
+
   }
 }
+

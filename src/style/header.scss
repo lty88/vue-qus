@@ -1,4 +1,5 @@
 $orange: #EE7419;
+
 .header {
   width: 100%;
   height: 6rem;
@@ -6,29 +7,33 @@ $orange: #EE7419;
   background-color: $orange;
   position: relative;
 
-    .userName{
-      
-      position: absolute;
-      right: 40.375rem;
-      font-size: 1.6rem;
-      color:  #fff;
-      cursor: pointer;
+  .userName {
+    position: absolute;
+    right: 40.375rem;
+    font-size: 1.6rem;
+    color: #fff;
+    cursor: pointer;
   }
+
   a {
     color: #fff;
     text-decoration: none;
+
     &:first-child {
       margin-right: 5rem;
       font-size: 2rem;
+
       &:before {
         content: '?';
         display: inline-block;
         width: 2.5rem;
         height: 2.5rem;
+
         margin: {
           left: 8rem;
           right: 1rem;
         }
+
         text-align: center;
         line-height: 2.5rem;
         color: $orange;
@@ -36,17 +41,25 @@ $orange: #EE7419;
         background-color: #fff;
       }
     }
+
     &:nth-of-type(2) {
       font-size: 1.6rem;
     }
-   
+
+    &:nth-of-type(3) {
+      margin-left: 5rem;
+      font-size: 1.6rem;
+    }
+
   }
 }
+
 @media screen and (max-width: 640px) {
   .header {
     a {
       &:first-child {
         margin-right: 2rem;
+
         &:before {
           margin: {
             left: 5rem;

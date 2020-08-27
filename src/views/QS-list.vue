@@ -1,6 +1,6 @@
 <template>
   <div class="qs-list">
-    <ul v-if="qsList.length == 0 ? false : true">
+    <ul v-if="qsList == 0 ? false : true">
       <li class="color">标题</li>
       <li class="color">开始时间</li>
       <li class="color">截止时间</li>
@@ -15,7 +15,7 @@
         <li>{{ item.title }}</li>
         <li style="font-size:15px">{{item.startTime}}</li>
         <li style="font-size:15px">{{item.endTime}}</li>
-        <li :class="item.state === 'inissue' ? 'inissue' : ''">{{ item.stateTitle}}</li>
+        <li :class="item.status ==1 ? 'inissue' : 'noissue'">{{getStatus(item.status)}}</li>
         <li>
           <button @click="iterator = edit(item.code);iterator.next();">编辑</button>
           <button @click="iterator = delItem(item);iterator.next();">删除</button>
@@ -27,13 +27,13 @@
       </ul>
     </div>
     <!-- <flow-control :ControlModal="showControlModal" @cancel="showControlModal=false" :qnCode="code"></flow-control> -->
-    <div class="add-qs" v-if="qsList.length === 0">
+    <div class="add-qs" v-if="qsList === 0">
       <button
         class="add-btn"
         @click="$router.push({ name: 'Add-Qs', params: { code: 0 } })"
       >+&nbsp;&nbsp;新建问卷</button>
     </div>
-    <Dialog
+    <modal-tips
       title="提示"
       btnType="3"
       sureText="确定"
@@ -44,9 +44,9 @@
       @cancel="showModal=false"
     >
       <template v-slot:body>
-        <p>{{info}}</p>
+        <div>{{info}}</div>
       </template>
-    </Dialog>
+    </modal-tips>
   </div>
 </template>
 
@@ -54,10 +54,10 @@
 import storage from "../store/seesion.js";
 import { getList, delList } from "../api/QS-list";
 // import FlowControl from "@/components/FlowControl";
-import Dialog from "@/components/Dialog";
+import ModalTips from "@/components/ModalTips";
 export default {
   name: "qsList",
-  components: { Dialog },
+  components: { ModalTips },
   data() {
     return {
       qsList: [],
@@ -73,6 +73,7 @@ export default {
   mounted() {
     this.fetchList();
   },
+  comments: {},
   methods: {
     showControl(code) {
       console.log(code);
@@ -81,30 +82,12 @@ export default {
     },
     fetchList() {
       getList().then(res => {
-        console.log(res.data.obj);
+        console.log(res);
         this.qsList = res.data.obj;
-        if (this.qsList !== null) {
-          this.qsList.forEach(item => {
-            let [year, month, day] = item.endTime.split("-");
-            // 从后台获取时间后判断发布的状态
-            if (year < new Date().getFullYear()) {
-              item.state = "issueed";
-              item.stateTitle = "已发布";
-            } else if (
-              year == new Date().getFullYear() &&
-              month < new Date().getMonth() + 1
-            ) {
-              item.state = "issueed";
-              item.stateTitle = "已发布";
-            } else if (
-              year == new Date().getFullYear() &&
-              month == new Date().getMonth() + 1 &&
-              day < new Date().getDate()
-            ) {
-              item.state = "issueed";
-              item.stateTitle = "已发布";
-            }
-          });
+        // console.log(this.qsList);
+        if (this.qsList == undefined) {
+          this.$message.info("暂无问卷！");
+          this.qsList = 0;
         }
       });
     },
@@ -113,10 +96,21 @@ export default {
       this.info = info;
       console.log(info);
     },
+    //处理状态
+    getStatus(Status) {
+      let msg = "";
+      if (Status === 0) {
+        return (msg = "禁用");
+      } else if (Status === 1) {
+        return (msg = "启用");
+      } else {
+        return (msg = "测试");
+      }
+    },
     //删除单个问卷
     *delItem(item) {
       console.log(item);
-      yield this.showDialogMsg("确认要删除此问卷");
+      yield this.showDialogMsg("确认要删除此问卷吗？");
       yield (() => {
         delList({ code: item.code }).then(res => {
           console.log(res);
@@ -137,26 +131,6 @@ export default {
           code
         }
       });
-      // yield (() => {
-      //   if (true) {
-      //     this.showDialogMsg("确认要编辑？");
-      //   } else {
-      //     this.showDialogMsg("只有未发布的问卷才能编辑");
-      //   }
-      // })();
-      // yield (() => {
-      //   if (true) {
-      //     this.showModal = false;
-      //   } else {
-      //     this.showModal = false;
-      //     this.$router.push({
-      //       name: "qsEdit",
-      //       params: {
-      //         num: item.num
-      //       }
-      //     });
-      //   }
-      // })();
     },
     // 查看问卷
     *watchData(item) {

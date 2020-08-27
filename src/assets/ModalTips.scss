@@ -1,0 +1,89 @@
+.modal {
+    @include position(fixed);
+    z-index: 10;
+    transition: all .5s;
+    transition: all .5s;
+
+    //遮罩层
+    .mask {
+        @include position(fixed);
+        background-color: $colorI;
+        opacity: 0.5;
+    }
+
+    &.slide-enter-active {
+        top: 0;
+    }
+
+    &.slide-leave-active {
+        top: -100%;
+    }
+
+    &.slide-leave-active {
+        top: -100%;
+    }
+
+    &.slide-enter {
+        top: -100%;
+    }
+
+    .modal-dialog {
+        @include position(absolute, 40%, 50%, 35.25rem, auto);
+        border-radius: 13px;
+        background-color: #fff;
+        transform: translate(-50%, -50%);
+        transition-property: transform, opacity;
+
+        .modal-header {
+            height: 60px;
+            background-color: $colorJ;
+            padding: 0 25px;
+            line-height: 3.75rem;
+            font-size: $fontI;
+          
+
+            span {
+                padding-left: 0;
+                margin-bottom: 0;
+                font-size: 18px;
+                line-height: 60px;
+                color: #000;
+                font-weight: bold;
+            }
+
+            .icon-close {
+                position: absolute;
+                top: 0px;
+                right: 1.5625rem;
+                font-size: 1.5625rem;
+                background-size: contain;
+                transition: transform .3s;
+
+                &:hover {
+                    transform: scale(1.5);
+                }
+            }
+        }
+
+        .modal-body {
+            height: 130px;
+            padding: 10px;
+            font-size: 14px;
+            text-align: center;
+            line-height: 120px;
+
+        }
+
+        .modal-footer {
+            width: 100%;
+            position: fixed;
+            bottom: 0px;
+            margin-bottom: -22px;
+            left: 0;
+            height: 4.125rem !important;
+
+            text-align: center;
+            background-color: $colorJ;
+        }
+    }
+}

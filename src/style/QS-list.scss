@@ -43,6 +43,7 @@ $green: #9fef96;
     li {
       display: inline-block;
       text-align: center;
+
       &:nth-of-type(1) {
         width: 30rem;
         box-sizing: border-box;
@@ -69,7 +70,7 @@ $green: #9fef96;
       &:nth-of-type(5) {
         width: 35.5rem;
         text-align: left;
-        
+
 
         span {
           display: inline-block;
@@ -95,6 +96,10 @@ $green: #9fef96;
 
   .inissue {
     color: $green;
+  }
+
+  .noissue {
+    color: #ccc;
   }
 
   button {

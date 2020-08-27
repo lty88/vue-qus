@@ -2,6 +2,7 @@
   <div class="header">
     <router-link to="/">问卷管理</router-link>
     <router-link to="/">我的问卷</router-link>
+    <router-link to="/AvailableQn">查看有效问卷</router-link>
     <span @click="logout" class="userName">退出</span>
   </div>
 </template>

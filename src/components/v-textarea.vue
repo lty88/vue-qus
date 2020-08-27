@@ -5,7 +5,7 @@
       <div class="modal-dialog">
         <div class="modal-header">
           <span>文本题目</span>
-          <a href="JavaScript:;" class="icon-close" @click="$emit('cancel')">x</a>
+          <a href="JavaScript:;" class="icon-close" @click.self="close" @click="$emit('cancel')">x</a>
         </div>
         <div class="modal-body">
           <div class="form">
@@ -30,7 +30,7 @@
                 :rules="[{ required: true, message: '题目序号不能为空', trigger: 'blur' }]"
               >
                 <el-input
-                  placeholder="请输入题号"
+                  placeholder="请输入序号"
                   v-model="formDataT.order"
                   type="number"
                   oninput="if(value.length>2)value=value.slice(0,2)"
@@ -38,7 +38,7 @@
                   <template slot="prepend">题目序号:</template>
                 </el-input>
               </el-form-item>
-              <br />
+
               <el-form-item>
                 <el-popover
                   class="btn-vido"
@@ -63,9 +63,14 @@
 
               <!-- 上传图片视频 -->
 
-              <el-form-item v-if="showVido" prop="titleUrl" label="多媒体链接">
+              <el-form-item v-if="showVido" label="多媒体链接" prop="url">
                 <el-input v-model="formDataT.url "></el-input>
-                <el-select v-model="formDataT.Types" placeholder="选择类型" class="select-type">
+                <el-select
+                  v-model="formDataT.Types"
+                  placeholder="选择类型"
+                  class="select-type"
+                  prop="Types"
+                >
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -85,8 +90,9 @@
                 <el-button size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
-              <el-form-item>
+              <el-form-item class="modal-footer">
                 <el-button type="primary" @click="submitForm('formDataT')">提交</el-button>
+                <el-button @click="resetForm('formDataT')">重置</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -169,6 +175,14 @@ export default {
     };
   },
   methods: {
+    close(){
+          this.$refs.formDataT.resetFields();
+      this.creatGroup = false;
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.creatGroup = false;
+    },
     //删除文件
     handleChange(file, fileList) {
       this.fileList = fileList.slice(-3);
@@ -199,15 +213,15 @@ export default {
             if (res.data.code === 200) {
               this.wlist = true;
             }
+            this.resetForm(formName);
           });
-          // this.$emit("formDataT", this.formDataT);
-          this.$refs[formName].resetFields();
-          this.creatGroup = false;
         } else {
           console.log("error submit!!");
           return false;
+          this.resetForm(formName);
         }
       });
+      this.$emit("showModalT",this.showModalT)
     }
   }
 };
