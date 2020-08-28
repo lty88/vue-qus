@@ -7,16 +7,10 @@
             <div class="qs-left">
                 <div class="demo-image__placeholder">
                     <div class="block">
-                        <p class="qs-title">{{`${index+1}`}}.&nbsp;{{ getMsg(qs)}}&nbsp;&nbsp;{{ qs.content}}</p>
+                        <p class="qs-title">{{qs.title}}.&nbsp;{{ getMsg(qs)}}&nbsp;&nbsp;{{ qs.content}}</p>
                         <el-image class="titleImg" v-if="qs.type===1" :src="qs.url"></el-image>
-                        <!-- <vido-player v-if="qs.type===3||qs.type===2"></vido-player> -->
-                        <div class="video-bg" @click="showSlide='slideDown'" v-if="qs.type===3||qs.type===2"></div>
-                        <div class="video-box" v-show="showSlide" v-if="qs.type===3||qs.type===2">
-                            <div class="overlay"></div>
-                            <div class="video" :class="showSlide">
-                                <span class="icon-close" @click="closeVideo">x</span>
-                                <video :src="`${qs.url}`" muted autoplay controls="controls"></video>
-                            </div>
+                        <div class="vido" v-if="qs.type===3||qs.type===2">
+                            <vido-player :vidoUrl="qs.url"></vido-player>
                         </div>
                     </div>
                 </div>
@@ -81,13 +75,15 @@ import request from "@/network/request";
 export default {
     name: "fill",
     components: {
-        ModalTips
+        ModalTips,
+        vidoPlayer
     },
     data() {
         return {
             showSlide: "", //控制动画效果
             qsItem: [], //保存题
-            questionList: [], //保存所有题
+            questionList: [], //保存服务器返回来的题
+            handledQsList: [], //加工后的题
             TapNext: false, //用户点击状态
             conditionList: [], //控制流程
             NewconditionInfo: [],
@@ -97,9 +93,9 @@ export default {
             code: "",
             info: "",
             jzVal: [],
-            textVal: '',
-            radioVal: '',
-            checkboxVal: '',
+            textVal: "",
+            radioVal: "",
+            checkboxVal: "",
             result1: null
         };
     },
@@ -127,43 +123,39 @@ export default {
                         _this.$message.info("暂无题目信息，请联系管理员");
                     }
                     //判断逻辑
-                    _this.handle();
+                    _this.handleData();
                 });
             });
-
         });
     },
     methods: {
-        handle() {
+        handleData() {
             let _this = this;
-            //1.静态展示全部，动态展示1题
-            console.log(_this.conditionList)
-            console.log(_this.questionList)
-            //组装数据
-            _this.questionList.forEach((qs, index) => {
+            //组装数据放到新数组
+            _this.handledQsList = _this.questionList.map((qs, index) => {
+                //0：单选，1：多选，2：文本录，3：单选矩阵，4：多选矩阵
+                qs.answer = [0, 2, 3].indexOf(qs.answerType) > -1 ? '' : [];
                 //1.先找题目对应的流程
                 let tmpCond = _this.conditionList.filter(c => {
                     return c.questionCode == qs.code;
                 });
-                if (tmpCond.length != 0) {
+                if (tmpCond.length > 0) {
                     let condition = tmpCond[0];
                     //跳转方式（0：选项跳转，1：累计得分跳转）
                     qs.controlType = condition.type;
+                    qs.nextQuestionCode = condition.nextQuestionCode;
                     if (condition.type === 1) {
                         qs.controlPoint = condition.point;
                     } else {
-                        qs.items.forEach((item) => {
-                            if (item.code == condition.itemCode) {
-                                item.nextQuestionCode = condition.nextQuestionCode;
-                            }
-                        })
+                        qs.skipItemCode = condition.itemCode;
                     }
                 }
-            })
+                return qs;
+            });
             if (_this.condition == 1) {
-                _this.qsItem.push(_this.questionList[0]);
+                _this.qsItem.push(_this.deepCopy(_this.handledQsList[0]));
             } else {
-                _this.qsItem = _this.questionList;
+                _this.qsItem = _this.deepCopy(_this.handledQsList);
             }
         },
 
@@ -184,22 +176,97 @@ export default {
         },
         next() {
             let _this = this;
+            let qs = _this.qsItem[0];
+            //0.需要判断有没有答题
+            if (qs.answer instanceof Array) {
+                if (qs.answer.length == 0) {
+                    //  提示
+                    _this.$message.error("请答题");
+                    return;
+                }
+            } else {
+                if (!qs.answer) {
+                    _this.$message.error("请答题");
+                    return;
+                }
+            }
             //1.保存答案
-            //2.找下一题
-
-            //3.提交
+            let strAnswer = qs.answer instanceof Array ? qs.answer.join(',') : qs.answer;
+            _this.answerList.push({
+                questionCode: qs.code,
+                answerCode: strAnswer
+            });
+            if (_this.condition === 1) { //动态
+                _this.handleDynamic(qs, strAnswer);
+            }
+            console.log(JSON.stringify(qs));
+            console.log(_this.deepCopy(_this.answerList))
         },
-        //获取动态问卷的方法=》 动态问卷遍历每题加载
-        dynamicQnMethdos(resInfo, conditions, next, point) {
+        findNextQs(qs) {
             let _this = this;
-            //  debugger
-            if (next == undefined && point == undefined) {
-                //先默认展示第一条出来
-                _this.qsItem.push(resInfo[0]);
-                console.log(_this.qsItem);
+            for (let index = 0; index < _this.handledQsList.length; index++) {
+                if (_this.handledQsList[index].code == qs.code) {
+                    if (index != _this.questionList.length) {
+                        _this.qsItem.splice(0, 1, _this.deepCopy(_this.questionList[index + 1]));
+                    }
+                    break;
+                }
             }
         },
+        handleDynamic(qs, strAnswer) {
+            let _this = this;
+            //2.找下一题
+            if (qs.controlType == undefined) {
+                //没值表示不控制，直接取下一题
+                _this.findNextQs(qs);
+            } else if (qs.controlType == 0) {
+                _this.optionSkip(qs, strAnswer);
 
+            } else if (qs.controlType == 1) {
+                _this.pointSkip(qs, strAnswer);
+            }
+        },
+        //跳转方式,选项跳转
+        optionSkip(qs, strAnswer) {
+            let _this = this;
+            //1.判断是否选了要跳转的选项
+            let answerList = strAnswer.split(',');
+            let isSkip = answerList.indexOf(qs.skipItemCode) > -1 ? true : false;
+            if (isSkip) {
+                let nextQs = _this.handledQsList.filter(item => {
+                    return item.code == qs.nextQuestionCode;
+                })[0];
+                _this.qsItem.splice(0, 1, _this.deepCopy(nextQs));
+            } else {
+                //直接取下一题
+                _this.findNextQs(qs);
+            }
+        },
+        //累计得分跳转
+        pointSkip(qs, strAnswer) {
+            let _this = this;
+            //找到用户选择的选项，然后计算分值
+            let totalPoint = 0;
+            let answerList = strAnswer.split(',');
+            answerList.forEach(answer => {
+                qs.items.forEach(option => {
+                    if (answer == option.code) {
+                        totalPoint += option.point;
+                    }
+                })
+            })
+            if (totalPoint == qs.controlPoint) {
+                let nextQs = _this.handledQsList.filter(item => {
+                    return item.code == qs.nextQuestionCode;
+                })[0];
+                _this.qsItem.splice(0, 1, _this.deepCopy(nextQs));
+            } else {
+                _this.findNextQs(qs);
+            }
+        },
+        deepCopy(obj) {
+            return JSON.parse(JSON.stringify(obj));
+        },
         showDialogMsg(info) {
             this.showModal = true;
             this.info = info;

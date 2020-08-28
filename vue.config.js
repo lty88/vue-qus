@@ -5,7 +5,7 @@
       port:8080,
       proxy:{
         '/api':{
-          target:'http://192.168.1.80:9090',
+          target:'http://127.0.0.1:9099',
           changeOrigin:true,
           pathRewrite:{
             '/api':''

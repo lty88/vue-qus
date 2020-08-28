@@ -11,7 +11,7 @@
                 <section class="form">
                     <el-form>
                         <el-form-item>
-                            <el-input placeholder="用户名" v-model.trim="phone">
+                            <el-input placeholder="用户名" v-model.trim="userName">
                                 <template slot="prepend">
                                     <span class="el-icon-user"></span>
                                 </template>
@@ -36,6 +36,9 @@
 </template>
 
 <script>
+import {
+    userLogin
+} from "../api/user";
 export default {
     name: "login",
     props: {
@@ -52,9 +55,7 @@ export default {
     },
     data() {
         return {
-            method: "pwd",
-            type: "login",
-            phone: "",
+            userName: "",
             password: "",
             code: "",
             NewShow: false
@@ -70,7 +71,7 @@ export default {
     },
     methods: {
         loginAjax() {
-            if (this.phone === "") {
+            if (this.userName === "") {
                 this.$message({
                     type: "warning",
                     message: "请填用户名"
@@ -85,23 +86,26 @@ export default {
                 });
                 return false;
             }
-            //   login({
-            //     method: this.method,
-            //     code: this.code,
-            //     phone: this.phone,
-            //     password: this.password
-            //   }).then(res => {
-            //     if (res.code === 200) {
-            //       this.$router.push({ path: "/index" });
-            //       return true;
-            //     }
-            //     this.$message({ type: "warning", message: res.message });
-            //   });
-            this.$router.push({
-                name: "fill",
-                params: {
-                    code: this.code
+            userLogin({
+                qnCode: this.code,
+                username: this.userName,
+                password: this.password
+            }).then(res => {
+                console.log(res);
+                if (res.data.code === 200) {
+                    this.$message.success("登录成功！")
+                    this.$router.push({
+                        name: "fill",
+                        params: {
+                            code: this.code
+                        }
+                    });
+                    return true;
                 }
+                this.$message({
+                    type: "warning",
+                    message: res.data.msg
+                });
             });
         },
 

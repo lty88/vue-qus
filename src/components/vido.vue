@@ -7,7 +7,14 @@
 <script>
 export default {
     name: "vido",
-    props: [""],
+    props: {
+        vidoUrl: {
+            type: String,
+            default: () => {
+                "";
+            }
+        }
+    },
     data() {
         return {
             // 视频播放
@@ -44,7 +51,11 @@ export default {
 
     beforeMount() {},
 
-    mounted() {},
+    mounted() {
+        // console.log(this.playerOptions.sources[0].src);
+        this.playerOptions.sources[0].src = this.vidoUrl;
+        console.log(this.vidoUrl);
+    },
 
     methods: {},
 
@@ -54,6 +65,18 @@ export default {
 
 <style lang="scss" scoped>
 .video-player {
-    width: 50.5rem;
+    width: 68.5rem;
+
+    @media screen and(min-width: 375px) and(max-width: 392px) {
+        width: 100%;
+    }
+
+    @media screen and(min-width: 401px) and(max-width: 500px) {
+        width: 100%;
+    }
+
+    @media screen and (min-width: 500px) and (max-width: 768px) {
+        width: 40rem;
+    }
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
 <div class="Drawer">
+    <router-link to="/" tag="span" class="back" v-if="code==0||code==undefined">
+        <i class="el-icon-arrow-left" style="font-size:25px;font-weight: bold"></i>
+    </router-link>
     <el-button id="set_btn" type="primary" @click="dialog = true">设置问卷</el-button>
     <el-drawer title="设置问卷调查" :before-close="handleClose" :visible.sync="dialog" direction="ltr" custom-class="demo-drawer" ref="drawer">
         <div class="demo-drawer__content">
@@ -66,7 +69,6 @@ export default {
             form: {
                 title: "",
                 code: 2,
-                createTime: "",
                 unitName: "", //发起单位
                 selectTime: "",
                 type: 2, //问卷类型（1：指定调查对象问卷，2：开放性问卷）
@@ -92,7 +94,6 @@ export default {
                 console.log(res.data.obj);
                 this.form.title = res.data.obj[0].title;
                 this.form.code = res.data.obj[0].code;
-                this.form.createTime = res.data.obj[0].createTime;
                 this.form.unitName = res.data.obj[0].unitName;
                 this.form.type = res.data.obj[0].type;
                 this.form.condition = res.data.obj[0].condition;
@@ -126,12 +127,14 @@ export default {
                                 endTime: this.form.selectTime[1],
                                 unitName: this.form.unitName,
                                 desc: this.form.desc,
-                                createTime: this.form.createTime,
                                 status: this.form.status,
                                 condition: this.form.condition
                             }).then(res => {
+                                console.log(res);
                                 if (res.data.code === 200) {
                                     this.$message.success(res.data.msg);
+                                } else {
+                                    this.$message.warning(res.data.msg);
                                 }
                             });
                         }
@@ -145,7 +148,6 @@ export default {
                                 endTime: this.form.selectTime[1],
                                 unitName: this.form.unitName,
                                 desc: this.form.desc,
-                                createTime: this.form.createTime,
                                 status: this.form.status,
                                 condition: this.form.condition
                             }).then(res => {

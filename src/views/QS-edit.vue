@@ -13,7 +13,9 @@
                     <div class="block">
                         <p class="qs-title">{{`${index+1}`}}.&nbsp;{{ getMsg(qs)}}&nbsp;&nbsp;{{ qs.content}}</p>
                         <el-image class="titleImg" v-if="qs.type===1" :src="qs.url"></el-image>
-                        <vido-player v-if="qs.type===3||qs.type===2"></vido-player>
+                        <div class="vido" v-if="qs.type===3||qs.type===2">
+                            <vido-player v-if="flag" :vidoUrl="qs.url"></vido-player>
+                        </div>
                     </div>
                 </div>
                 <p v-for="(item, index) in qs.items" class="option" :key="index">
@@ -38,12 +40,12 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tswjdc_table" v-if="qs.answerType === 4||qs.answerType === 3">
                         <tr>
                             <td class="lefttd_qk">&nbsp;</td>
-                            <td class="lefttd_tit" v-for="(jzOption,jzIndex) in qs.subTitles" :key="jzIndex">{{jzOption.title}}</td>
+                            <td class="lefttd_tit" v-for="(jzOption,jzIndex) in qs.items" :key="jzIndex">{{jzOption.content}}</td>
                         </tr>
                         <!-- 渲染的矩阵的radio-->
-                        <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.items" :key="jztIndex">
-                            <td class="lefttd_qk">{{jzTitle.content}}</td>
-                            <td v-for="(jzOption,jzIndex) in qs.subTitles" :key="jzIndex">
+                        <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.subTitles" :key="jztIndex">
+                            <td class="lefttd_qk">{{jzTitle.title}}</td>
+                            <td v-for="(jzOption,jzIndex) in qs.items" :key="jzIndex">
                                 <input type="radio" :value="`${jzOption.code}`" :name="`${jzIndex}`" />
                             </td>
                         </tr>
@@ -157,6 +159,7 @@ export default {
             editQsJz: {},
             showM: false,
             showMJz: false,
+            flag: false,
             qsItem: [],
             qsList: [],
             isError: false,
@@ -236,6 +239,7 @@ export default {
                         this.$message.info(res.data.msg);
                     } else {
                         this.qsItem = res.data.obj;
+                        this.flag = true;
                     }
                     console.log(this.qsItem);
                 });
