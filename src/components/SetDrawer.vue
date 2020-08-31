@@ -32,7 +32,9 @@
                     <el-radio v-model="form.status" :label="0">禁用</el-radio>
                 </el-form-item>
                 <el-form-item label="问卷描述" class="desc">
-                    <el-input type="textarea" style="overflow-x:hidden;text-indent: 4rem;" v-model.trim.trim="form.desc"></el-input>
+                    <el-input type="textarea" rows="5" style="text-indent: 6rem !important;" placeholder="请输入内容" v-model="textarea" maxlength="150" v-model.trim.trim="form.desc" show-word-limit>
+                    </el-input>
+                    <!-- <el-input type="textarea" style="overflow-x:hidden;text-indent: 4rem;" v-model.trim.trim="form.desc"></el-input> -->
                 </el-form-item>
             </el-form>
             <div class="demo-drawer__footer">

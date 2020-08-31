@@ -10,6 +10,7 @@
             <div class="modal-body">
                 <div class="form">
                     <el-form :model="formData" ref="formData" label-width="100px" class="demo-dynamic">
+                        {{formData}}
                         <el-form-item prop="content" label="题目" :rules="[{ required: true, message: '题目不能为空', trigger: 'blur' }]">
                             <el-input v-model="formData.content"></el-input>
                         </el-form-item>
@@ -33,16 +34,16 @@
                         </el-form-item>
 
                         <!-- 上传图片视频 -->
-                        <el-form-item v-if="showVido" label="多媒体链接">
-                            <el-input v-model="formData.url "></el-input>
-                            <el-select label="文本" v-model="value" placeholder="选择类型" class="select-type">
-                                <el-option label="文本" value="0"></el-option>
-                                <el-option label="图片" value="1"></el-option>
-                                <el-option label="视频" value="2"></el-option>
-                                <el-option label="音频" value="3"></el-option>
-                            </el-select>
-                            <!-- <el-button @click.prevent="removeTitleUrl()">删除</el-button> -->
+                        <el-form-item prop="url" v-if="showVido" label="多媒体链接">
+                            <el-input placeholder="请输入链接" v-model="formData.url" class="input-with-select"></el-input>
+                            <el-form-item label="选择类型" style="margin-top:20px ;">
+                                <el-radio v-model="formData.type" :label="0" border size="medium">文本</el-radio>
+                                <el-radio v-model="formData.type" :label="1" border size="medium">图片</el-radio>
+                                <el-radio v-model="formData.type" :label="2" border size="medium">音频</el-radio>
+                                <el-radio v-model="formData.type" :label="3" border size="medium">视频</el-radio>
+                            </el-form-item>
                         </el-form-item>
+
                         <el-upload v-if="showAddVido" class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange">
                             <el-button size="small" type="primary">点击上传</el-button>
                             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -70,15 +71,23 @@
                                         <template slot="prepend">分值:</template>
                                     </el-input>
                                 </el-form-item>
+
                                 <!-- 选项多媒体 -->
                                 <el-form-item>
+                                    <el-popover class="btn-vido" placement="top-start" width="200" trigger="hover" content="这是切换为多媒体的题目">
+                                        <el-button slot="reference" @click="changeItemVido">多媒体选项</el-button>
+                                    </el-popover>
+                                </el-form-item>
+
+                                <el-form-item v-show="showItemVido" class="btn-vido">
+                                    <el-form-item label="选择类型" style="margin-bottom:20px ;">
+                                        <el-radio v-model="option.type" :label="0" border size="medium">文本</el-radio>
+                                        <el-radio v-model="option.type" :label="1" border size="medium">图片</el-radio>
+                                        <el-radio v-model="option.type" :label="2" border size="medium">音频</el-radio>
+                                        <el-radio v-model="option.type" :label="3" border size="medium">视频</el-radio>
+                                    </el-form-item>
                                     <el-input placeholder="请输入链接" v-model="option.url" class="input-with-select">
-                                        <el-select v-model="itemType" slot="prepend" placeholder="请选择类型">
-                                            <el-option label="文本" value="0"></el-option>
-                                            <el-option label="图片" value="1"></el-option>
-                                            <el-option label="视频" value="2"></el-option>
-                                            <el-option label="音频" value="3"></el-option>
-                                        </el-select>
+                                        <template slot="prepend">链接:</template>
                                     </el-input>
                                 </el-form-item>
                             </div>
@@ -86,7 +95,7 @@
                         <el-form-item class="modal-footer">
                             <el-button type="primary" @click="submitForm('formData')">提交</el-button>
                             <el-button @click="addDomain">新增选项</el-button>
-                            <el-button @click="resetForm('formData')">重置</el-button>
+                            <!-- <el-button @click="resetForm('formData')">重置</el-button> -->
                         </el-form-item>
                     </el-form>
                 </div>
@@ -116,9 +125,9 @@ export default {
     mounted() {},
     data() {
         return {
-            value: "文本",
-            itemType: "文本",
-            options: [{
+            // value: "文本",
+            showItemVido: false,
+            typeOptions: [{
                     value: 0,
                     label: "文本"
                 },
@@ -203,6 +212,9 @@ export default {
         addVido() {
             this.showAddVido = !this.showAddVido;
         },
+        changeItemVido() {
+            this.showItemVido = !this.showItemVido;
+        },
         //删除多媒体链接
         removeTitleUrl() {
             console.log(this);
@@ -218,7 +230,7 @@ export default {
                         answerType: this.formData.answerType, //在radio组件里面
                         title: this.formData.title,
                         content: this.formData.content,
-                        type: this.value,
+                        type: this.formData.type,
                         url: this.formData.url,
                         item: JSON.stringify(this.formData.items)
                     };
@@ -232,18 +244,18 @@ export default {
                         this.$emit("EditShowModal", this.showModal);
                     });
                     // this.$emit("formData", this.formData);
-                    this.$refs[formName].resetFields();
-                    this.creatGroup = false;
+                    // this.$refs[formName].resetFields();
+                    // this.creatGroup = false;
                 } else {
                     console.log("error submit!!");
                     return false;
                 }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.creatGroup = false;
-        },
+        // resetForm(formName) {
+        //     this.$refs[formName].resetFields();
+        //     this.creatGroup = false;
+        // },
         removeDomain(item) {
             //   var types = this.types;
             let numOption = this.formData.items.length;

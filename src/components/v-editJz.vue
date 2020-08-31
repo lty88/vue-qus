@@ -11,7 +11,7 @@
                 <div class="form">
                     <el-form :model="formDataJz" ref="formDataJz" label-width="100px" class="demo-dynamic">
                         <!-- 矩阵题目标题 -->
-                        {{this.formDataJz}}
+
                         <el-form-item prop="title" label="题目标题" :rules="[{ required: true, message: '题目题目不能为空', trigger: 'blur' }]">
                             <el-input v-model="formDataJz.content"></el-input>
                             <el-input placeholder="请输入题号" v-model="formDataJz.title">
@@ -30,12 +30,14 @@
                             </el-popover>
                         </el-form-item>
                         <!-- 上传图片视频 -->
-                        <el-form-item v-if="showVido" prop="titleUrl" label="多媒体链接">
+                        <el-form-item v-show="showVido" prop="titleUrl" label="多媒体链接">
                             <el-input v-model="formDataJz.url"></el-input>
-                            <el-select v-model="formDataJz.type" placeholder="选择类型" class="select-type">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                            </el-select>
-                            <el-button @click.prevent="removeTitleUrl()">删除</el-button>
+                            <el-form-item label="选择类型" style="margin-top:20px ;">
+                                <el-radio v-model="formDataJz.type" :label="0" border size="medium">文本</el-radio>
+                                <el-radio v-model="formDataJz.type" :label="1" border size="medium">图片</el-radio>
+                                <el-radio v-model="formDataJz.type" :label="2" border size="medium">音频</el-radio>
+                                <el-radio v-model="formDataJz.type" :label="3" border size="medium">视频</el-radio>
+                            </el-form-item>
                         </el-form-item>
 
                         <el-upload v-if="showAddVido" class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange">
@@ -83,15 +85,20 @@
                                             </el-input>
                                         </el-form-item>
                                         <!-- 选项多媒体 -->
-                                        <el-form-item :prop="'items.' + Rowindex + '.url'">
-                                            <el-input placeholder="请输入链接" v-model="Rowoption.url" class="input-with-select">
-                                                <el-select v-model="Rowoption.type" slot="prepend" placeholder="请选择类型">
-                                                    <el-option label="文本" value="0"></el-option>
-                                                    <el-option label="图片" value="1"></el-option>
-                                                    <el-option label="视频" value="2"></el-option>
-                                                    <el-option label="音频" value="3"></el-option>
-                                                </el-select>
-                                            </el-input>
+                                        <el-form-item>
+                                            <el-popover class="btn-vido" placement="top-start" width="200" trigger="hover" content="这是切换为多媒体的题目">
+                                                <el-button slot="reference" @click="changeItemVido">多媒体选项</el-button>
+                                            </el-popover>
+                                        </el-form-item>
+
+                                        <el-form-item :prop="'items.' + Rowindex + '.url'" v-show="showItemVido" class="btn-vido">
+                                            <el-form-item label="选择类型" style="margin-bottom:20px ;">
+                                                <el-radio v-model="Rowoption.type" :label="0" border size="medium">文本</el-radio>
+                                                <el-radio v-model="Rowoption.type" :label="1" border size="medium">图片</el-radio>
+                                                <el-radio v-model="Rowoption.type" :label="2" border size="medium">音频</el-radio>
+                                                <el-radio v-model="Rowoption.type" :label="3" border size="medium">视频</el-radio>
+                                            </el-form-item>
+                                            <el-input placeholder="请输入链接" v-model="Rowoption.url" class="input-with-select"></el-input>
                                         </el-form-item>
                                     </div>
 
@@ -153,6 +160,7 @@ export default {
                 }
             ],
             showVido: false,
+            showItemVido: false,
             showAddVido: false,
             showModals: this.showModal,
             code: 1
@@ -193,6 +201,9 @@ export default {
         //新增多媒体题目
         changeVido() {
             this.showVido = !this.showVido;
+        },
+        changeItemVido() {
+            this.showItemVido = !this.showItemVido;
         },
         //上传多媒体题目
         addVido() {

@@ -35,7 +35,7 @@
                         <!-- 上传图片视频 -->
                         <el-form-item v-if="showVido" label="多媒体链接" prop="url">
                             <el-input v-model="formData.url "></el-input>
-                            <el-select v-model="formData.Types" clearable placeholder="选择类型" class="select-type">
+                            <el-select v-model="formData.Types" placeholder="选择类型" class="select-type">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                             </el-select>
                             <!-- <el-button @click.prevent="removeTitleUrl()">删除</el-button> -->
@@ -57,7 +57,7 @@
                                 </el-input>
                             </el-form-item>
                             <el-form-item :prop="'options.' + index + '.order'" :rules="[{ required: true, message: '选项序号不能为空', trigger: 'blur' }]">
-                                <el-input placeholder="请输入选项序号" v-model="option.order">
+                                <el-input placeholder="请输入选项序号" type="number" v-model="option.order">
                                     <template slot="prepend">选项序号:</template>
                                 </el-input>
                             </el-form-item>
@@ -69,11 +69,8 @@
                             <!-- 选项多媒体 -->
                             <el-form-item :prop="'options.' + index + '.url'">
                                 <el-input placeholder="请输入链接" v-model="option.url" class="input-with-select">
-                                    <el-select v-model="option.type" slot="prepend" clearable placeholder="请选择类型">
-                                        <el-option label="文本" value="0"></el-option>
-                                        <el-option label="图片" value="1"></el-option>
-                                        <el-option label="视频" value="2"></el-option>
-                                        <el-option label="音频" value="3"></el-option>
+                                    <el-select v-model="option.type" slot="prepend" placeholder="请选择类型" class="select-type">
+                                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                     </el-select>
                                 </el-input>
                             </el-form-item>
@@ -143,11 +140,11 @@ export default {
                 },
                 {
                     value: 2,
-                    label: "视频"
+                    label: "音频"
                 },
                 {
                     value: 3,
-                    label: "音频"
+                    label: "视频"
                 }
             ],
             showVido: false,
@@ -162,29 +159,29 @@ export default {
                 url: "", //多媒体内容链接
                 options: [{
                         code: "",
-                        title: "",
+                        title: "1",
                         content: "",
                         point: 0,
                         order: 1,
-                        type: "0",
+                        type: 0,
                         url: ""
                     },
                     {
                         code: "",
-                        title: "",
+                        title: "2",
                         content: "",
                         point: 0,
                         order: 2,
-                        type: "0",
+                        type: 0,
                         url: ""
                     },
                     {
                         code: "",
-                        title: "",
+                        title: " 3",
                         content: "",
                         point: 0,
                         order: 3,
-                        type: "0",
+                        type: 0,
                         url: ""
                     }
                 ]
@@ -225,6 +222,7 @@ export default {
                     console.log(this.formData);
                     let obj = {
                         qnCode: this.code,
+                        code: "",
                         order: this.formData.order,
                         title: this.formData.title,
                         content: this.formData.content,
@@ -270,8 +268,13 @@ export default {
         },
         addDomain() {
             this.formData.options.push({
-                name: "",
-                key: Date.now()
+                code: "",
+                title: "4",
+                content: "",
+                point: 0,
+                order: 4,
+                type: 0,
+                url: ""
             });
         }
     }

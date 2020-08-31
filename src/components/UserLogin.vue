@@ -93,19 +93,33 @@ export default {
             }).then(res => {
                 console.log(res);
                 if (res.data.code === 200) {
-                    this.$message.success("登录成功！")
-                    this.$router.push({
-                        name: "fill",
-                        params: {
-                            code: this.code
-                        }
+                    if (res.data.obj.status == 1) {
+                        this.$emit("close", this.NewShow);
+                        this.$message({
+                            message: "你已经答过此题了，无需再答！",
+                            duration: 5000
+                        });
+                    } else {
+                        this.$message({
+                            message: "登录成功！",
+                            duration: 2000
+                        });
+                        const uid = res.data.obj.uid;
+                        window.sessionStorage.setItem("uid", uid);
+                        this.$router.push({
+                            name: "fill",
+                            params: {
+                                code: this.code
+                            }
+                        });
+                    }
+                } else {
+                    this.$message({
+                        type: "warning",
+                        message: res.data.msg,
+                        duration: 2000
                     });
-                    return true;
                 }
-                this.$message({
-                    type: "warning",
-                    message: res.data.msg
-                });
             });
         },
 

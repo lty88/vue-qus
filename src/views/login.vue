@@ -6,7 +6,7 @@
             <el-input v-model.trim="formLogin.account" prefix-icon="el-icon-user-solid"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model.trim="formLogin.password" autocomplete="off" prefix-icon="el-icon-lock"></el-input>
+            <el-input type="password" show-password v-model.trim="formLogin.password" autocomplete="off" prefix-icon="el-icon-lock"></el-input>
         </el-form-item>
         <el-button type="success" class="login-btn" @click="submitForm('formLogin')">登录</el-button>
     </el-form>

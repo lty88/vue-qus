@@ -33,13 +33,16 @@
                                 <el-button slot="reference" @click="addVido">上传多媒体</el-button>
                             </el-popover>
                         </el-form-item>
+                        <el-form-item label="矩阵类型">
+                            <el-radio v-model="formDataJz.answerType" :label="3" border size="medium">单选矩阵</el-radio>
+                            <el-radio v-model="formDataJz.answerType" :label="4" border size="medium">多选矩阵</el-radio>
+                        </el-form-item>
                         <!-- 上传图片视频 -->
                         <el-form-item v-if="showVido" prop="titleUrl" label="多媒体链接">
                             <el-input v-model="formDataJz.url"></el-input>
                             <el-select v-model="formDataJz.type" placeholder="选择类型" class="select-type">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                             </el-select>
-                            <el-button @click.prevent="removeTitleUrl()">删除</el-button>
                         </el-form-item>
 
                         <el-upload v-if="showAddVido" class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange">
@@ -89,11 +92,8 @@
                                     <!-- 选项多媒体 -->
                                     <el-form-item :prop="'items.' + Rowindex + '.url'">
                                         <el-input placeholder="请输入链接" v-model="Rowoption.url" class="input-with-select">
-                                            <el-select v-model="Rowoption.type" slot="prepend" placeholder="请选择类型">
-                                                <el-option label="文本" value="0"></el-option>
-                                                <el-option label="图片" value="1"></el-option>
-                                                <el-option label="视频" value="2"></el-option>
-                                                <el-option label="音频" value="3"></el-option>
+                                            <el-select v-model="Rowoption.type" slot="prepend" placeholder="请选择类型" class="select-type">
+                                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                             </el-select>
                                         </el-input>
                                     </el-form-item>
@@ -170,7 +170,7 @@ export default {
             showModals: false,
             code: 1, //问卷的code
             formDataJz: {
-                code: '', //题号
+                code: "", //题号
                 title: "", //题号
                 content: "", //题目
                 order: 1,
@@ -184,7 +184,7 @@ export default {
                         content: "",
                         point: 0,
                         order: 1,
-                        type: "0",
+                        type: 0,
                         url: ""
                     },
                     {
@@ -193,7 +193,7 @@ export default {
                         content: "",
                         point: 0,
                         order: 2,
-                        type: "0",
+                        type: 0,
                         url: ""
                     },
                     {
@@ -202,7 +202,7 @@ export default {
                         content: "",
                         point: 0,
                         order: 3,
-                        type: "0",
+                        type: 0,
                         url: ""
                     }
                 ],
@@ -311,7 +311,7 @@ export default {
                 content: "",
                 point: 0,
                 order: 4,
-                type: "0",
+                type: 0,
                 url: ""
             });
         },
@@ -319,7 +319,6 @@ export default {
             this.formDataJz.subTitles.push({
                 code: "",
                 title: ""
-
             });
         }
     }

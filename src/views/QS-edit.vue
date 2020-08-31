@@ -23,14 +23,18 @@
                         <div v-if="qs.answerType === 0">
                             <input type="radio" :name="`${qs.title}`" />
                             {{item.content}}
-                            <el-image class="titleImg" v-if="item.type===1" :src="qs.url"></el-image>
-                            <vido-player v-if="item.type===3||item.type===2"></vido-player>
+                            <el-image class="titleImg" v-if="item.type===1" :src="item.url"></el-image>
+                            <div class="vido" v-if="item.type===3||item.type===2">
+                                <vido-player v-if="flag" :vidoUrl="qs.url"></vido-player>
+                            </div>
                         </div>
                         <div v-if="qs.answerType === 1">
                             <input type="checkbox" :name="`${qs.title}`" />
                             {{item.content}}
-                            <el-image class="titleImg" v-if="item.type===1" :src="qs.url"></el-image>
-                            <vido-player v-if="item.type===3||item.type===2"></vido-player>
+                            <el-image class="titleImg" v-if="item.type===1" :src="item.url"></el-image>
+                            <div class="vido" v-if="item.type===3||item.type===2">
+                                <vido-player v-if="flag" :vidoUrl="qs.url"></vido-player>
+                            </div>
                         </div>
                     </label>
                 </p>
@@ -40,13 +44,13 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tswjdc_table" v-if="qs.answerType === 4||qs.answerType === 3">
                         <tr>
                             <td class="lefttd_qk">&nbsp;</td>
-                            <td class="lefttd_tit" v-for="(jzOption,jzIndex) in qs.items" :key="jzIndex">{{jzOption.content}}</td>
+                            <td class="lefttd_tit" v-for="(jzOption,jzIndex) in qs.subTitles" :key="jzIndex">{{jzOption.title}}</td>
                         </tr>
                         <!-- 渲染的矩阵的radio-->
-                        <tr class="os_bjqk" v-for="(jzTitle,jztIndex) in qs.subTitles" :key="jztIndex">
-                            <td class="lefttd_qk">{{jzTitle.title}}</td>
-                            <td v-for="(jzOption,jzIndex) in qs.items" :key="jzIndex">
-                                <input type="radio" :value="`${jzOption.code}`" :name="`${jzIndex}`" />
+                        <tr class="os_bjqk" v-for="option in qs.items" :key="option.code">
+                            <td class="lefttd_qk">{{option.content}}</td>
+                            <td v-for="subTitle in qs.subTitles" :key="subTitle.code">
+                                <input type="radio" :value="subTitle.code" :name="option.code" />
                             </td>
                         </tr>
                     </table>
@@ -58,7 +62,7 @@
             此题是否必填
           </label>-->
                 <p id="edit-btn-box">
-                    <el-button @click="del(qs,index)" type="warning" plain>删除</el-button>
+                    <el-button @click="iterator=del(qs,index);iterator.next();" type="warning" plain>删除</el-button>
                     <el-button @click="editTitle(qs,index)" type="success" plain>编辑</el-button>
                 </p>
             </div>
@@ -107,6 +111,12 @@
             </div>
         </div>
     </div>
+    <!-- 自定义删除diaog -->
+    <modal-tips title="提示" btnType="3" sureText="确定" cancelText="取消" modalType="small" :showModal="showModalDel" @submit="iterator.next()" @cancel="showModal=false">
+        <template v-slot:body>
+            <div>{{info}}</div>
+        </template>
+    </modal-tips>
     <!-- 编辑radio、checkbox、textarea组件 -->
     <v-edit-radio :showModal="showM" :formData="editQs" :formDataJz="editQsJz" @cancel="showmo" @EditShowModal="EditShowModals"></v-edit-radio>
     <!-- 编辑矩阵组件 -->
@@ -123,7 +133,6 @@
 </template>
 
 <script>
-import storage from "../store/seesion.js";
 import vRadio from "@/components/v-radio";
 import vJztemp from "@/components/v-jztemp";
 import vTextarea from "@/components/v-textarea";
@@ -132,9 +141,9 @@ import vEditRadio from "@/components/v-editRadio";
 import vEditJz from "@/components/v-editJz";
 import SetDrawer from "@/components/SetDrawer";
 import vidoPlayer from "@/components/vido";
+import ModalTips from "@/components/ModalTips";
 import {
     GetQuestionInfo,
-    UpdateQsInfo,
     DeleteQsItems
 } from "../api/QS-edit";
 import {
@@ -151,7 +160,8 @@ export default {
         SetDrawer,
         vidoPlayer,
         vEditRadio,
-        vEditJz
+        vEditJz,
+        ModalTips
     },
     data() {
         return {
@@ -162,7 +172,7 @@ export default {
             flag: false,
             qsItem: [],
             qsList: [],
-            isError: false,
+            showModalDel: false,
             showBtn: false,
             showAddQsDialog: false,
             showAddQsDialogJz: false,
@@ -228,18 +238,17 @@ export default {
             }
         },
         fetchData() {
-            this.code = this.$route.params.code;
+            let _this = this;
             // 获取列表数据信息接口
             if (this.code != 0) {
                 GetQuestionInfo({
-                    qncode: this.code
+                    qncode: _this.code
                 }).then(res => {
-                    console.log(res);
-                    if (res.data.code === 503) {
-                        this.$message.info(res.data.msg);
-                    } else {
+                    if (res.data.code === 200) {
                         this.qsItem = res.data.obj;
                         this.flag = true;
+                    } else {
+                        this.$message.info(res.data.msg);
                     }
                     console.log(this.qsItem);
                 });
@@ -259,19 +268,26 @@ export default {
             }
             return item.isNeed ? `${msg} *` : msg;
         },
-        del(qs, index) {
-            console.log(qs.code);
-            console.log(index);
-            console.log(this.code);
-            // 参数：qnCode-问卷编号
-            //       code-题目编号
-            DeleteQsItems({
-                qnCode: this.code,
-                code: qs.code
-            }).then(res => {
-                this.fetchData();
-                console.log(res);
-            });
+        showDialogMsg(info) {
+            this.showModalDel = true;
+            this.info = info;
+            console.log(info);
+        },
+        * del(qs, index) {
+            yield this.showDialogMsg("确认要删除此问卷吗？");
+            yield(() => {
+                DeleteQsItems({
+                    qnCode: this.code,
+                    code: qs.code
+                }).then(res => {
+                    console.log(res);
+                    if (res.data.code === 200) {
+                        this.fetchData();
+                        this.showModalDel = false;
+                        this.$message.success("刪除成功！");
+                    }
+                });
+            })();
         },
         addItemClick() {
             if (this.showBtn === false) {
@@ -316,86 +332,6 @@ export default {
             if (this.questionLength === 20) return alert("问卷已满！");
             this.AddshowModalJz = true;
             this.addOptionType = "jz";
-        },
-        // 增加删除矩阵类型
-        delJzItemOption(rowOptions, roptionsIndex) {
-            let rownum = this.jzItemOptions.length;
-            console.log(rownum);
-            if (rownum >= 4) {
-                this.jzItemOptions.splice(rowOptions, 1);
-            } else this.$message.error("至少保留三项");
-        },
-        delJzTitleOptions(colOptions, coptionsIndex) {
-            let cowNum = this.jzTitleOptions.length;
-            console.log(cowNum);
-            if (cowNum >= 4) {
-                this.jzTitleOptions.splice(coptionsIndex, 1);
-            } else this.$message.error("至少保留三项");
-        },
-        addJzItemOption(rowOptions, roptionsIndex) {
-            let rowNumT = this.jzItemOptions.length;
-            console.log(rowNumT);
-            if (rowNumT < 8) {
-                let jzItemOptions = {
-                    name: ""
-                };
-                this.jzItemOptions.push(rowOptions);
-            } else this.$message.error("最多只能有八项");
-        },
-        addJzTitleOptions(colOptions, coptionsIndex) {
-            let rowNumO = this.jzTitleOptions.length;
-            if (rowNumO < 8) {
-                let jzTitleOptions = {
-                    name: ""
-                };
-                this.jzTitleOptions.push(colOptions);
-            } else this.$message.error("最多只能有八项");
-        },
-
-        addItemOption() {
-            let qsOptions = {
-                name: ""
-            };
-            this.qsInputOptions.push(qsOptions);
-        },
-        validateAddQs() {
-            //修改题目
-            // 参数：qnCode-问卷编号
-            // code-题目编号，修改题目时必须
-            //title-题号
-            //order-排序号
-            // content-题目内容
-            // type - 题目类型（0：文本，1：图片，2：音频，3：视频）
-            // url-多媒体内容链接
-            // answerType-题目回答类型（0：单选，1：多选，2：文本录入，3：单选矩阵，4：		多选矩阵）
-            //Item-选项信息json字符串-[{"code": "3454545","title": "选项1"},{"code": "","title": "选项3"}]
-            //subTitles-子标题信息json字符串
-
-            if (this.currEditIndex >= 0) {
-                console.log(this.qsItem[this.currEditIndex]);
-                let obj = {
-                    qnCode: this.code,
-                    code: this.qsItem[this.currEditIndex].code,
-                    title: this.qsItem[this.currEditIndex].title,
-                    content: this.qsItem[this.currEditIndex].content,
-                    type: this.qsItem[this.currEditIndex].type,
-                    answerType: this.qsItem[this.currEditIndex].answerType,
-                    type: this.qsItem[this.currEditIndex].type,
-                    items: JSON.stringify(this.qsItem[this.currEditIndex].items)
-                };
-                console.log(obj);
-                UpdateQsInfo(obj).then(res => {
-                    console.log(res);
-                    this.showAddQsDialog = false;
-                });
-            }
-        },
-        validateAddQsJz() {
-            if (this.qsJzTitle === "") {
-                this.$message.error("题目不能为空");
-            } else {
-                this.showAddQsDialog = false;
-            }
         }
     },
     computed: {
