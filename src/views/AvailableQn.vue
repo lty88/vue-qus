@@ -1,7 +1,7 @@
 <template>
   <div class="AvailableQn">
     <el-container>
-      <el-main>
+      <el-main v-if="noData">
         <div class="bb" v-for="item in dataList" :key="item.code">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
@@ -24,12 +24,13 @@
           <user-login :show="showLogin" @close="showLogin=false" :qnCode="code"></user-login>
         </div>
       </el-main>
+      <div class="noData" v-else>目前暂无开放的问卷</div>
     </el-container>
   </div>
 </template>
 
 <script>
-import { getAvailableQn } from "../api/user";
+import { getAvailableQn, getResults } from "../api/user";
 import UserLogin from "@/components/UserLogin";
 export default {
   name: "AvailableQn",
@@ -40,13 +41,25 @@ export default {
     return {
       dataList: [], //有效问卷调查列表
       showLogin: false,
-      code: "1"
+      code: "1",
+      noData: false
     };
   },
   created() {
     getAvailableQn().then(res => {
-      console.log(res);
-      this.dataList = res.data.obj;
+      if (res.data.obj.length != 0) {
+        console.log(res);
+        this.dataList = res.data.obj;
+        this.noData = true;
+      } else {
+        this.$message({
+          type: "info",
+          message: "目前暂无开放的问卷",
+          duration: 5000
+        });
+        this.dataList = [];
+        this.noData = false;
+      }
     });
   },
   methods: {
@@ -69,15 +82,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.AvailableQn {
+//   background: url(../assets/img/bgc.jpg) fixed repeat;
+}
 .el-main {
   display: flex;
   align-items: center;
   flex-direction: column;
   color: #333;
   padding: 0;
+  margin-top: 3z0px;
+//   background-color: #909399;
 
   @media screen and (min-width: 768px) {
     padding: 2rem;
+  }
+
+  .el-card /deep/ .el-card__header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ebeef5;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: lightgrey;
   }
 
   .text {
@@ -87,12 +114,6 @@ export default {
   .title {
     font-size: 1.5rem;
     font-weight: 600;
-  }
-
-  .header {
-    display: flex;
-    justify-content: space-between;
-    justify-items: center;
   }
 
   .item {
@@ -158,5 +179,13 @@ export default {
       width: 750px;
     }
   }
+}
+
+.noData {
+  width: 100%;
+  padding: 30px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 </style>

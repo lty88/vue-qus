@@ -29,7 +29,7 @@ export default {
                 fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
                 sources: [{
                     type: "",
-                    src: "../../public/video.mp4" //url地址
+                    src: "" //url地址
                     // src: "" //url地址
                 }],
                 poster: "", //你的封面地址
@@ -54,7 +54,7 @@ export default {
     mounted() {
         // console.log(this.playerOptions.sources[0].src);
         this.playerOptions.sources[0].src = this.vidoUrl;
-        console.log(this.vidoUrl);
+        // console.log(this.vidoUrl);
     },
 
     methods: {},
@@ -68,14 +68,17 @@ export default {
     width: 68.5rem;
 
     @media screen and(min-width: 375px) and(max-width: 392px) {
-        width: 100%;
+        margin-bottom: 0.9375rem;
+        width: 320px;
     }
 
     @media screen and(min-width: 401px) and(max-width: 500px) {
-        width: 100%;
+          margin-bottom: 0.9375rem;
+        width: 350px;
     }
 
     @media screen and (min-width: 500px) and (max-width: 768px) {
+          margin-bottom: 0.9375rem;
         width: 40rem;
     }
 }

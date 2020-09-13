@@ -17,12 +17,22 @@ const routes = [{
 	path: '/AvailableQn',
 	name: 'AvailableQn',
 	meta: {
-		title: '有效问卷列表',
-		keepAlive: false
+		title: '有效问卷',
+		keepAlive: true
 	},
 	component: () =>
 		import( /* webpackChunkName: "about" */ "../views/AvailableQn.vue")
 
+},
+{
+	path: '/viewResults/:code',
+	name: 'viewResults',
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/viewResults.vue"),
+	meta: {
+		title: '查看问卷结果',
+		keepAlive: false
+	}
 },
 {
 	path: '/fill/:code',
@@ -31,7 +41,8 @@ const routes = [{
 		import( /* webpackChunkName: "about" */ "../views/QS-fill.vue"),
 	meta: {
 		title: '填写问卷',
-		keepAlive: false
+		keepAlive: false,
+		requireAuth: true
 	}
 },
 {
@@ -78,7 +89,7 @@ const routes = [{
 	path: '/importUser/:code',
 	name: 'importUser',
 	meta: {
-		title: '我是批量导入',
+		title: '批量导入',
 		keepAlive: true
 	},
 	component: () =>
@@ -89,10 +100,20 @@ const routes = [{
 	name: 'condition',
 	meta: {
 		title: "流程控制",
-		keepAlive: true
+		keepAlive: true,
 	},
 	component: () =>
 		import( /* webpackChunkName: "about" */ "../components/FlowControl.vue")
+},
+{
+	path: '/test',
+	name: 'test',
+	meta: {
+		title: "测试",
+		keepAlive: true
+	},
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/test.vue")
 }
 ];
 

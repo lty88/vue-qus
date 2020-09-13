@@ -1,9 +1,16 @@
 import Vue from "vue" 
-import { Button,link,row,Col,PageHeader, DatePicker, Message, MessageBox, Form,Card, FormItem,RadioGroup ,Input, Drawer, Select, option, Loading, table,pagination, Radio, Image, Upload, Progress, Switch,Popover, TableColumn,Alert,dialog,container,main,header } from 'element-ui';
+import { Button,link,row,Footer,Col,PageHeader,tabs,tooltip,dropdown,DropdownMenu,DropdownItem, DatePicker, Message, MessageBox, Form,Card, FormItem,RadioGroup ,Input, Drawer, Select, option, Loading, table,pagination, Radio, Image, Upload, Progress, Switch,Popover, TableColumn,Alert,dialog,container,main,header, TabPane } from 'element-ui';
 Vue.use(DatePicker);
 Vue.use(Drawer);
 Vue.use(Select);
+Vue.use(Footer);
 Vue.use(PageHeader);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
+Vue.use(dropdown);
+Vue.use(tabs);
+Vue.use(TabPane);
+Vue.use(tooltip);
 Vue.use(row);
 Vue.use(Col);
 Vue.use(link);
@@ -30,7 +37,7 @@ Vue.use(TableColumn);
 Vue.use(pagination);
 Vue.use(RadioGroup);
 
+// Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;
 Vue.prototype.$MessageBox = MessageBox;
-
 Vue.prototype.$confirm = MessageBox.confirm

@@ -34,3 +34,17 @@ export const DeleteQsItems = function (data) {
         params: data
     });
 };
+// 1.15、多媒体上传接口
+// 地址：/apiv1/upload
+// 参数：qnCode-问卷编号
+// 返回：json字符串
+export const uploadMedia = function (data) {
+    return request({
+        url: '/apiv1/upload',
+        data: data,
+        headers: {
+            "Content-type": "multipart/form-data"
+        },
+        method: 'POST',
+    });
+};

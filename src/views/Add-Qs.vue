@@ -1,7 +1,6 @@
 <template>
   <div class="edit-container">
     <set-drawer></set-drawer>
-   
   </div>
 </template>
 

@@ -3,7 +3,7 @@ import request from '../network/request.js';
 export const login = function (data) {
     return request({
         url: '/apiv1/login',
-        method: 'post',
+        method: 'POST',
         params: data
     });
 };
@@ -23,6 +23,18 @@ export const getAvailableQn = function (data) {
 export const userLogin = function (data) {
     return request({
         url: '/apiv1/getAnswerStatus',
+        method: 'GET',
+        params: data
+    });
+};
+// 、获取回答
+// 地址：/apiv1/getAnswer
+// 参数：qnCode-问卷编号
+//           uid-用户uid
+// 返回：json字符串
+export const getResults = function (data) {
+    return request({
+        url: '/apiv1/getAnswer',
         method: 'GET',
         params: data
     });

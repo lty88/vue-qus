@@ -1,27 +1,47 @@
 $orange: #EE7419;
 
-.header {
-  width: 100%;
+.el-header {
+  display: flex;
   height: 6rem;
   line-height: 6rem;
-  background-color: $orange;
-  position: relative;
-
-  .userName {
-    position: absolute;
-    right: 40.375rem;
-    font-size: 1.6rem;
-    color: #fff;
-    cursor: pointer;
-  }
+  // background-color: $orange;
+  background-color:#f5f5f5;
+  box-shadow: 0 0 15px 0 rgba(29, 50, 71, 0.1);
+  justify-content: space-around;
+ 
+  // position: fixed;
+  // top: 0;
+  // right: 0;
+  // width: 100%;
+  // z-index: 10;
 
   a {
-    color: #fff;
+    font-size: 16px;
+    // color: #fff;
+    color: #333;
     text-decoration: none;
+  }
+  .logout{
+    cursor: pointer;
+  }
+  .logo-box {
+    display: flex;
+    justify-content: space-around;
+    width: 500px;
+    align-items: center;
 
-    &:first-child {
-      margin-right: 5rem;
-      font-size: 2rem;
+    .logo-title {
+      margin-left: -30px;
+      
+    }
+
+    .logo-img {
+      width: 54px;
+      height: 54px;
+      margin-top: 2px;
+    }
+
+    .my-qs {
 
       &:before {
         content: '?';
@@ -30,43 +50,26 @@ $orange: #EE7419;
         height: 2.5rem;
 
         margin: {
-          left: 8rem;
-          right: 1rem;
+          right: 6px;
         }
 
         text-align: center;
         line-height: 2.5rem;
         color: $orange;
         border-radius: 1.25rem;
-        background-color: #fff;
+        background-color: rgb(95, 86, 86);
       }
     }
-
-    &:nth-of-type(2) {
-      font-size: 1.6rem;
-    }
-
-    &:nth-of-type(3) {
-      margin-left: 5rem;
-      font-size: 1.6rem;
-    }
-
   }
 }
 
 @media screen and (max-width: 640px) {
-  .header {
-    a {
-      &:first-child {
-        margin-right: 2rem;
-
-        &:before {
-          margin: {
-            left: 5rem;
-            right: 1rem;
-          }
-        }
-      }
+  .el-header {
+    .my-qs,
+    .logout,
+    .AvailableQn {
+      display: none;
     }
+
   }
 }

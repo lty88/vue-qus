@@ -1,10 +1,10 @@
 <template>
   <transition name="slide">
-    <div class="modal" v-show="showModalT">
+    <div class="modal" v-show="showModalMedia">
       <div class="mask"></div>
       <div class="modal-dialog">
         <div class="modal-header">
-          <span>文本题目</span>
+          <span>多媒体回答题型</span>
           <a href="JavaScript:;" class="icon-close" @click.self="close" @click="$emit('cancel')">x</a>
         </div>
         <div class="modal-body">
@@ -39,37 +39,6 @@
                   <template slot="prepend">题目序号:</template>
                 </el-input>
               </el-form-item>
-              <!-- 
-              <el-form-item>
-                <el-popover
-                  class="btn-vido"
-                  placement="top-start"
-                  width="200"
-                  trigger="hover"
-                  content="这是切换为多媒体的题目"
-                >
-                  <el-button slot="reference" @click="changeVido">多媒体题目</el-button>
-                </el-popover>
-
-                <el-popover
-                  class="btn-vido"
-                  placement="top-start"
-                  width="200"
-                  trigger="hover"
-                  content="这是切换为多媒体的题目"
-                >
-                  <el-button slot="reference" @click="addVido">上传多媒体</el-button>
-                </el-popover>
-              </el-form-item>-->
-
-              <!-- 上传图片视频 -->
-
-              <!-- <el-form-item v-if="showVido" label="多媒体链接" prop="url">
-                            <el-input v-model="formDataT.url "></el-input>
-                            <el-select v-model="formDataT.Types" placeholder="选择类型" class="select-type" prop="Types">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                            </el-select>
-              </el-form-item>-->
               <el-form-item>
                 <el-popover
                   class="btn-vido"
@@ -143,7 +112,7 @@ export default {
   watch: {
     showModal(newVal) {
       console.log(newVal);
-      this.showModalT = newVal;
+      this.showModalMedia = newVal;
     },
     types(newVal) {
       this.formDataT.type = this.types;
@@ -178,7 +147,7 @@ export default {
       fileList: [],
       showVido: false,
       showAddVido: false,
-      showModalT: false,
+      showModalMedia: false,
       formDataT: {
         title: "", //题号
         content: "", //题目
@@ -208,10 +177,6 @@ export default {
       this.$refs[formName].resetFields();
       this.creatGroup = false;
     },
-    //删除文件
-    handleChange(file, fileList) {
-      this.fileList = fileList.slice(-3);
-    },
     //新增多媒体题目
     changeVido() {
       this.showVido = !this.showVido;
@@ -231,7 +196,7 @@ export default {
             content: this.formDataT.content,
             type: this.formDataT.Types,
             url: this.formDataT.url,
-            answerType: 2 //在radio组件里面
+            answerType: 5 //在radio组件里面
           };
           console.log(obj);
           UpdateQsInfo(obj).then(res => {
@@ -248,7 +213,7 @@ export default {
         }
         this.resetForm(formName);
         this.showVido = false;
-        this.$emit("showModalT", this.showModalT);
+        this.$emit("showModalMedia", this.showModalMedia);
       });
     }
   }

@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <div class="form">
                     <el-form :model="formData" ref="formData" label-width="100px" class="demo-dynamic">
-                        {{formData}}
+                        <!-- {{formData}} -->
                         <el-form-item prop="content" label="题目" :rules="[{ required: true, message: '题目不能为空', trigger: 'blur' }]">
                             <el-input v-model="formData.content"></el-input>
                         </el-form-item>
@@ -44,10 +44,6 @@
                             </el-form-item>
                         </el-form-item>
 
-                        <el-upload v-if="showAddVido" class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange">
-                            <el-button size="small" type="primary">点击上传</el-button>
-                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                        </el-upload>
                         <!-- 选项内容radio跟CheckBox的选项内容的修改 -->
 
                         <div v-if="formData.answerType===0||formData.answerType===1">
@@ -66,8 +62,8 @@
                                         <template slot="prepend">选项序号:</template>
                                     </el-input>
                                 </el-form-item>
-                                <el-form-item :prop="'items.' + index + '.point'" :rules="[{ required: true, message: '选项号不能为空', trigger: 'blur' }]">
-                                    <el-input placeholder="需要流程控制请输入分值" type="number" oninput="if(value.length>2)value=value.slice(0,2)" v-model="option.point">
+                                <el-form-item :prop="'items.' + index + '.point'">
+                                    <el-input placeholder="需要流程控制请输入分值" type="number" oninput="if(value.length>2)value=value.slice(0,2)" :min="0" v-model="option.point">
                                         <template slot="prepend">分值:</template>
                                     </el-input>
                                 </el-form-item>
@@ -120,9 +116,9 @@ export default {
             default: function () {
                 return {};
             }
-        }
+        },
     },
-    mounted() {},
+
     data() {
         return {
             // value: "文本",
@@ -146,7 +142,8 @@ export default {
             ],
             showVido: false,
             showAddVido: false,
-            code: 1
+            code: 1,
+            editFormData: this.formData
             // editFormData: {
             //     title: "", //题号
             //     type: "0",
@@ -179,14 +176,12 @@ export default {
             // }
         };
     },
+    
     mounted() {
+        console.log(this.point());
         this.code = this.$route.params.code;
         console.log(this.code);
-    },
-    computed: {
-        EditShowModals() {
-            return this.showModal;
-        }
+      
     },
     methods: {
         //   处理题目类型
@@ -204,7 +199,20 @@ export default {
             return msg;
         },
         //新增多媒体题目
+        point() {
 
+            console.log(this.editFormData);
+            // this.formData.forEach(q => {
+            //     console.log(q);
+            //     // if (this.formData.items.length != 0) {
+            //     //     this.formData.items.forEach(item => {
+            //     //         p = (item.point) / 100
+            //     //     })
+            //     //     console.log(p);
+            //     // }
+            // })
+
+        },
         changeVido() {
             this.showVido = !this.showVido;
         },

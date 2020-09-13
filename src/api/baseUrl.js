@@ -1,0 +1,1 @@
+export const baseUrl = 'http://192.168.1.173:8081/fill/' //主要用于erweima.vue组件解析二维码

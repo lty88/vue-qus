@@ -11,7 +11,7 @@
                 <div class="form">
                     <el-form :model="formDataJz" ref="formDataJz" label-width="100px" class="demo-dynamic">
                         <!-- 矩阵题目标题 -->
-
+                        <!-- {{formDataJz}} -->
                         <el-form-item prop="title" label="题目标题" :rules="[{ required: true, message: '题目题目不能为空', trigger: 'blur' }]">
                             <el-input v-model="formDataJz.content"></el-input>
                             <el-input placeholder="请输入题号" v-model="formDataJz.title">
@@ -30,7 +30,7 @@
                             </el-popover>
                         </el-form-item>
                         <!-- 上传图片视频 -->
-                        <el-form-item v-show="showVido" prop="titleUrl" label="多媒体链接">
+                        <el-form-item v-if="showVido" prop="titleUrl" label="多媒体链接">
                             <el-input v-model="formDataJz.url"></el-input>
                             <el-form-item label="选择类型" style="margin-top:20px ;">
                                 <el-radio v-model="formDataJz.type" :label="0" border size="medium">文本</el-radio>
@@ -39,11 +39,6 @@
                                 <el-radio v-model="formDataJz.type" :label="3" border size="medium">视频</el-radio>
                             </el-form-item>
                         </el-form-item>
-
-                        <el-upload v-if="showAddVido" class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange">
-                            <el-button size="small" type="primary">点击上传</el-button>
-                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                        </el-upload>
 
                         <!-- 矩阵行标题 -->
                         <div class="title-box">
@@ -75,12 +70,12 @@
                                             </el-input>
                                         </el-form-item>
                                         <el-form-item :prop="'items.' + Rowindex + '.order'" :rules="[{ required: true, message: '题目序号不能为空', trigger: 'blur' }]">
-                                            <el-input placeholder="请输入选项序号" v-model="Rowoption.order" type="number" oninput="if(value.length>2)value=value.slice(0,2)" min="0">
+                                            <el-input placeholder="请输入选项序号" v-model="Rowoption.order" type="number" oninput="if(value.length>2)value=value.slice(0,2)" :min="0">
                                                 <template slot="prepend">选项序号:</template>
                                             </el-input>
                                         </el-form-item>
-                                        <el-form-item :prop="'items.' + Rowindex + '.point'" :rules="[{ required: true, message: '选项内容不能为空', trigger: 'blur' }]">
-                                            <el-input placeholder="需要流程控制请输入分值" type="number" v-model="Rowoption.point">
+                                        <el-form-item :prop="'items.' + Rowindex + '.point'">
+                                            <el-input placeholder="需要流程控制请输入分值" type="number"  :min="0" v-model="Rowoption.point">
                                                 <template slot="prepend">分值:</template>
                                             </el-input>
                                         </el-form-item>
@@ -121,6 +116,7 @@
 </template>
 
 <script>
+// import UploadVido from '@/components/UploadVido'
 import {
     UpdateQsInfo
 } from "../api/QS-edit";
@@ -135,9 +131,12 @@ export default {
             default: function () {
                 return {};
             }
-        }
+        },
+
     },
-    mounted() {},
+    components: {
+        
+    },
     data() {
         return {
             dataList: this.editQsList,
@@ -217,6 +216,8 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
+                    let subTitles = JSON.stringify(this.formDataJz.subTitles)
+                    let item = JSON.stringify(this.formDataJz.items)
                     let obj = {
                         qnCode: this.code,
                         code: this.formDataJz.code,
@@ -225,8 +226,8 @@ export default {
                         content: this.formDataJz.content,
                         type: this.formDataJz.type,
                         url: this.formDataJz.url,
-                        subTitles: JSON.stringify(this.formDataJz.subTitles),
-                        items: JSON.stringify(this.formDataJz.items)
+                        subTitles,
+                        item
                     };
                     console.log(obj);
                     UpdateQsInfo(obj).then(res => {

@@ -2,96 +2,37 @@ $orange: #ee7419;
 $lightorange: #fcf0e5;
 $green: #9fef96;
 
+
 .qs-list {
-  max-width: 120rem;
+  flex: 1;
+  max-width: 140rem;
   margin: 50px auto;
   color: #666;
   font-size: 1.6rem;
   background-color: #fff !important;
   border-radius: .4rem;
   box-shadow: 0 0 1rem #aaa;
+  margin-top: 30px;
 
-  #list-item {
-    &:hover {
-      background-color: $lightorange !important;
-    }
+  .addqs {
+    position: relative;
+    top: 15px;
+    float: right;
+    margin-right: 3rem;
+    margin-bottom: 20px;
+    text-align: center;
   }
 
-  ul {
-    height: 6rem;
-    border-top: 1px solid #e5e5e5;
-    list-style: none;
-    line-height: 6rem;
-    font-size: 16px;
 
-    margin: {
-      left: 2rem;
-      right: 2rem;
+  .erweima {
+    cursor: pointer;
+    margin-left: 10px;
+    border: none;
+
+    .icon-erweima {
+      color: #1296db;
     }
 
-
-
-    &:nth-of-type(1) {
-      padding: {
-        left: 3rem;
-        right: 2rem;
-      }
-
-      margin: 0;
-    }
-
-    li {
-      display: inline-block;
-      text-align: center;
-
-      &:nth-of-type(1) {
-        width: 30rem;
-        box-sizing: border-box;
-        vertical-align: middle;
-        text-overflow: ellipsis;
-        overflow-x: hidden;
-        white-space: nowrap;
-        text-align: left;
-
-      }
-
-      &:nth-of-type(2) {
-        width: 18rem;
-      }
-
-      &:nth-of-type(3) {
-        width: 18rem;
-      }
-
-      &:nth-of-type(4) {
-        width: 10rem;
-      }
-
-      &:nth-of-type(5) {
-        width: 35.5rem;
-        text-align: left;
-
-
-        span {
-          display: inline-block;
-          height: 2.5rem;
-          width: 9.5rem;
-          margin-left: 15rem;
-          line-height: 2.5rem;
-          font-size: 1.4rem;
-          text-align: center;
-          color: #fff;
-          border: 1px solid $orange;
-          border-radius: .3rem;
-          background-color: $orange;
-          cursor: pointer;
-
-          &:hover {
-            box-shadow: 0 0 5px $orange;
-          }
-        }
-      }
-    }
   }
 
   .inissue {
@@ -100,27 +41,6 @@ $green: #9fef96;
 
   .noissue {
     color: #ccc;
-  }
-
-  button {
-    width: 7rem;
-    height: 2.5rem;
-
-    padding: {
-      top: .3rem;
-      bottom: .3rem;
-    }
-
-    line-height: 100%;
-    color: #777;
-    border: 1px solid #555;
-    border-radius: .2rem;
-    background-color: #fff;
-    cursor: pointer;
-
-    &:hover {
-      box-shadow: 0 0 5px #bbb;
-    }
   }
 
   .list-bottom {
