@@ -4,14 +4,8 @@
     :style="{backgroundImage: 'url(' + coverImgUrl + ')', backgroundSize:'contain',backgroundPosition:'center',backgroundRepeat:'no-repeat'}"
   >
     <el-header>
-      <!-- <div class="goback">
-        <el-page-header @click.native="goBack"></el-page-header>
-      </div>-->
-      <!-- <span></span> -->
       <el-button class="viewResults el-icon-back" @click.native="goBack" type="text">返回</el-button>
-      <!-- <el-button class="viewResults" @click="viewResults" type="text">查看已回答结果</el-button> -->
     </el-header>
-
     <!--渲染数据-->
     <el-main class="content">
       <h1 class="title">{{qsTitle}}</h1>
@@ -56,7 +50,6 @@
             <!-- 多媒体回答题型 -->
             <div v-if="qs.answerType === 5">
               <upload-ipt v-model="qs.answer"></upload-ipt>
-              
             </div>
             <!-- 矩阵题-->
             <v-matrix-radio v-if="qs.answerType==3" :qustion="qs" v-model="qs.answer"></v-matrix-radio>
@@ -80,6 +73,7 @@
       </modal-tips>
       <el-button type="primary" class="submit" style="with:100%" plain @click="next">提交</el-button>
     </el-main>
+    <user-login :show="showLogin" @close="showLogin=false" :qnCode="restCode"></user-login>
   </el-container>
 </template>
 
@@ -88,7 +82,8 @@ import vidoPlayer from "@/components/vido";
 import ModalTips from "@/components/ModalTips";
 import vMatrixRadio from "@/components/v-matrix-radio";
 import vMatrixCkb from "@/components/v-matrix-ckb";
-import UploadIpt from '@/components/UploadIpt'
+import UploadIpt from "@/components/UploadIpt";
+import UserLogin from "@/components/UserLogin";
 import { GetQuestionInfo } from "../api/QS-edit";
 import { getList } from "../api/QS-list";
 import { getAvailableQn, getResults } from "../api/user";
@@ -101,7 +96,8 @@ export default {
     vidoPlayer,
     vMatrixRadio,
     vMatrixCkb,
-    UploadIpt
+    UploadIpt,
+    UserLogin
   },
   data() {
     return {
@@ -123,7 +119,9 @@ export default {
       code: "",
       info: "",
       uid: "",
-      flag: false
+      flag: false,
+      showLogin:false,
+      restCode:''
     };
   },
   // beforeRouteLeave(to, from, next) {
@@ -133,6 +131,25 @@ export default {
   //     next("aa");
   //   }
   // },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if(!window.sessionStorage.uid){
+      if (to.name == "fill") {
+        console.log(to.params.code);
+        getAvailableQn({
+          code: to.params.code
+        }).then(res => {
+          console.log(res);
+          let type = res.data.obj[5].type;
+          if (type == 1) {
+            vm.showLogin = true;
+            vm.restCode=to.params.code
+          }
+        });
+      }
+       }
+    });
+  },
   created() {
     let _this = this;
     _this.code = _this.$route.params.code;
@@ -499,6 +516,7 @@ export default {
 <style lang="scss" scoped>
 .el-header {
   width: 100%;
+  height: 45px !important;
   display: flex !important;
   justify-content: space-between;
   border-bottom: 0.2rem solid #ccc !important;

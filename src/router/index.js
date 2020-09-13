@@ -117,6 +117,10 @@ const routes = [{
 }
 ];
 
+const originalPush = VueRouter.prototype.push
+   VueRouter.prototype.push = function push(location) {
+   return originalPush.call(this, location).catch(err => err)
+}
 /* 路由异常错误处理，尝试解析一个异步组件时发生错误，重新渲染目标页面 */
 // router.onError((error) => {
 // 	const pattern = /Loading chunk (\d)+ failed/g;

@@ -64,6 +64,7 @@ export default {
   },
   methods: {
     fillQs(item) {
+      console.log(item);
       if (item.type == 2) {
         this.$router.push({
           name: "fill",
@@ -71,8 +72,8 @@ export default {
             code: item.code
           }
         });
-      }
-      if (item.type == 1) {
+      } else {
+        //type为1=》指定性问卷 需要登录
         this.code = item.code;
         this.showLogin = true;
       }
@@ -83,7 +84,7 @@ export default {
 
 <style lang="scss" scoped>
 .AvailableQn {
-//   background: url(../assets/img/bgc.jpg) fixed repeat;
+  //   background: url(../assets/img/bgc.jpg) fixed repeat;
 }
 .el-main {
   display: flex;
@@ -92,7 +93,7 @@ export default {
   color: #333;
   padding: 0;
   margin-top: 3z0px;
-//   background-color: #909399;
+  //   background-color: #909399;
 
   @media screen and (min-width: 768px) {
     padding: 2rem;

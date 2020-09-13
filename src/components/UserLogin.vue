@@ -5,7 +5,7 @@
       <div class="modal-dialog">
         <div class="modal-header">
           <span>登录</span>
-          <a href="JavaScript:;" class="icon-close" @click.self="close" @click="$emit('cancel')">x</a>
+          <!-- <a href="JavaScript:;" class="icon-close" @click.self="close" @click="$emit('cancel')">x</a> -->
         </div>
         <div class="modal-body">
           <section class="form">
@@ -114,9 +114,11 @@ export default {
             });
           } else {
             this.$message({
+              type:"success",
               message: "登录成功！",
               duration: 2000
             });
+            this.NewShow=false
             const uid = res.data.obj.uid;
             window.sessionStorage.setItem("uid", uid);
             this.$router.push({
