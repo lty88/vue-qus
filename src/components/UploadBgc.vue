@@ -3,21 +3,16 @@
     <div class="upload">
       <el-form ref="form" label-width="80px">
         <div class="upload" style="margin:0 0 10px">
-          <el-button type="primary" plain>
-            <el-upload
-              class="upload-demo"
-              action
-              :limit="1"
-              :file-list="formFileList"
-              :http-request="handleUploadForm"
-              :before-upload="beforeUploadForm"
-              accept=".jpg, .jpeg, .png, .JPG, .JPEG"
-            >
-              <el-button type="primary">
-                <slot name="title"></slot>
-              </el-button>
-            </el-upload>
-          </el-button>
+          <el-upload
+            class="upload-demo"
+            action
+            :file-list="formFileList"
+            :http-request="handleUploadForm"
+            :before-upload="beforeUploadForm"
+            accept=".jpg, .jpeg, .png, .JPG, .JPEG"
+          >
+            <el-button type="primary" plain>上传背景图片</el-button>
+          </el-upload>
         </div>
       </el-form>
     </div>
@@ -28,31 +23,26 @@
 import { uploadMedia } from "../api/QS-edit";
 
 export default {
-    props:{
-        qnCode:{
-            type:String,
-            default:()=>{
-                ''
-            }
-        }
+  props: {
+    qnCode: {
+      type: String,
+      default: ""
     },
+  },
   name: "importUser",
   data() {
     return {
       headersObj: {
         Authorization: window.sessionStorage.getItem("token")
       }, //携带的请求头
-      code: '', //问卷code
+      url: "",
+      code: "", //问卷code
       formMaxSize: 10, // 上传文件大小
       formFileList: [], // 显示上传文件
       uploadFormFileList: [], // 确定上传文件
-      uploadUrl: "这是上传过后的地址，不能做修改", //服务器返回的地址
+      uploadUrl: "" //服务器返回的地址
     };
   },
-  created() {
-      console.log(this.qnCode);
-  },
-  mounted() {},
   methods: {
     // 开始上传前验证
     beforeUploadForm(file) {
@@ -79,7 +69,7 @@ export default {
         testmsg === "jpeg" ||
         testmsg === "png" ||
         testmsg === "JPGng" ||
-        testmsg === "png" ;
+        testmsg === "png";
       if (!extension) {
         this.$message({
           message: "上传文件只能是视频音频图片!",
@@ -102,11 +92,10 @@ export default {
       });
       uploadMedia(formData).then(res => {
         console.log(res);
-        // this.$emit('uploadUrl',"https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1089874897,1268118658&fm=26&gp=0.jpg")
         if (res.data.code === 200) {
-          _this.uploadUrl = res.data.obj.filepath;
           _this.$message.success("上传文件成功，" + res.data.msg);
-          this.$emit("uploadUrl", res.data.obj.filepath);
+          _this.uploadUrl = res.data.obj.filepath;
+          this.$emit("changeUrl", _this.uploadUrl);
           loading.close();
         } else {
           _this.$message.warning("上传文件失败，");
@@ -120,6 +109,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/import-user.scss";
+.hidIpt {
+  opacity: 0;
+}
 
 /deep/ .el-select .select-type {
   width: 50% !important;
@@ -127,6 +119,7 @@ export default {
 
 .el-input {
   width: 80% !important;
+  height: 50% !important;
 }
 
 .el-input-group__prepend {

@@ -135,24 +135,6 @@
                     ></el-option>
                   </el-select>
                 </el-form-item>
-
-                <!-- <el-form-item :prop="'options.' + index + '.url'">
-                  <el-input placeholder="请输入链接" v-model="option.url" class="input-with-select">
-                    <el-select
-                      v-model="option.type"
-                      slot="prepend"
-                      placeholder="请选择类型"
-                      class="select-type"
-                    >
-                      <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select>
-                  </el-input>
-                </el-form-item>-->
               </div>
               <el-form-item class="modal-footer">
                 <el-button type="primary" @click="submitForm('formData')">提交</el-button>

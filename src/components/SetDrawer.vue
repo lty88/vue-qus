@@ -52,11 +52,7 @@
           </el-form-item>
           <el-form-item label="自定义背景图片" label-width="150px">
             <el-input v-model="form.bgUrl" autocomplete="off"></el-input>
-            <upload-img @uploadUrl="handlUploadUrl" :qnCode="code">
-              <template v-slot:title>
-                <span>上传图片</span>
-              </template>
-            </upload-img>
+            <upload-bgc @changeUrl="handlUploadUrl" :qnCode="code"></upload-bgc>
           </el-form-item>
           <el-form-item label="问卷描述" class="desc">
             <el-input
@@ -86,13 +82,13 @@
 </template>
 
 <script>
-import UploadImg from "@/components/UploadImg";
+import UploadBgc from "@/components/UploadBgc";
 import { getList } from "../api/QS-list";
 import { UpdateQsSetting } from "../api/QS-edit";
 export default {
   props: {},
   name: "Drawer",
-  components: { UploadImg },
+  components: { UploadBgc },
   data() {
     return {
       pickerOptions: {
@@ -222,7 +218,8 @@ export default {
         .catch(_ => {});
     },
     handlUploadUrl(e) {
-      this.form.url = e;
+      console.log(e);
+      this.form.bgUrl = e;
     },
     cancelForm() {
       this.loading = false;

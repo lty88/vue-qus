@@ -104,7 +104,6 @@ router.beforeEach((to, from, next) => {
   // }
   // 获取 JWT Token
   if (window.sessionStorage.getItem('token')) {
-    debugger
     next();
   } else {
     if (to.name === 'login' || to.name === 'AvailableQn' || to.name === 'fill' || to.name === 'viewResults') {

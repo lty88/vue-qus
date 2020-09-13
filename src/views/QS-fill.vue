@@ -55,7 +55,8 @@
             <textarea v-if="qs.answerType === 2" v-model="qs.answer"></textarea>
             <!-- 多媒体回答题型 -->
             <div v-if="qs.answerType === 5">
-              <upload-fill v-model="qs.answer"></upload-fill>
+              <upload-ipt v-model="qs.answer"></upload-ipt>
+              
             </div>
             <!-- 矩阵题-->
             <v-matrix-radio v-if="qs.answerType==3" :qustion="qs" v-model="qs.answer"></v-matrix-radio>
@@ -87,7 +88,7 @@ import vidoPlayer from "@/components/vido";
 import ModalTips from "@/components/ModalTips";
 import vMatrixRadio from "@/components/v-matrix-radio";
 import vMatrixCkb from "@/components/v-matrix-ckb";
-import UploadFill from "@/components/UploadFill";
+import UploadIpt from '@/components/UploadIpt'
 import { GetQuestionInfo } from "../api/QS-edit";
 import { getList } from "../api/QS-list";
 import { getAvailableQn, getResults } from "../api/user";
@@ -100,7 +101,7 @@ export default {
     vidoPlayer,
     vMatrixRadio,
     vMatrixCkb,
-    UploadFill
+    UploadIpt
   },
   data() {
     return {
@@ -144,7 +145,7 @@ export default {
       // if (bgUrl) {
       //   this.coverImgUrl =bgUrl
       // }
-       this.coverImgUrl =res.data.obj[0].bgUrl
+      this.coverImgUrl = res.data.obj[0].bgUrl;
       this.qsTitle = res.data.obj[0].title;
       _this.conditionList = res.data.obj;
       _this.condition = res.data.obj[0].condition;
