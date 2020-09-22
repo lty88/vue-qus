@@ -1,33 +1,33 @@
-$orange: #ee7419;
+$orange     : #ee7419;
 $lightorange: #fcf0e5;
-$green: #9fef96;
+$green      : #9fef96;
 
 
 .qs-list {
-  flex: 1;
-  max-width: 140rem;
-  margin: 50px auto;
-  color: #666;
-  font-size: 1.6rem;
+  flex            : 1;
+  max-width       : 140rem;
+  margin          : 50px auto;
+  color           : #666;
+  font-size       : 1.6rem;
   background-color: #fff !important;
-  border-radius: .4rem;
-  box-shadow: 0 0 1rem #aaa;
-  margin-top: 30px;
+  border-radius   : .4rem;
+  box-shadow      : 0 0 1rem #aaa;
+  margin-top      : 30px;
 
   .addqs {
-    position: relative;
-    top: 15px;
-    float: right;
-    margin-right: 3rem;
+    position     : relative;
+    top          : 15px;
+    float        : right;
+    margin-right : 3rem;
     margin-bottom: 20px;
-    text-align: center;
+    text-align   : center;
   }
 
 
   .erweima {
-    cursor: pointer;
+    cursor     : pointer;
     margin-left: 10px;
-    border: none;
+    border     : none;
 
     .icon-erweima {
       color: #1296db;
@@ -44,15 +44,15 @@ $green: #9fef96;
   }
 
   .list-bottom {
-    box-sizing: border-box;
-    height: 8rem;
-    margin: 0 2rem;
-    padding: 2rem 0;
+    box-sizing      : border-box;
+    height          : 8rem;
+    margin          : 0 2rem;
+    padding         : 2rem 0;
     background-color: #fff;
 
     label {
       margin: {
-        left: 1.8rem;
+        left : 1.8rem;
         right: 4rem;
       }
 
@@ -63,22 +63,22 @@ $green: #9fef96;
   }
 
   .shadow {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+    position  : fixed;
+    left      : 0;
+    top       : 0;
+    width     : 100%;
+    height    : 100%;
     background: rgba(85, 85, 85, .7);
 
     .del-dialog {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 40rem;
-      height: 20rem;
-      transform: translateX(-50%) translateY(-50%);
-      border-radius: .5rem;
-      box-shadow: 0 0 5px #555;
+      position        : absolute;
+      left            : 50%;
+      top             : 50%;
+      width           : 40rem;
+      height          : 20rem;
+      transform       : translateX(-50%) translateY(-50%);
+      border-radius   : .5rem;
+      box-shadow      : 0 0 5px #555;
       background-color: #fff;
     }
 
@@ -86,12 +86,12 @@ $green: #9fef96;
       height: 5rem;
 
       padding: {
-        left: 3rem;
+        left : 3rem;
         right: 3rem;
       }
 
-      line-height: 5rem;
-      border-radius: .5rem;
+      line-height     : 5rem;
+      border-radius   : .5rem;
       background-color: #f7f7f7;
 
       span:nth-of-type(1) {
@@ -100,9 +100,9 @@ $green: #9fef96;
 
       .close-btn {
         position: absolute;
-        right: 3rem;
-        color: #bbb;
-        cursor: pointer;
+        right   : 3rem;
+        color   : #bbb;
+        cursor  : pointer;
 
         &:hover {
           color: $orange;
@@ -111,23 +111,23 @@ $green: #9fef96;
     }
 
     .del-dialog p {
-      margin-top: 3rem;
+      margin-top : 3rem;
       margin-left: 3rem;
     }
 
     .btn-box {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 6rem;
-      text-align: center;
+      position   : absolute;
+      bottom     : 0;
+      width      : 100%;
+      height     : 6rem;
+      text-align : center;
       line-height: 6rem;
 
       .yes {
-        margin-right: 1rem;
-        color: #fff;
+        margin-right    : 1rem;
+        color           : #fff;
         background-color: $orange;
-        border: 1px solid $orange;
+        border          : 1px solid $orange;
 
         &:hover {
           box-shadow: 0 0 5px $orange;
@@ -137,27 +137,27 @@ $green: #9fef96;
   }
 
   .add-qs {
-    width: 100rem;
-    height: 30rem;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 30rem;
-    text-align: center;
-    border-radius: .5rem;
-    box-shadow: 1px 1px 4px #aaa;
+    width           : 100rem;
+    height          : 30rem;
+    margin-left     : auto;
+    margin-right    : auto;
+    line-height     : 30rem;
+    text-align      : center;
+    border-radius   : .5rem;
+    box-shadow      : 1px 1px 4px #aaa;
     background-color: #fff;
 
     .add-btn {
-      width: 20rem;
-      height: 5rem;
-      color: #fff;
-      font-size: 2rem;
-      border: 1px solid $orange;
+      width           : 20rem;
+      height          : 5rem;
+      color           : #fff;
+      font-size       : 2rem;
+      border          : 1px solid $orange;
       background-color: $orange;
 
       &:hover {
         background-color: #ff7f1f;
-        box-shadow: 0 0 5px $orange;
+        box-shadow      : 0 0 5px $orange;
       }
     }
   }

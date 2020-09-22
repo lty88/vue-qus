@@ -15,12 +15,31 @@ $lightorange: #fcf0e5;
         color: #1ea0fa;
         font-weight: bold;
         text-align: center;
+        font-weight: 500px;
+        max-width: 400px;
+        font-size: 18px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+
     }
 
     .btn {
         display: flex;
         justify-content: space-around;
         align-items: center;
+
+        .Dowlaod-template {
+            a {
+                text-decoration: none;
+                color: #409eff !important;
+                padding: 10px;
+                &:hover {
+                    color: #FFF !important;
+                }
+            }
+
+        }
     }
 
     .table {

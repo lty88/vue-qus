@@ -7,17 +7,12 @@
         </el-button>
       </div>
       <div class="title">
-        <h2>{{qsTitle+"参与人员"}}</h2>
+        <span>{{qsTitle+"参与人员表"}}</span>
       </div>
       <div class="Dowlaod-template">
         <el-button type="primary" plain>
           <i style="font-size:20px" class="el-icon-s-promotion"></i>
-          <a
-            style="color:blue;font-style:none"
-            :href="`${publicPath}Template/user.xlsx`"
-            target="_blank"
-            download="模板.xls"
-          >下载模板</a>
+          <a :href="`${publicPath}Template/user.xlsx`" target="_blank" download="模板.xls">下载模板</a>
         </el-button>
       </div>
       <div class="upload">
@@ -30,7 +25,7 @@
           :before-upload="beforeUploadForm"
           accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
         >
-          <el-button type="primary" plain>
+          <el-button type="primary" @click="alert" plain>
             <i style="font-size:20px" class="el-icon-upload"></i> 批量导入文件
           </el-button>
         </el-upload>
@@ -102,6 +97,18 @@ export default {
     this.fetchUserList();
   },
   methods: {
+    alert() {
+      const h = this.$createElement;
+      this.$notify({
+        title: "提示",
+        offset: 200,
+        message: h(
+          "i",
+          { style: "color: teal" },
+          "上传新的人员表时请将目前已有的全部人员删除"
+        )
+      });
+    },
     //删除单个
     handleDelete(index, row) {
       let _this = this;
@@ -254,15 +261,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-a{
-  color: #409EFF;
-  list-style: none !important;
-  text-decoration: none;
-}
 @import "../style/import-user.scss";
 
 .el-table .warning-row {
   background: oldlace !important;
+}
+a {
+  color: #409eff;
+  list-style: none !important;
+  text-decoration: none;
 }
 
 .el-table .success-row {

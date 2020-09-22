@@ -1,0 +1,42 @@
+.form {
+    margin: 0 auto !important;
+}
+
+.upload-demo {
+    width : 614px;
+    border: 1px solid;
+    margin: 20px auto;
+}
+
+.el-input {
+    width: 80% !important;
+}
+
+.select-type {
+    width: 110px !important;
+}
+
+.selecte-op {
+    position: absolute;
+    left    : 645px;
+    top     : 0px;
+}
+
+.el-input-group__prepend {
+    .el-select {
+        display: block;
+        width  : 120px !important;
+    }
+}
+
+/deep/ .el-upload-list__item,
+.is-ready {
+    width: 60% !important;
+}
+
+.el-form-item__content {
+    margin: 0 !important;
+}
+.btn-vido {
+    margin-right: 30px;
+  }

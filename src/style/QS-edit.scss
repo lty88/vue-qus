@@ -1,24 +1,24 @@
-$orange: #ee7419;
+$orange     : #ee7419;
 $lightorange: #fcf0e5;
 
 .edit-container {
-  max-width: 110rem;
-  margin: 5rem auto;
-  padding: 5rem;
-  color: #666;
+  max-width       : 110rem;
+  margin          : 5rem auto;
+  padding         : 5rem;
+  color           : #666;
   background-color: #fff;
-  border-radius: .4rem;
-  box-shadow: 0 0 1rem #aaa;
-  margin-top: 30px;
+  border-radius   : .4rem;
+  box-shadow      : 0 0 1rem #aaa;
+  margin-top      : 30px;
 
   h2 {
-    height: 6rem;
+    height       : 6rem;
     margin-bottom: 3rem;
-    line-height: 6rem;
-    text-align: center;
-    font-size: 2rem;
-    color: #555;
-    cursor: pointer;
+    line-height  : 6rem;
+    text-align   : center;
+    font-size    : 2rem;
+    color        : #555;
+    cursor       : pointer;
 
     &:hover {
       background-color: $lightorange;
@@ -26,12 +26,12 @@ $lightorange: #fcf0e5;
   }
 
   input[name="qsTitle"] {
-    height: 6rem;
-    width: 100%;
-    margin-bottom: 3rem;
-    font-size: 2rem;
-    text-align: center;
-    border: 1px solid #ccc;
+    height          : 6rem;
+    width           : 100%;
+    margin-bottom   : 3rem;
+    font-size       : 2rem;
+    text-align      : center;
+    border          : 1px solid #ccc;
     background-color: #ccc;
   }
 
@@ -39,18 +39,18 @@ $lightorange: #fcf0e5;
     padding: 3rem;
 
     border: {
-      top: .2rem solid #ccc;
+      top   : .2rem solid #ccc;
       bottom: .2rem solid #ccc;
     }
   }
 
   .questions {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    display        : flex;
+    flex-direction : row;
+    flex-wrap      : nowrap;
     justify-content: space-between;
-    padding: 1.5rem 2rem;
-    margin-bottom: 2rem;
+    padding        : 1.5rem 2rem;
+    margin-bottom  : 2rem;
 
     &:hover {
       background-color: $lightorange;
@@ -58,27 +58,27 @@ $lightorange: #fcf0e5;
 
     p {
       margin: {
-        top: 1.5rem;
+        top   : 1.5rem;
         bottom: 1.5rem;
       }
     }
 
     textarea {
-      width: 35rem;
-      height: 15rem;
+      width      : 35rem;
+      height     : 15rem;
       margin-left: 2.5rem;
     }
 
     .qs-title {
-      font-size: 1.6rem;
+      font-size  : 1.6rem;
       font-weight: 700;
-      color: #333;
+      color      : #333;
     }
 
 
 
     .titleImg {
-      width: 80%;
+      width : 80%;
       height: 80%;
 
     }
@@ -87,7 +87,7 @@ $lightorange: #fcf0e5;
       margin-left: 3px;
       line-height: 30px;
       // border: solid 1px salmon;
-      font-size: 16px;
+      font-size  : 16px;
     }
 
 
@@ -99,14 +99,14 @@ $lightorange: #fcf0e5;
     }
 
     .qs-right {
-      display: flex;
-      flex-direction: column;
+      display        : flex;
+      flex-direction : column;
       justify-content: space-between;
-      width: 20rem;
+      width          : 20rem;
 
       label {
         margin: {
-          top: 2rem;
+          top   : 2rem;
           bottom: 2rem;
         }
       }
@@ -130,64 +130,64 @@ $lightorange: #fcf0e5;
   }
 
   .add-option {
-    height: 8rem;
+    height     : 8rem;
     line-height: 8rem;
-    text-align: center;
+    text-align : center;
 
     button {
-      height: 3rem;
-      width: 8rem;
+      height     : 3rem;
+      width      : 8rem;
       margin-left: 4rem;
-      cursor: pointer;
+      cursor     : pointer;
 
     }
   }
 
   .add-item {
-    height: 8rem;
-    line-height: 8rem;
-    text-align: center;
+    height          : 8rem;
+    line-height     : 8rem;
+    text-align      : center;
     background-color: #eee;
-    cursor: pointer;
+    cursor          : pointer;
 
     >span {
       font-size: 1.6rem;
 
       i {
-        margin: 5px;
+        margin        : 5px;
         vertical-align: middle;
       }
     }
   }
 
   footer {
-    position: relative;
-    height: 6rem;
-    margin-top: 3rem;
+    position   : relative;
+    height     : 6rem;
+    margin-top : 3rem;
     line-height: 6rem;
 
     .btn-box {
       position: absolute;
-      right: 2rem;
-      display: inline-block;
+      right   : 2rem;
+      display : inline-block;
     }
 
     .save,
     .issue {
-      width: 10rem;
+      width : 10rem;
       height: 3rem;
 
       padding: {
-        top: .3rem;
+        top   : .3rem;
         bottom: .3rem;
       }
 
-      line-height: 100%;
-      color: #777;
-      border: .1rem solid #aaa;
-      border-radius: .2rem;
+      line-height     : 100%;
+      color           : #777;
+      border          : .1rem solid #aaa;
+      border-radius   : .2rem;
       background-color: #fff;
-      cursor: pointer;
+      cursor          : pointer;
     }
 
     .save:hover {
@@ -195,9 +195,9 @@ $lightorange: #fcf0e5;
     }
 
     .issue {
-      margin-left: 4rem;
-      color: #fff;
-      border: .1rem solid $orange;
+      margin-left     : 4rem;
+      color           : #fff;
+      border          : .1rem solid $orange;
       background-color: $orange;
 
       &:hover {
@@ -217,26 +217,26 @@ $lightorange: #fcf0e5;
 
   .slide-enter,
   .slide-leave-active {
-    opacity: 0;
-    height: 0;
+    opacity  : 0;
+    height   : 0;
     transform: translateY(-3rem);
   }
 
   button {
-    width: 7rem;
+    width : 7rem;
     height: 2.5rem;
 
     padding: {
-      top: .3rem;
+      top   : .3rem;
       bottom: .3rem;
     }
 
-    line-height: 100%;
-    color: #777;
-    border: 1px solid #555;
-    border-radius: .2rem;
+    line-height     : 100%;
+    color           : #777;
+    border          : 1px solid #555;
+    border-radius   : .2rem;
     background-color: #fff;
-    cursor: pointer;
+    cursor          : pointer;
 
     &:hover {
       box-shadow: 0 0 5px #bbb;
@@ -244,31 +244,31 @@ $lightorange: #fcf0e5;
   }
 
   .shadow {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
+    position  : fixed;
+    left      : 0;
+    top       : 0;
+    z-index   : 10;
+    width     : 100%;
+    height    : 100%;
     background: rgba(85, 85, 85, .7);
 
     .add-qs-dialog,
     .dialog {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 80rem;
-      min-height: 550px;
-      overflow-y: auto;
-      transform: translateX(-50%) translateY(-50%);
-      border-radius: .5rem;
-      box-shadow: 0 0 5px #555;
+      position        : absolute;
+      left            : 50%;
+      top             : 50%;
+      width           : 80rem;
+      min-height      : 550px;
+      overflow-y      : auto;
+      transform       : translateX(-50%) translateY(-50%);
+      border-radius   : .5rem;
+      box-shadow      : 0 0 5px #555;
       background-color: #fff;
 
       .shadow-body {
-        max-height: 450px;
-        overflow-y: auto !important;
-        padding: 20px;
+        max-height   : 450px;
+        overflow-y   : auto !important;
+        padding      : 20px;
         margin-bottom: 30px;
       }
     }
@@ -277,12 +277,12 @@ $lightorange: #fcf0e5;
       height: 5rem;
 
       padding: {
-        left: 3rem;
+        left : 3rem;
         right: 3rem;
       }
 
-      line-height: 5rem;
-      border-radius: .5rem;
+      line-height     : 5rem;
+      border-radius   : .5rem;
       background-color: #f7f7f7;
 
       span:nth-of-type(1) {
@@ -291,9 +291,9 @@ $lightorange: #fcf0e5;
 
       .close-btn {
         position: absolute;
-        right: 3rem;
-        color: #bbb;
-        cursor: pointer;
+        right   : 3rem;
+        color   : #bbb;
+        cursor  : pointer;
 
         &:hover {
           color: $orange;
@@ -307,8 +307,8 @@ $lightorange: #fcf0e5;
     }
 
     label {
-      display: block;
-      margin-left: 3rem;
+      display      : block;
+      margin-left  : 3rem;
       margin-bottom: 2rem;
 
       &:nth-of-type(2) {
@@ -321,18 +321,18 @@ $lightorange: #fcf0e5;
     }
 
     .btn-box {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 6rem;
-      text-align: center;
+      position   : absolute;
+      bottom     : 0;
+      width      : 100%;
+      height     : 6rem;
+      text-align : center;
       line-height: 6rem;
 
       .yes {
-        margin-right: 1rem;
-        color: #fff;
+        margin-right    : 1rem;
+        color           : #fff;
         background-color: $orange;
-        border: 1px solid $orange;
+        border          : 1px solid $orange;
 
         &:hover {
           box-shadow: 0 0 5px $orange;
@@ -344,17 +344,17 @@ $lightorange: #fcf0e5;
 }
 
 #edit-btn-box {
-  width: 20rem;
+  width  : 20rem;
   display: flex;
 }
 
 .wjdc_list {
   box-sizing: border-box;
-  overflow: hidden;
+  overflow  : hidden;
 }
 
 .tswjdc_table {
-  width: 100%;
+  width        : 100%;
   margin-bottom: 20px;
 }
 
@@ -366,16 +366,16 @@ $lightorange: #fcf0e5;
 
 .tswjdc_table td {
   text-align: center;
-  width: 20%;
+  width     : 20%;
 
 }
 
 .tswjdc_table td.lefttd_qk {
-  text-align: center;
+  text-align  : center;
   padding-left: 10px;
   // border: 1px solid red;
-  min-width: 200px;
-  height: 62px;
+  min-width   : 200px;
+  height      : 62px;
 }
 
 .jzwent_input {
@@ -383,55 +383,55 @@ $lightorange: #fcf0e5;
 }
 
 .shadowTwo {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 10;
-  width: 100%;
-  height: 100%;
+  position  : fixed;
+  left      : 0;
+  top       : 0;
+  z-index   : 10;
+  width     : 100%;
+  height    : 100%;
   background: rgba(85, 85, 85, .7);
 
   .add-qs-dialog,
   .dialog {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 100rem;
-    min-height: 550px;
-    overflow-y: auto;
-    transform: translateX(-50%) translateY(-50%);
-    border-radius: .5rem;
-    box-shadow: 0 0 5px #555;
+    position        : absolute;
+    left            : 50%;
+    top             : 50%;
+    width           : 100rem;
+    min-height      : 550px;
+    overflow-y      : auto;
+    transform       : translateX(-50%) translateY(-50%);
+    border-radius   : .5rem;
+    box-shadow      : 0 0 5px #555;
     background-color: #fff;
 
     .shadow-body {
-      max-height: 450px;
-      overflow-y: auto !important;
-      padding: 20px;
+      max-height   : 450px;
+      overflow-y   : auto !important;
+      padding      : 20px;
       margin-bottom: 30px;
 
       #edit-box {
-        display: flex;
+        display        : flex;
         justify-content: space-between;
 
         .edit-box {
           border-radius: 3px;
-          box-shadow: 20px 0px 10px 0px rgba(0, 0, 0, 0.5);
+          box-shadow   : 20px 0px 10px 0px rgba(0, 0, 0, 0.5);
 
           h3 {
-            background: rgba(85, 85, 85, .7);
+            background   : rgba(85, 85, 85, .7);
             border-radius: 2px 3px 2px 2px;
-            box-shadow: 0 0 0 1px #5F5A4B, 1px 1px 6px 1px rgba(10, 10, 0, 0.5);
-            color: #FFFFFF;
-            font-family: "微软雅黑", "宋体", "黑体", Arial;
-            font-size: 18px;
-            font-weight: bold;
-            height: 25px;
-            line-height: 25px;
-            margin: 18px 0 !important;
-            padding: 8px 0 5px 5px;
-            text-shadow: 2px 2px 3px #222222;
-            text-align: center;
+            box-shadow   : 0 0 0 1px #5F5A4B, 1px 1px 6px 1px rgba(10, 10, 0, 0.5);
+            color        : #FFFFFF;
+            font-family  : "微软雅黑", "宋体", "黑体", Arial;
+            font-size    : 18px;
+            font-weight  : bold;
+            height       : 25px;
+            line-height  : 25px;
+            margin       : 18px 0 !important;
+            padding      : 8px 0 5px 5px;
+            text-shadow  : 2px 2px 3px #222222;
+            text-align   : center;
           }
 
         }
@@ -447,12 +447,12 @@ $lightorange: #fcf0e5;
     height: 5rem;
 
     padding: {
-      left: 3rem;
+      left : 3rem;
       right: 3rem;
     }
 
-    line-height: 5rem;
-    border-radius: .5rem;
+    line-height     : 5rem;
+    border-radius   : .5rem;
     background-color: #f7f7f7;
 
     span:nth-of-type(1) {
@@ -461,9 +461,9 @@ $lightorange: #fcf0e5;
 
     .close-btn {
       position: absolute;
-      right: 3rem;
-      color: #bbb;
-      cursor: pointer;
+      right   : 3rem;
+      color   : #bbb;
+      cursor  : pointer;
 
       &:hover {
         color: $orange;
@@ -477,8 +477,8 @@ $lightorange: #fcf0e5;
   }
 
   label {
-    display: block;
-    margin-left: 3rem;
+    display      : block;
+    margin-left  : 3rem;
     margin-bottom: 2rem;
 
     &:nth-of-type(2) {
@@ -491,22 +491,50 @@ $lightorange: #fcf0e5;
   }
 
   .btn-box {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 6rem;
-    text-align: center;
+    position   : absolute;
+    bottom     : 0;
+    width      : 100%;
+    height     : 6rem;
+    text-align : center;
     line-height: 6rem;
 
     .yes {
-      margin-right: 1rem;
-      color: #fff;
+      margin-right    : 1rem;
+      color           : #fff;
       background-color: $orange;
-      border: 1px solid $orange;
+      border          : 1px solid $orange;
 
       &:hover {
         box-shadow: 0 0 5px $orange;
       }
     }
+  }
+}
+
+
+
+#edit-box {
+  width : 80%;
+  margin: 0 auto;
+}
+textarea{
+  text-indent: 2em;
+  font-size: 16px;
+  padding-top: 10px;
+}
+.btn_add_text {
+  display   : inline-block;
+  width     : 9.5rem !important;
+  text-align: center !important;
+}
+
+.select-type {
+  width: 110px !important;
+}
+
+.el-input-group__prepend {
+  .el-select {
+    display: block;
+    width  : 120px !important;
   }
 }

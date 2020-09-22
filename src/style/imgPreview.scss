@@ -1,0 +1,18 @@
+  /* 图片遮罩 */
+  /deep/ .el-image-viewer__mask {
+    opacity: 0.9 !important;
+  }
+
+  /* 图片关闭按钮 */
+  /deep/ .el-icon-circle-close {
+    color: #ccc !important;
+  }
+
+  .demo-image__preview {
+    cursor: pointer;
+    .el-image {
+      border: 2px solid #666463;
+      outline-width: .6rem;
+      border-radius: 1.1rem;
+    }
+  }

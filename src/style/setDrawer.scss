@@ -1,0 +1,33 @@
+/deep/ .el-drawer {
+    width: 37% !important;
+}
+
+#set_btn {
+    display         : flex;
+    margin-left     : auto;
+    text-align      : center;
+    color           : #fff;
+    border          : 1px solid #ee7419;
+    border-radius   : 0.3rem;
+    background-color: #ee7419;
+    cursor          : pointer;
+}
+
+.el-form {
+    padding: 0 15px;
+}
+
+.el-date-editor {
+    width: 500px;
+}
+
+.desc {
+    margin-left: 20px !important;
+}
+
+.demo-drawer__footer {
+    padding        : 0 10px !important;
+    margin-right   : 20px !important;
+    display        : flex;
+    justify-content: flex-end;
+}

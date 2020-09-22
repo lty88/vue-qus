@@ -29,7 +29,7 @@ export const UpdateQsInfo = function (data) {
 // code - 题目编号
 // 返回：json字符串
 export const DeleteQsItems = function (data) {
-    return request({
+    return  request({
         url: '/apiv1/deleteQuestion',
         params: data
     });

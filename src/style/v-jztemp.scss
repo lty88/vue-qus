@@ -1,0 +1,36 @@
+.select-type {
+    width: 120px !important;
+  }
+  
+  .upload-demo {
+    width: 614px;
+    border: 1px solid;
+    margin: 20px auto;
+  }
+  
+  .el-input {
+    width: 80% !important;
+  }
+  
+  .select-type {
+    width: 120px !important;
+  }
+  
+  .title-box {
+    max-height: 37.5rem;
+    overflow-y: auto;
+  }
+  /deep/ .el-upload-list__item,
+  .is-ready {
+    width: 60% !important;
+  }
+  
+  .el-input-group__prepend {
+    .el-select {
+      display: block;
+      width: 120px !important;
+    }
+  }
+  .el-form-item__content{
+      margin: 0 !important;
+  }

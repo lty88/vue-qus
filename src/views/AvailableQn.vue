@@ -6,22 +6,35 @@
           <el-card class="box-card">
             <div slot="header" class="clearfix">
               <span class="title">{{item.title}}</span>
-              <el-button
-                style="float: right; padding: 3px 5px"
-                @click="fillQs(item)"
-                type="text"
-              >进入问卷</el-button>
+              <el-button style="float: right; padding: 3px 5px" @click="fillQs(item)" type="text">
+                <i class="iconfont uni-iconfonts icon-custom308"></i>
+                进入问卷
+              </el-button>
             </div>
             <div class="text item">
-              <h3>有效期：</h3>
+              <h3>
+                <i class="iconfont uni-iconfonts icon-ico_wupinguanli_wupinyouxiaoqiyujing"></i>有效期：
+              </h3>
               <div class="timer menue">{{item.startTime}}&nbsp;&nbsp;至&nbsp;&nbsp;{{item.endTime}}</div>
-              <h3>发起单位：</h3>
+              <h3>
+                <i class="iconfont uni-iconfonts icon-xuexiao"></i>发起单位：
+              </h3>
               <div class="unitName menue">{{item.unitName}}</div>
-              <h3>简要说明：</h3>
+              <h3>
+                <i class="iconfont uni-iconfonts icon-wenjianleixingFileTypes11"></i>问卷类型：
+              </h3>
+              <div class="menue">{{item.type === 1 ? '指定性问卷': '开放性问卷'}}</div>
+              <h3>
+                <i class="iconfont uni-iconfonts icon-shuxingliebiaoxiangqing"></i>问卷属性：
+              </h3>
+              <div class="condition menue">{{item.condition ===0 ? '静态问卷': '动态问卷' }}</div>
+              <h3>
+                <i class="iconfont uni-iconfonts icon-hangchengmiaoshu"></i>简要说明：
+              </h3>
               <div class="des menue">{{item.desc}}</div>
             </div>
           </el-card>
-          <user-login :show="showLogin" @close="showLogin=false" :qnCode="code"></user-login>
+          <user-login v-if="isPc" :show="showLogin" @close="showLogin=false" :qnCode="code"></user-login>
         </div>
       </el-main>
       <div class="noData" v-else>目前暂无开放的问卷</div>
@@ -30,163 +43,93 @@
 </template>
 
 <script>
-import { getAvailableQn, getResults } from "../api/user";
-import UserLogin from "@/components/UserLogin";
-export default {
-  name: "AvailableQn",
-  components: {
-    UserLogin
-  },
-  data() {
-    return {
-      dataList: [], //有效问卷调查列表
-      showLogin: false,
-      code: "1",
-      noData: false
-    };
-  },
-  created() {
-    getAvailableQn().then(res => {
-      if (res.data.obj.length != 0) {
-        console.log(res);
-        this.dataList = res.data.obj;
-        this.noData = true;
-      } else {
-        this.$message({
-          type: "info",
-          message: "目前暂无开放的问卷",
-          duration: 5000
-        });
-        this.dataList = [];
-        this.noData = false;
-      }
-    });
-  },
-  methods: {
-    fillQs(item) {
-      console.log(item);
-      if (item.type == 2) {
-        this.$router.push({
-          name: "fill",
-          params: {
-            code: item.code
+  import { getAvailableQn, getResults, userLogin } from "../api/user";
+  import UserLogin from "@/components/UserLogin";
+  export default {
+    name: "AvailableQn",
+    components: {
+      UserLogin,
+    },
+    data() {
+      return {
+        dataList: [], //有效问卷调查列表
+        showLogin: false,
+        code: "1",
+        noData: false,
+        isPc: false,
+        flag: "phone"
+      };
+    },
+    created() {
+      //获取用户设备
+      this.getMobile()
+      getAvailableQn().then(res => {
+        if (res.data.obj.length != 0) {
+          console.log(res);
+          this.dataList = res.data.obj;
+          this.noData = true;
+        } else {
+          this.$message({
+            type: "info",
+            message: "目前暂无开放的问卷",
+            duration: 5000
+          });
+          this.dataList = [];
+          this.noData = false;
+        }
+      });
+    },
+    methods: {
+      fillQs(item) {
+        console.log(item);
+        if (item.type == 2) {
+          userLogin({
+            qnCode: item.code,
+            username: "",
+            password: ""
+          }).then(res => {
+            this.$router.push({
+              name: "fill",
+              params: {
+                code: item.code
+              }
+            });
+          });
+        } else {
+          //type为1=》指定性问卷 需要登录
+          this.code = item.code;
+          if (this.isPc) {
+            //移动端
+            this.showLogin = true;
+          } else {
+            this.$router.push({
+              name: "userLoginPhone",
+              params: {
+                code: item.code
+              }
+            });
           }
-        });
-      } else {
-        //type为1=》指定性问卷 需要登录
-        this.code = item.code;
-        this.showLogin = true;
-      }
+
+        }
+      },
+      //监听设备
+      getMobile() {
+        this.flag = navigator.userAgent.match(
+          /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+        );
+        if (this.flag === null) {
+          console.log("pc端");
+          this.isPc = true;
+        } else {
+          console.log("移动端");
+          this.isPc = false;
+        }
+      },
     }
-  }
-};
+
+  };
 </script>
 
 <style lang="scss" scoped>
-.AvailableQn {
-  //   background: url(../assets/img/bgc.jpg) fixed repeat;
-}
-.el-main {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  color: #333;
-  padding: 0;
-  margin-top: 3z0px;
-  //   background-color: #909399;
-
-  @media screen and (min-width: 768px) {
-    padding: 2rem;
-  }
-
-  .el-card /deep/ .el-card__header {
-    padding: 10px 20px;
-    border-bottom: 1px solid #ebeef5;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: 16px;
-    background-color: lightgrey;
-  }
-
-  .text {
-    font-size: 14px;
-  }
-
-  .title {
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-
-  .item {
-    padding: 15px;
-    margin-bottom: 18px;
-  }
-
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-
-  .clearfix:after {
-    clear: both;
-  }
-
-  .box-card {
-    display: flex;
-    flex-direction: column;
-    line-height: 2.875rem;
-    min-height: 31.25rem;
-    width: 90rem;
-
-    .menue {
-      text-indent: 2rem;
-    }
-  }
-
-  /***************************** 媒体查询****************************/
-  @media screen and(min-width: 375px) and(max-width: 392px) {
-    .box-card {
-      padding: 0 !important;
-      margin: 0 !important;
-      box-sizing: border-box;
-      width: 100%;
-    }
-  }
-
-  @media screen and(min-width: 401px) and(max-width: 500px) {
-    .box-card {
-      padding: 0 !important;
-      margin: 0 !important;
-      box-sizing: border-box;
-      width: 412px;
-    }
-  }
-
-  @media screen and (min-width: 500px) and (max-width: 760px) {
-    .box-card {
-      width: 100%;
-      padding: 0 !important;
-      margin: 0 !important;
-    }
-  }
-
-  @media screen and (min-width: 768px) {
-    .el-main {
-      padding: 20px;
-    }
-
-    .box-card {
-      width: 750px;
-    }
-  }
-}
-
-.noData {
-  width: 100%;
-  padding: 30px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
+  @import "../style/availableQn.scss"
 </style>

@@ -5,7 +5,7 @@
       <div class="modal-dialog">
         <div class="modal-header">
           <span>登录</span>
-          <!-- <a href="JavaScript:;" class="icon-close" @click.self="close" @click="$emit('cancel')">x</a> -->
+          <a href="JavaScript:;" class="icon-close" @click.self="close" @click="$emit('cancel')">x</a>
         </div>
         <div class="modal-body">
           <section class="form">
@@ -46,9 +46,7 @@ export default {
     },
     qnCode: {
       type: String,
-      default: () => {
-        "";
-      }
+      default: ""
     }
   },
   data() {
@@ -67,12 +65,12 @@ export default {
       this.code = newVal;
     }
   },
-  beforeRouteEnter: (to, from, next) => {
-    console.log(to,from);
-    next(vm => {
-      console.log(vm);
-    });
-  },
+  // beforeRouteEnter: (to, from, next) => {
+  //   console.log(to,from);
+  //   next(vm => {
+  //     console.log(vm);
+  //   });
+  // },
   methods: {
     loginAjax() {
       if (this.userName === "") {

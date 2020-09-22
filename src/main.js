@@ -25,12 +25,21 @@ Vue.use(VueAxios, axios);
 
 
 router.beforeEach((to, from, next) => {
+  let flag = navigator.userAgent.match(
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+  );
+  let equipment = ""
+  if (flag === null) {
+    equipment = "pc端"
+  } else {
+    equipment = "移动端"
+  }
   let URL = to.fullPath
   //判断是否有username，有则为外链地址 执行下面的请求
   if (URL.indexOf("username") != -1) {
     const url = to.fullPath
     console.log(url);
-    // var url = 'http://localhost:8081/fill?qnCode=1598436816773&username=user1&password=123';
+    // var url = http://192.168.1.171:8081/fill?qnCode=1598436816773&username=user1&password=123;
     var temp1 = url.split('?');
     var pram = temp1[1];
     var keyValue = pram.split('&');
@@ -73,7 +82,7 @@ router.beforeEach((to, from, next) => {
           router.push({
             name: "viewResults",
             params: {
-              code:obj.qnCode
+              code: obj.qnCode
             }
           });
         }
@@ -82,31 +91,26 @@ router.beforeEach((to, from, next) => {
           message: res.data.msg,
           type: 'error'
         })
+        if (equipment === "移动端") {
+          router.push({
+            name: "userLoginPhone",
+            params: {
+              code: obj.qnCode
+            }
+          });
+        } else {
+          router.push({
+            name: "AvailableQn",
+          });
+        }
       }
     })
-
-
-
   }
-  //判断用户是否通过登录携带了uid进入问卷
-  // if (to.name == "fill") {
-
-  //   if (window.sessionStorage.getItem('uid')) {
-  //     next()
-  //   } else {
-  //     Element.Message({
-  //       message: "该问卷为指定性调查问卷，请先登录",
-  //       type: 'error',
-  //       duration:3000,
-  //     })
-  //     next("/AvailableQn")
-  //   }
-  // }
   // 获取 JWT Token
   if (window.sessionStorage.getItem('token')) {
     next();
   } else {
-    if (to.name === 'login' || to.name === 'AvailableQn' || to.name === 'fill' || to.name === 'viewResults') {
+    if (to.name === 'login' || to.name === 'AvailableQn' || to.name === 'userLoginPhone' || to.name === 'fill' || to.name === 'viewResults') {
       next();
     } else {
       next("/login");

@@ -1,0 +1,30 @@
+.el-header {
+    width          : 100%;
+    display        : flex !important;
+    justify-content: space-between;
+    border-bottom  : 0.2rem solid #ccc !important;
+}
+
+input:checked+span {
+    color      : #efa030;
+    font-weight: bold;
+}
+
+.anwerMedia {
+    border: 3px solid #efa030
+}
+
+/* input[disabled] {
+    border: 1px solid rgb(226, 36, 36) !important;
+    background-color: #e91e1e !important;
+    color: #f8c304 !important;
+    font-size: 30px;
+    opacity: .9;
+  } */
+input[disabled],
+input:disabled,
+input.disabled {
+    -webkit-text-fill-color: #333;
+    -webkit-opacity        : 1;
+    opacity                : 1;
+}

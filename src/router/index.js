@@ -65,6 +65,16 @@ const routes = [{
 	component: () =>
 		import( /* webpackChunkName: "about" */ "../views/login.vue")
 },
+{
+	path: '/userLoginPhone/:code',
+	name: 'userLoginPhone',
+	meta: {
+		title: '用户登录',
+		keepAlive: false
+	},
+	component: () =>
+		import( /* webpackChunkName: "about" */ "../views/userLoginPhone.vue")
+},
 
 {
 	path: '/edit/:code',
@@ -96,14 +106,14 @@ const routes = [{
 		import( /* webpackChunkName: "about" */ "../views/import-user.vue")
 },
 {
-	path: '/condition/:code',
-	name: 'condition',
+	path: '/FlowControl/:code',
+	name: 'FlowControl',
 	meta: {
 		title: "流程控制",
 		keepAlive: true,
 	},
 	component: () =>
-		import( /* webpackChunkName: "about" */ "../components/FlowControl.vue")
+		import( /* webpackChunkName: "about" */ "../views/FlowControl.vue")
 },
 {
 	path: '/test',
@@ -118,8 +128,8 @@ const routes = [{
 ];
 
 const originalPush = VueRouter.prototype.push
-   VueRouter.prototype.push = function push(location) {
-   return originalPush.call(this, location).catch(err => err)
+VueRouter.prototype.push = function push(location) {
+	return originalPush.call(this, location).catch(err => err)
 }
 /* 路由异常错误处理，尝试解析一个异步组件时发生错误，重新渲染目标页面 */
 // router.onError((error) => {

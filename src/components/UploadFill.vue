@@ -10,7 +10,7 @@
             :file-list="formFileList"
             :http-request="handleUploadForm"
             :before-upload="beforeUploadForm"
-            accept=".jpg, .jpeg, .png, .JPG, .JPEG"
+            accept=".jpg, .jpeg, .png, .gif, .JPG, .JPEG, .GIF, .Vido, audio/*, video/*, image/*"
           >
             <el-button type="primary" plain>上传</el-button>
           </el-upload>
@@ -31,11 +31,11 @@ export default {
   props: {
     qnCode: {
       type: String,
-      default: ''
+      default: ""
     },
     fillUrl: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   name: "importUser",
@@ -46,18 +46,18 @@ export default {
       }, //携带的请求头
       url: "",
       code: "", //问卷code
-      formMaxSize: 10, // 上传文件大小
+      formMaxSize: 100, // 上传文件大小
       formFileList: [], // 显示上传文件
       uploadFormFileList: [], // 确定上传文件
-      uploadUrl: "", //服务器返回的地址
+      uploadUrl: "" //服务器返回的地址
     };
   },
   watch: {
-    url(newVal,oldVal) {
+    url(newVal, oldVal) {
       this.$emit("change", newVal);
     },
-    fillUrl(newVal,oldVal) {
-      this.url=newVal;
+    fillUrl(newVal, oldVal) {
+      this.url = newVal;
     }
   },
   created() {
@@ -93,7 +93,10 @@ export default {
         testmsg === "jpeg" ||
         testmsg === "png" ||
         testmsg === "JPGng" ||
-        testmsg === "png";
+        testmsg === "png" ||
+        testmsg === "Vido" ||
+        testmsg === "mp3" ||
+        testmsg === "mp4";
       if (!extension) {
         this.$message({
           message: "上传文件只能是视频音频图片!",
@@ -119,7 +122,7 @@ export default {
         // this.$emit('uploadUrl',"https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1089874897,1268118658&fm=26&gp=0.jpg")
         if (res.data.code === 200) {
           _this.$message.success("上传文件成功，" + res.data.msg);
-          _this.url=res.data.obj.filepath;
+          _this.url = res.data.obj.filepath;
           // this.$emit("change", res.data.obj.filepath);
           loading.close();
         } else {

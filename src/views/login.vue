@@ -1,14 +1,14 @@
 <template>
 <div id="login">
     <el-form class="form demo-ruleForm" ref="formLogin" :rules="rules" :label-position="labelPosition" :model="formLogin" status-icon>
-        <div class="login-title">账号登录</div>
+        <div class="login-title">乐培生问卷管理系统</div>
         <el-form-item label="用户名" prop="account">
-            <el-input v-model.trim="formLogin.account" prefix-icon="el-icon-user-solid"></el-input>
+            <el-input v-model.trim="formLogin.account" placeholder="Username" prefix-icon="el-icon-user-solid"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-            <el-input type="password" show-password v-model.trim="formLogin.password" autocomplete="off" prefix-icon="el-icon-lock"></el-input>
+            <el-input type="password" placeholder="Password" show-password v-model.trim="formLogin.password" autocomplete="off" prefix-icon="el-icon-lock"></el-input>
         </el-form-item>
-        <el-button type="success" class="login-btn" @click="submitForm('formLogin')">登录</el-button>
+        <div class="login-btn" @click="submitForm('formLogin')">Log  In</div>
     </el-form>
 </div>
 </template>
@@ -116,45 +116,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
-// @import "../assets/base.scss";
-
-#login {
-    background-image: url("../assets/img/login_wps图片.png");
-    height: 100%;
-
-    .form {
-        position: relative;
-        box-sizing: border-box;
-        padding-left: 31px;
-        padding-right: 31px;
-        width: 410px;
-        height: 400px;
-        background-color: #ffffff;
-        width: 40.5rem;
-        font-size: 20px;
-
-        position: absolute;
-        left: 50%;
-        top: 40%;
-        transform: translate(-50%, -50%);
-
-        .login-title {
-            font-size: 24px;
-            text-align: center;
-            margin: 20px auto 30px;
-            color: #ff6600;
-            font-weight: bold;
-        }
-
-        .login-btn {
-            background-color: #ff6600;
-            width: 60%;
-            position: absolute;
-            left: 50%;
-            bottom: 10%;
-            transform: translate(-50%, 50%);
-        }
-    }
-}
+<style lang="scss" scoped>
+ @import "../assets/base.scss";
+ @import "../style/login.scss";
 </style>

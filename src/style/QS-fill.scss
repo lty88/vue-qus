@@ -1,4 +1,4 @@
-$orange: #ee7419;
+$orange     : #ee7419;
 $lightorange: #fcf0e5;
 
 /***************************** 媒体查询****************************/
@@ -45,15 +45,33 @@ $lightorange: #fcf0e5;
   }
 }
 
+.el-header {
+  width          : 100%;
+  height         : 45px !important;
+  display        : flex !important;
+  justify-content: space-between;
+  border-bottom  : 0.2rem solid #ccc !important;
+}
+
+.t-content {
+  padding: 15px;
+  cursor : pointer;
+}
+
+/deep/ .el-upload-list__item,
+.is-ready {
+  width: 65% !important;
+}
+
 #fill-container {
   // height: 100%;
-  max-width: 110rem;
-  margin: 5rem auto;
-  color: #666;
+  max-width       : 110rem;
+  margin          : 5rem auto;
+  color           : #666;
   background-color: #fff;
-  border-radius: .4rem;
-  box-shadow: 0 0 1rem #aaa;
-  margin-top: 30px;
+  border-radius   : .4rem;
+  box-shadow      : 0 0 1rem #aaa;
+  margin-top      : 30px;
 
   @media only screen and (min-width: 768px) {
     padding: 1rem;
@@ -64,9 +82,9 @@ $lightorange: #fcf0e5;
   }
 
   @media only screen and (max-width: 500px) {
-    margin: 0 auto;
-    width: 100%;
-    height: 100%;
+    margin       : 0 auto;
+    width        : 100%;
+    height       : 100%;
     border-radius: .2rem;
 
     .el-message-box {
@@ -76,37 +94,51 @@ $lightorange: #fcf0e5;
 
 
   @media only screen and (max-width: 768px) {
-    margin: 0 auto;
+    margin       : 0 auto;
     border-radius: .2rem;
-    width: 100%;
+    width        : 100%;
 
   }
 
 
 
   input[name="qsTitle"] {
-    height: 6rem;
-    width: 100%;
-    margin-bottom: 3rem;
-    font-size: 2rem;
-    text-align: center;
-    border: 1px solid #ccc;
+    height          : 6rem;
+    width           : 100%;
+    margin-bottom   : 3rem;
+    font-size       : 2rem;
+    text-align      : center;
+    border          : 1px solid #ccc;
     background-color: #ccc;
   }
 
   .content {
     .title {
-      font-size: 30px;
-      line-height: 32px;
-      color: #1ea0fa;
-      font-weight: bold;
-      padding: 30px 0;
-      text-align: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding         : 26px 10px 12px;
+      width           : 100%;
+      color           : #1ea0fa;
+      font-size       : 24px;
+      line-height     : 32px;
+      font-weight     : bold;
+      margin          : 0;
+      padding         : 0;
+      text-align      : center;
+
+    }
+
+    .qs-desc {
+      text-indent   : 2em;
+      line-height   : 2.5rem;
+      letter-spacing: 0.125rem;
+      border-bottom : 1px dashed #ccc;
+      padding       : 10px 0 26px;
+      margin        : 0 10px 16px;
     }
 
     .el-page-header {
       padding-bottom: 1rem;
-      border-bottom: .2rem solid #ccc !important;
+      border-bottom : .2rem solid #ccc !important;
     }
 
     .submit {
@@ -126,19 +158,19 @@ $lightorange: #fcf0e5;
   }
 
   .questions {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    display        : flex;
+    flex-direction : row;
+    flex-wrap      : nowrap;
     justify-content: space-between;
-    padding: 1.5rem 2rem;
-    margin-bottom: 2rem;
+    padding        : 1.5rem 2rem;
+    margin-bottom  : 2rem;
 
     .item-content {
       margin-left: 5px;
     }
 
     @media only screen and (max-width: 768px) {
-      padding: 0.5rem .5rem;
+      padding      : 0.5rem .5rem;
       margin-bottom: .35rem;
     }
 
@@ -151,52 +183,60 @@ $lightorange: #fcf0e5;
 
     p {
       margin: {
-        top: 1.5rem;
+        top   : 1.5rem;
         bottom: 1.5rem;
       }
     }
 
     textarea {
-      font-size: 15px;
-      width: 50rem;
-      height: 10rem;
+      font-size  : 15px;
+      width      : 40rem;
+      height     : 10rem;
       margin-left: 2.5rem;
       text-indent: 2em;
-      padding: 0.9375rem;
+      padding    : 0.9375rem;
 
-      @media screen and(min-width: 375px)and(max-width: 392px) {
-        font-size: 14px;
+      @media screen and(min-width: 300px)and(max-width: 374px) {
+        font-size  : 14px;
         margin-left: 1rem;
         text-indent: 1em;
-        width: 19rem;
-        height: 8rem;
+        width      : 25rem;
+        height     : 10rem;
+      }
+
+      @media screen and(min-width: 375px)and(max-width: 392px) {
+        font-size  : 14px;
+        margin-left: 1rem;
+        text-indent: 1em;
+        width      : 30rem;
+        height     : 12rem;
       }
 
       @media screen and(min-width: 401px)and(max-width: 500px) {
         margin-left: 1.5rem;
-        width: 23rem;
-        height: 10rem;
+        width      : 33rem;
+        height     : 15rem;
       }
 
       @media screen and (min-width:500px) and (max-width:760px) {
-        font-size: 14px;
+        font-size  : 14px;
         margin-left: 1.8rem;
         text-indent: 2em;
-        width: 35rem;
-        height: 8rem;
+        width      : 38rem;
+        height     : 8rem;
       }
 
 
     }
 
     .qs-title {
-      font-size: 1.6rem;
+      font-size  : 1.6rem;
       font-weight: 700;
-      color: #333;
+      color      : #333;
 
 
       @media only screen and (max-width: 768px) {
-        font-size: 1.5rem;
+        font-size  : 1.5rem;
         font-weight: 600;
 
       }
@@ -228,7 +268,7 @@ $lightorange: #fcf0e5;
 
     .wjdc_list {
       box-sizing: border-box;
-      overflow: hidden;
+      overflow  : hidden;
     }
 
     .tswjdc_table {
@@ -252,28 +292,28 @@ $lightorange: #fcf0e5;
 
     .tswjdc_table td {
       text-align: center;
-      width: 20%;
+      width     : 20%;
 
     }
 
     .tswjdc_table td.lefttd_qk {
-      text-align: left;
+      text-align  : left;
       padding-left: 10px;
       // border: 1px solid red;
-      min-width: 200px;
-      height: 62px;
+      min-width   : 200px;
+      height      : 62px;
 
       @media only screen and (max-width: 500px) {
         padding-left: 0px;
-        text-align: left;
-        min-width: 4rem;
+        text-align  : left;
+        min-width   : 4rem;
         // border: 1px solid red;
       }
 
       @media screen and (min-width:500px) and (max-width:760px) {
         padding-left: 0px;
-        text-align: left;
-        min-width: 5rem;
+        text-align  : left;
+        min-width   : 5rem;
         // border: 1px solid rgb(120, 245, 4);
       }
     }

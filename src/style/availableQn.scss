@@ -1,0 +1,120 @@
+.uni-iconfonts {
+    font-size   : 20px;
+    color       : #1296db;
+    margin-right: 8px;
+}
+
+.el-main {
+    display              : flex;
+    align-items          : center;
+    flex-direction       : column;
+    color                : #333;
+    padding              : 0;
+    margin-top           : 3z0px;
+    //   background-color: #909399;
+
+    @media screen and (min-width: 768px) {
+        padding: 2rem;
+    }
+
+    .el-card /deep/ .el-card__header {
+        padding           : 10px 20px;
+        border-bottom     : 1px solid #ebeef5;
+        -webkit-box-sizing: border-box;
+        box-sizing        : border-box;
+        font-size         : 16px;
+        background-color  : lightgrey;
+    }
+
+    .text {
+        font-size: 14px;
+    }
+
+    .title {
+        font-size  : 1.5rem;
+        font-weight: 600;
+    }
+
+    .item {
+        padding      : 15px;
+        margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both;
+    }
+
+    .box-card {
+        display       : flex;
+        flex-direction: column;
+        line-height   : 2.875rem;
+        min-height    : 31.25rem;
+        width         : 90rem;
+
+        .menue {
+            font-family: "Arial", "Microsoft,YaHei", "黑体", "宋体", sans-serif;
+            font-size  : 15px;
+            text-indent: 2em;
+        }
+    }
+
+    /***************************** 媒体查询****************************/
+    @media screen and (max-width: 374px) {
+        .box-card {
+            padding   : 0 !important;
+            margin    : 0 !important;
+            box-sizing: border-box;
+            width     : 100%;
+        }
+    }
+
+    @media screen and(min-width: 375px) and(max-width: 392px) {
+        .box-card {
+            padding   : 0 !important;
+            margin    : 0 !important;
+            box-sizing: border-box;
+            width     : 100%;
+        }
+    }
+
+    @media screen and(min-width: 401px) and(max-width: 500px) {
+        .box-card {
+            padding   : 0 !important;
+            margin    : 0 !important;
+            box-sizing: border-box;
+            width     : 412px;
+        }
+    }
+
+    @media screen and (min-width: 500px) and (max-width: 760px) {
+        .box-card {
+            width  : 100%;
+            padding: 0 !important;
+            margin : 0 !important;
+        }
+    }
+
+    @media screen and (min-width: 768px) {
+        .el-main {
+            padding: 20px;
+        }
+
+        .box-card {
+            width: 750px;
+        }
+    }
+}
+
+.noData {
+    width           : 100%;
+    padding         : 30px;
+    background-color: #fff;
+    border          : 1px solid #ddd;
+    border-radius   : 5px;
+}

@@ -1,0 +1,74 @@
+#login {
+    background-image: url("../../public/login-bg.png");
+    height          : 100%;
+    font-family     : SimHei, 'Helvetica Neue', Arial, 'Droid Sans', sans-serif;
+    font-size       : 14px;
+    color           : rgb(255, 255, 255);
+
+    .form {
+        position     : relative;
+        box-sizing   : border-box;
+        padding-left : 31px;
+        padding-right: 31px;
+        height       : 400px;
+        width        : 40.5rem;
+        color        : #fff;
+        position     : absolute;
+        left         : 50%;
+        top          : 45%;
+        transform    : translate(-50%, -50%);
+
+        .el-form-item {
+            margin-top: 35px;
+
+            .el-form-item__error {
+                color      : #F56C6C;
+                font-size  : 13px;
+                line-height: 2;
+                padding-top: 4px;
+                position   : absolute;
+                top        : 102%;
+                left       : 15px;
+            }
+        }
+
+        .el-input__inner {
+            border       : 1px solid #fff;
+            border-radius: 25px;
+        }
+
+        .login-title {
+            font-size  : 24px;
+            text-align : center;
+            margin     : 20px auto 30px;
+            color      : #fff;
+            font-weight: bold;
+        }
+
+        .goBack {
+            position: absolute;
+            bottom  : 160px;
+            right   : 50px;
+        }
+
+        .login-btn {
+            border       : 1px solid #fff;
+            border-radius: 25px;
+            width        : 80%;
+            position     : absolute;
+            left         : 50%;
+            bottom       : 30%;
+            transform    : translate(-50%, 50%);
+
+            span {
+                display       : block;
+                width         : 100%;
+                text-align    : center;
+                color         : #fff;
+                font-size     : 16px;
+                letter-spacing: 5px;
+                line-height   : 40px;
+            }
+        }
+    }
+}

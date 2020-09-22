@@ -1,5 +1,5 @@
 import Vue from "vue" 
-import { Button,link,row,Footer,Col,PageHeader,tabs,tooltip,dropdown,DropdownMenu,DropdownItem, DatePicker, Message, MessageBox, Form,Card, FormItem,RadioGroup ,Input, Drawer, Select, option, Loading, table,pagination, Radio, Image, Upload, Progress, Switch,Popover, TableColumn,Alert,dialog,container,main,header, TabPane } from 'element-ui';
+import { Button,link,row,Footer,Col,PageHeader,Notification,tabs,tooltip,dropdown,DropdownMenu,DropdownItem, DatePicker, Message, MessageBox, Form,Card, FormItem,RadioGroup ,Input, Drawer, Select, option, Loading, table,pagination, Radio, Image, Upload, Progress, Switch,Popover, TableColumn,Alert,dialog,container,main,header, TabPane } from 'element-ui';
 Vue.use(DatePicker);
 Vue.use(Drawer);
 Vue.use(Select);
@@ -38,6 +38,14 @@ Vue.use(pagination);
 Vue.use(RadioGroup);
 
 // Vue.prototype.$loading = Loading;
-Vue.prototype.$message = Message;
+
+Vue.prototype.$loading = Loading.service;
 Vue.prototype.$MessageBox = MessageBox;
-Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$prompt = MessageBox.prompt;
+Vue.prototype.$notify = Notification;
+Vue.prototype.$message = Message;
+// Vue.prototype.$message = Message;
+// Vue.prototype.$MessageBox = MessageBox;
+// Vue.prototype.$confirm = MessageBox.confirm
