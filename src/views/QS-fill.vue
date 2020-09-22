@@ -23,7 +23,7 @@
                 </audio>
               </div>
               <div class="vido" v-if="qs.type===3">
-                <vido-player :vidoUrl="qs.url"></vido-player>
+                <video-player :vidoUrl="qs.url"></video-player>
               </div>
             </div>
           </div>
@@ -38,7 +38,7 @@
                     </audio>
                   </div>
                   <div class="vido" v-if="item.type===3">
-                    <vido-player :vidoUrl="item.url"></vido-player>
+                    <video-player :vidoUrl="item.url"></video-player>
                   </div>
                   <div class="content-box">
                     <input type="radio" :name="qs.code" :value="item.code" v-model="qs.answer" />
@@ -54,7 +54,7 @@
                     </audio>
                   </div>
                   <div class="vido" v-if="item.type===3">
-                    <vido-player :vidoUrl="item.url"></vido-player>
+                    <video-player :vidoUrl="item.url"></video-player>
                   </div>
                   <div class="content-box">
                     <input type="checkbox" :value="item.code" v-model="qs.answer" />
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-  import vidoPlayer from "@/components/vido";
+  import VideoPlayer from "@/components/Video";
   import imgPreview from "@/components/imgPreview";
   import ModalTips from "@/components/ModalTips";
   import vMatrixRadio from "@/components/v-matrix-radio";
@@ -115,7 +115,7 @@
     name: "fill",
     components: {
       ModalTips,
-      vidoPlayer,
+      VideoPlayer,
       vMatrixRadio,
       vMatrixCkb,
       UploadIpt,

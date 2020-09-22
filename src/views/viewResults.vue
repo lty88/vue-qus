@@ -16,7 +16,7 @@
           <div class="demo-image__placeholder">
             <div class="block">
               <p class="qs-title">{{qs.title}}.&nbsp;{{ getMsg(qs)}}&nbsp;&nbsp;{{ qs.content}}</p>
-              {{qs.code}}
+              <!-- {{qs.code}} -->
               <imgPreview v-if="qs.type===1" :imgUrl="qs.url"></imgPreview>
               <div class="audio" v-if="qs.type===2">
                 <audio controls :src="qs.url">
@@ -59,8 +59,8 @@
             <textarea v-if="qs.answerType === 2" disabled v-model="qs.answerCode"></textarea>
             <!-- 多媒体回答题型 -->
             <div class="anwerMediaBox">
-              <div v-if="qs.answerType === 5" class="">
-                <imgPreview :imgUrl="qs.answerCode"></imgPreview>
+              <div v-if="qs.answerType === 5" >
+                <imgPreview :imgUrl="qs.answerCode" ></imgPreview>
               </div>
               <div v-else-if="qs.answerType === 6" class="">
                 <audio controls :src="qs.answerCode">
@@ -81,12 +81,12 @@
                 </tr>
                 <!-- 渲染的矩阵的radio-->
                 <tr class="os_bjqk" v-for="subTitle in qs.subTitles" :key="subTitle.code">
-                  <td class="lefttd_qk">{{subTitle.title}} {{subTitle.code}}</td>
+                  <td class="lefttd_qk">{{subTitle.title}} </td>
                   <td v-for="jzOption in qs.items" :key="jzOption.code">
-                    <input disabled type="radio" :value="jzOption.code" :name="jzOption.code"
-                      v-model="jzOption.answerCode" />
-                    {{jzOption.code}}
+                    <input type="radio" disabled :value="jzOption.code" v-model="subTitle.answerCode" :name="subTitle.code" />
+                    <!-- {{jzOption.code}} -->
                   </td>
+                  <!-- {{subTitle.answerCode}} -->
                 </tr>
               </table>
             </div>
@@ -98,13 +98,14 @@
                   <td class="lefttd_qk">&nbsp;</td>
                   <td class="lefttd_tit" v-for="(jzOption,jzIndex) in qs.items" :key="jzIndex">{{jzOption.content}}</td>
                 </tr>
-                <!-- 渲染的矩阵的radio-->
+                <!-- 渲染的矩阵的ckb-->
                 <tr class="os_bjqk" v-for="subTitle in qs.subTitles" :key="subTitle.code">
-                  <td class="lefttd_qk">{{subTitle.title}} {{subTitle.code}}</td>
+                  <td class="lefttd_qk">{{subTitle.title}} </td>
                   <td v-for="jzOption in qs.items" :key="jzOption.code">
-                    <input type="checkbox" :value="jzOption.code" v-model="jzOption.answerCode" :name="subTitle.code" />
-                    {{jzOption.code}}
+                    <input type="checkbox" disabled :value="jzOption.code" v-model="subTitle.answerCode" :name="subTitle.code" />
+                    <!-- {{jzOption.code}} -->
                   </td>
+                  <!-- {{subTitle.answerCode}} -->
                 </tr>
               </table>
             </div>
@@ -116,7 +117,7 @@
 </template>
 
 <script>
-  import VideoPlayer from "@/components/vido";
+  import VideoPlayer from "@/components/Video";
   import vMatrixRadio from "@/components/v-matrix-radio";
   import vMatrixCkb from "@/components/v-matrix-ckb";
   import imgPreview from "@/components/imgPreview";
@@ -193,33 +194,44 @@
     methods: {
       handleData() {
         let _this = this;
-        //组装后的数据放到新数组  handledQsList=>组合了要展示被控制的题目信息和没有展示的题目
+        //组装后的数据放到新数组  handledQsList=>组合了要展示的题目信息和返回的结果
         _this.handledQsList = _this.qsItem.map((qs, index) => {
-          debugger
           //answerType 0：单选，1：多选，2：文本录，3：单选矩阵，4：多选矩阵 ,5:多媒体上传题
           qs.answerCode = [0, 2, 5].indexOf(qs.answerType) > -1 ? "" : [];
           //1.先找题目对应的答案
-          let tmpCond = [];
-          _this.resultsList.forEach(c => {
-            if (c.questionCode == qs.code) {
-              tmpCond.push(c.itemCode);
-            }
-          });
-          if (qs.answerType == 3 || qs.answerType == 4) {
-            //矩阵
+          if (qs.answerType == 3) {
+            //单选矩阵
             // debugger
-            if (tmpCond.length > 1) {
-              qs.subTitles.forEach(c1 => {
-                c1.answerCode = "";
-                let index = tmpCond.indexOf(c1.code);
-                if (index > -1) {
-                  c1.answerCode = tmpCond[index];
+            let answerCode = "";
+            _this.resultsList.forEach(c => {
+              //找出结果questionCode的题目与题目code
+              qs.subTitles.forEach(s => {
+                if (c.questionCode == s.code) {
+                  s.answerCode = c.itemCode;
                 }
-              });
-            } else {
-              qs.answerCode = tmpCond[0];
-            }
-          } else {
+              })
+            })
+
+          } else if (qs.answerType == 4) {
+            //多选矩阵
+            //找出结果questionCode的题目与题目code
+            qs.subTitles.map(s => {
+              s.answerCode = [];
+              _this.resultsList.forEach(r => {
+                if (r.questionCode == s.code) {
+                  s.answerCode.push(r.itemCode);
+                }
+              })
+            })
+          }
+          else {
+            // debugger
+            let tmpCond = [];
+            _this.resultsList.forEach(c => {
+              if (c.questionCode == qs.code) {
+                tmpCond.push(c.itemCode);
+              }
+            });
             if (tmpCond.length > 1) {
               qs.items.forEach(c1 => {
                 c1.answerCode = "";

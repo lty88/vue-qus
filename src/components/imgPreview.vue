@@ -14,13 +14,14 @@
         default: ""
       }
     },
-    //   watch: {
-    //     imgUrl(newVal, o) {
-    //       console.log(newVal);
-    //       console.log(o);
-    //       this.newImgUrl = imgUrl;
-    //     }
-    //   },
+    // watch: {
+    //   imgUrl(newVal, o) {
+    //     console.log(newVal);
+    //     console.log(o);
+    //     this.srcList.push(newVal);
+    //     console.log(this.srcList);
+    //   }
+    // },
     mounted() {
       // console.log(this.imgUrl);
       this.srcList.push(this.imgUrl);
@@ -38,5 +39,5 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../style/imgPreview.scss";
+  @import "../style/imgPreview.scss";
 </style>

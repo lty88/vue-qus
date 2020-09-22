@@ -114,32 +114,14 @@ const routes = [{
 	},
 	component: () =>
 		import( /* webpackChunkName: "about" */ "../views/FlowControl.vue")
-},
-{
-	path: '/test',
-	name: 'test',
-	meta: {
-		title: "测试",
-		keepAlive: true
-	},
-	component: () =>
-		import( /* webpackChunkName: "about" */ "../views/test.vue")
 }
+
 ];
 
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
 	return originalPush.call(this, location).catch(err => err)
 }
-/* 路由异常错误处理，尝试解析一个异步组件时发生错误，重新渲染目标页面 */
-// router.onError((error) => {
-// 	const pattern = /Loading chunk (\d)+ failed/g;
-// 	const isChunkLoadFailed = error.message.match(pattern);
-// 	const targetPath = router.history.pending.fullPath;
-// 	if (isChunkLoadFailed) {
-// 	  router.replace(targetPath);
-// 	}
-//   });
 const router = new VueRouter({
 	mode: 'history',
 	routes

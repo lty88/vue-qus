@@ -12,7 +12,7 @@
         </tr>
         <!-- 渲染的矩阵的radio-->
         <tr class="os_bjqk" v-for="subTitles in qustion.subTitles" :key="subTitles.code">
-          <td class="lefttd_qk">{{subTitles.title}}{{subTitles.code}}</td>
+          <td class="lefttd_qk">{{subTitles.title}}</td>
           <td v-for="jzOption in qustion.items" :key="jzOption.code">
             <input
               type="checkbox"
@@ -22,7 +22,7 @@
               :name="subTitles.code"
               @change="onChange($event,jzOption.code,subTitles.code)"
             />
-            {{jzOption.code}}
+            <!-- {{jzOption.code}} -->
           </td>
         </tr>
       </table>

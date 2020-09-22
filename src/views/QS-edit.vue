@@ -21,7 +21,7 @@
                 </audio>
               </div>
               <div class="vido title-meida" v-if="qs.type===3">
-                <vido-player :vidoUrl="qs.url"></vido-player>
+                <video-player :vidoUrl="qs.url"></video-player>
               </div>
             </div>
           </div>
@@ -35,7 +35,7 @@
                   </audio>
                 </div>
                 <div class="vido" v-if="item.type===3">
-                  <vido-player :vidoUrl="item.url"></vido-player>
+                  <video-player :vidoUrl="item.url"></video-player>
                 </div>
                 <div class="content-box">
                   <input type="radio" :name="`${qs.title}`" />
@@ -50,7 +50,7 @@
                   </audio>
                 </div>
                 <div class="vido" v-if="item.type===3">
-                  <vido-player :vidoUrl="item.url"></vido-player>
+                  <video-player :vidoUrl="item.url"></video-player>
                 </div>
                 <div class="content-box">
                   <input type="checkbox" :name="`${qs.title}`" />
@@ -130,9 +130,6 @@
       </div>
     </div>
 
-
-
-
     <!-- 编辑radio、checkbox、textarea组件 -->
     <v-edit-radio :showModal="showM" :formData="editQs" :formDataJz="editQsJz" @cancel="showmo"
       @EditShowModal="EditShowModals"></v-edit-radio>
@@ -166,7 +163,7 @@
   import vEditRadio from "@/components/v-editRadio";
   import vEditJz from "@/components/v-editJz";
   import SetDrawer from "@/components/SetDrawer";
-  import vidoPlayer from "@/components/vido";
+  import VideoPlayer from "@/components/Video";
   import UploadIpt from "@/components/UploadIpt";
   import imgPreview from "@/components/imgPreview";
   import { GetQuestionInfo, DeleteQsItems } from "../api/QS-edit";
@@ -180,7 +177,7 @@
       vTextarea,
       vCheckbox,
       SetDrawer,
-      vidoPlayer,
+      VideoPlayer,
       vEditRadio,
       vEditJz,
       vMedia,

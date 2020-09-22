@@ -105,11 +105,11 @@
           },
           {
             value: 2,
-            label: "视频"
+            label: "音频"
           },
           {
             value: 3,
-            label: "音频"
+            label: "视频"
           }
         ],
         fileList: [],
